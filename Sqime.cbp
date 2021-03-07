@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Sqime" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/Sqime" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-std=c++14" />
+					<Add option="-g" />
+					<Add directory="C:/Users/forva/Desktop/Instruments/SFML-2.5.1/include" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add library="sfml-graphics-d" />
+					<Add library="sfml-audio-d" />
+					<Add library="sfml-network-d" />
+					<Add library="sfml-window-d" />
+					<Add library="sfml-system-d" />
+					<Add directory="C:/Users/forva/Desktop/Instruments/SFML-2.5.1/lib" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Sqime" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="sfml-graphics" />
+					<Add library="sfml-audio" />
+					<Add library="sfml-network" />
+					<Add library="sfml-window" />
+					<Add library="sfml-system" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="AllHitboxInf.cpp" />
+		<Unit filename="Button.cpp" />
+		<Unit filename="DynamicObject.cpp" />
+		<Unit filename="LevelMenu.cpp" />
+		<Unit filename="MainMenu.cpp" />
+		<Unit filename="MapForCreating.cpp" />
+		<Unit filename="MyMap.cpp" />
+		<Unit filename="Platform.cpp" />
+		<Unit filename="Player.cpp" />
+		<Unit filename="include/AllHitboxInf.h" />
+		<Unit filename="include/AllIncludes.h" />
+		<Unit filename="include/Button.h" />
+		<Unit filename="include/DynamicObject.h" />
+		<Unit filename="include/LevelMenu.h" />
+		<Unit filename="include/MainMenu.h" />
+		<Unit filename="include/MapForCreating.h" />
+		<Unit filename="include/MyMap.h" />
+		<Unit filename="include/Platform.h" />
+		<Unit filename="include/Player.h" />
+		<Unit filename="main.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
