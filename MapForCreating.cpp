@@ -32,12 +32,11 @@
 
     Image backgroundImage;
     backgroundImage.loadFromFile(backgroundPlace);
-    backWidth = backgroundImage.getSize().x;
-    backHeight = backgroundImage.getSize().y;
 
     backTex.loadFromFile(backgroundPlace);
     backSprite.setTexture(backTex);
-    backSprite.setTextureRect(IntRect(0, 0, tilesize * scale * width, tilesize * scale * height));
+    backSprite.setTextureRect(IntRect(0, 0, tilesize * width, tilesize * height));
+    backSprite.setScale(scale, scale);
     backSprite.setPosition(startX, startY);
 
 
@@ -116,26 +115,8 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
 
 
     displayButtons(window);
-  /*  for (i = 0; i < buttonsAmount; i++)
-    {
-        if (buttons[i][0]->ButtonDisplayAndCheck(window, spaceAroundButtons, 100 + i * spaceForButtons + spaceAroundButtons) == 1)
-        {
-            if (curTiles != i)
-                curTiles = i;
-            else
-                curTiles = -1;
-        }
 
-        if (curTiles == i)
-        {
-            int k;
-            for (k = 1; k < 17; k++)
-                if (buttons[i][k]->ButtonDisplayAndCheck(window, spaceForButtons + spaceAroundButtons + (k - 1) / 4 * spaceForButtons, 100 + i * spaceForButtons + spaceAroundButtons + ((k - 1) % 4) * spaceForButtons) == 1)
-                    curTile = i * 16 + k;
-        }
-    }*/
-
-    if (playerButton->buttonDisplayAndCheck(window, -1, -1))
+    if (playerButton->buttonDisplayAndCheck(window, -1, -1) == 1)
     {
         int w, h, sX, sY;
         pair <int, int> helper;
@@ -151,7 +132,7 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
     }
 
 
-    if (platformButton->buttonDisplayAndCheck(window, -1, -1))
+    if (platformButton->buttonDisplayAndCheck(window, -1, -1) == 1)
     {
         float w, h, sX, sY, eX, eY, speed;
         pair <int, int> helper;
@@ -175,7 +156,7 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
     displaySprites(window);
     Font font;
     font.loadFromFile("images\\mainFont.ttf");
-    Text infText("", font, 20);
+    Text infText("", font, 25);
     infText.setColor(Color::White);
     infText.setPosition(10 + windowWidth - spaceForObjButtons, 10);
     string s = to_string((int)width) + "    " + to_string((int)height) + "\n" + to_string((int)((Mouse::getPosition().x - startX) / tilesize / scale)) + "     " +  to_string((int)((Mouse::getPosition().y - startY) / tilesize / scale))
@@ -386,7 +367,8 @@ void MapForCreating::correctPositions()
     startX = spaceForButtons * 5 + (((float)windowWidth - spaceForButtons * 10) - tilesize * scale * width) / 2;
     startY = ((float)windowHeight - scale * tilesize * height) / 2;
 
-    backSprite.setTextureRect(IntRect(0, 0, tilesize * scale * width, tilesize * scale * height));
+    backSprite.setTextureRect(IntRect(0, 0, tilesize * width, tilesize * height));
+    backSprite.setScale(scale, scale);
     backSprite.setPosition(startX, startY);
     feelObjSprites(objects.size());
 }

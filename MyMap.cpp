@@ -20,8 +20,9 @@ MyMap::MyMap(string mapFilePlace, string tilesPlace, string backgroundPlace)
     backgroundImage.loadFromFile(backgroundPlace);
     backTex.loadFromFile(backgroundPlace);
     backSprite.setTexture(backTex);
-    backSprite.setTextureRect(IntRect(0, 0, windowWidth - startX * 2, windowHeight - startY * 2));
+    backSprite.setTextureRect(IntRect(0, 0, tilesize * width, tilesize * height));
     backSprite.setPosition(startX, startY);
+    backSprite.setScale(scale, scale);
 }
 
 int MyMap::DrawMap(RenderWindow *window, float time)

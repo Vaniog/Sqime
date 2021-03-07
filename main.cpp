@@ -131,12 +131,12 @@ int main()
             if (Keyboard::isKeyPressed(Keyboard::N))
             {
                 delete mainMapForCreating;
-                mainMapForCreating = new MapForCreating("images\\Tile7.png", "images\\GreenBack.png", "images\\Slime.png", "images\\Platform.png");
+                mainMapForCreating = new MapForCreating("images\\Tile7.png", "images\\Background.png", "images\\Slime.png", "images\\Platform.png");
             }
 
             if (Keyboard::isKeyPressed(Keyboard::T))
             {
-                mainMap = new MyMap("maps\\level00.txt", "images\\Tile7.png", "images\\GreenBack.png");
+                mainMap = new MyMap("maps\\level00.txt", "images\\Tile7.png", "images\\Background.png");
                 lastLevel = 0;
                 process = 1;
                 clock.restart();
@@ -158,7 +158,7 @@ int main()
             way += s;
             way += ".txt";
 
-            mainMap = new MyMap(way, "images\\Tile7.png", "images\\GreenBack.png");
+            mainMap = new MyMap(way, "images\\Tile7.png", "images\\Background.png");
             process = 1;
             clock.restart();
             break;
@@ -174,7 +174,7 @@ int main()
 
         case -3://download
         {
-            mainMapForCreating = new MapForCreating("images\\Tile7.png", "images\\GreenBack.png", "images\\Slime.png", "images\\Platform.png");
+            mainMapForCreating = new MapForCreating("images\\Tile7.png", "images\\Background.png", "images\\Slime.png", "images\\Platform.png");
             mainMapForCreating->mapDownload("maps\\level00.txt");
             process = 3;
             clock.restart();

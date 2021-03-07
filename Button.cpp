@@ -29,6 +29,7 @@ int Button::buttonDisplayAndCheck(RenderWindow *window, int xIn, int yIn)
         x = xIn, y = yIn;
     }
 
+    bool isMouseOnButton = 0;
     int mouseX = Mouse::getPosition().x;
     int mouseY = Mouse::getPosition().y;
     if (mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height)
@@ -48,6 +49,7 @@ int Button::buttonDisplayAndCheck(RenderWindow *window, int xIn, int yIn)
                 {
                     buttonSprite.setScale(scaleX * 0.95, scaleY * 0.95), isSmall = 1;
                 }
+        isMouseOnButton = 1;
     }
     else
         if (isSmall == 1)
@@ -61,5 +63,7 @@ int Button::buttonDisplayAndCheck(RenderWindow *window, int xIn, int yIn)
         buttonSprite.setPosition(x, y);
     (*window).draw(buttonSprite);
 
+    if (isMouseOnButton == 1)
+        return 3;
     return 0;
 }
