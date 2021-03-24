@@ -28,7 +28,7 @@ Platform::Platform(float startXIn, float startYIn, float endXIn, float endYIn, f
     platformSprite.setTexture(platformTexture);
     platformSprite.setTextureRect(IntRect(0, 0, tilesize * width, height * tilesize));
     platformSprite.setPosition(startX, startY);
-    platformSprite.setScale(MapIn->scale * (tilesize * scale * width - conturWidth * 2) / (tilesize * scale * width), MapIn->scale * (tilesize * scale * height - conturWidth * 2) / (tilesize * scale * height));
+    platformSprite.setScale(MapIn->scale * (tilesize * scale * width) / (tilesize * scale * width), MapIn->scale * (tilesize * scale * height) / (tilesize * scale * height));
 }
 
 void Platform::drawObject(float &time)
@@ -39,14 +39,15 @@ void Platform::drawObject(float &time)
 
 void Platform::displayObject(RenderWindow *window)
 {
-    int conturWidth = 7;
-    platformSprite.setPosition((int)(curX * scale * tilesize + mapStartX) + conturWidth, (int)(curY * scale * tilesize + mapStartY) + conturWidth);
+    int conturWidth = scale;
+    platformSprite.setPosition((int)(curX * scale * tilesize + mapStartX), (int)(curY * scale * tilesize + mapStartY));
     RectangleShape contur(Vector2f(width * scale * tilesize - conturWidth * 2, height * scale * tilesize - conturWidth * 2));
     contur.setOutlineThickness(conturWidth);
     contur.setOutlineColor(Color(32, 47, 57));
+    contur.setFillColor(Color(0, 0, 0, 0));
     contur.setPosition((int)(curX * scale * tilesize + mapStartX) + conturWidth, (int)(curY * scale * tilesize + mapStartY) + conturWidth);
-    window->draw(contur);
     window->draw(platformSprite);
+    window->draw(contur);
 }
 
 pair <float, float> Platform::coordinates()

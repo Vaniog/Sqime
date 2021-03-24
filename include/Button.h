@@ -10,13 +10,14 @@ using namespace sf;
 class Slider // Slider help you input inf with slider
 {
 public:
-    Slider(int textX, int textY, int textSize, int lineStartXIn, int lineStartYIn, int lineEndXIn, int lineEndYIn, int minValueIn, int maxValueIn, int sliderDiametrIn, float stepIn, string sliderPlace)
+    Slider(float textX, float textY, int textSize, int lineStartXIn, int lineStartYIn, int lineEndXIn, int lineEndYIn, int minValueIn, int maxValueIn, int sliderDiametrIn, float stepIn, string sliderPlace)
     {
         lineStartX = lineStartXIn, lineStartY = lineStartYIn;
         lineEndX = lineEndXIn, lineEndY = lineEndYIn;
         minValue = minValueIn, maxValue = maxValueIn;
         sliderDiametr = sliderDiametrIn;
         step = stepIn;
+        lineThick = sliderDiametr / 16;
 
         Image sImage;
         sImage.loadFromFile(sliderPlace);
@@ -33,18 +34,19 @@ public:
         if (lineStartY == lineEndY)
         {
             rotation = 1;
-            line = new RectangleShape(sf::Vector2f(lineEndX - lineStartX, lineThick));
+            line = new RectangleShape(sf::Vector2f(lineEndX - lineStartX, 0));
             pixelStep = (lineEndX - lineStartX) / (maxValue - minValue);
         }
         else
         {
             rotation = 2;
-            line = new RectangleShape(sf::Vector2f(lineThick, lineEndY - lineStartY));
+            line = new RectangleShape(sf::Vector2f(0, lineEndY - lineStartY));
             pixelStep = (lineEndY - lineStartY) / (maxValue - minValue);
         }
 
-        line->setFillColor(Color(32, 47, 57));
         line->setPosition(lineStartX, lineStartY);
+        line->setOutlineThickness(lineThick);
+        line->setOutlineColor(Color(32, 47, 57));
 
         mainValue = minValue;
         sliderCurX = lineStartX;
@@ -82,7 +84,7 @@ public:
             else
                 sliderCurX = lineStartX + (mainValue - minValue) * pixelStep, remTouch = 0;
 
-            sliderSprite.setPosition(sliderCurX - sliderDiametr / 2, sliderCurY - sliderDiametr / 2 + lineThick / 2);
+            sliderSprite.setPosition(sliderCurX - sliderDiametr / 2, sliderCurY - sliderDiametr / 2);
             break;
         }
         case 2:
@@ -104,7 +106,7 @@ public:
             else
                 sliderCurY = lineStartY + (mainValue - minValue) * pixelStep, remTouch = 0;
 
-            sliderSprite.setPosition(line->getPosition().x + line->getSize().x / 2 - sliderDiametr / 2, sliderCurY - sliderDiametr / 2);
+            sliderSprite.setPosition(sliderCurX - sliderDiametr / 2, sliderCurY - sliderDiametr / 2);
             break;
         }
         }
@@ -126,7 +128,7 @@ private:
     int rotation; // 1 if slide horizontal, 2 if slider vertical
     bool remTouch = 0; // remember touch, it help you move slider after tap on it
     float scale;
-    int lineThick = 6;
+    int lineThick;
     float mainValue;
     Texture sliderTexture;
     Sprite sliderSprite;

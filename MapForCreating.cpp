@@ -97,7 +97,8 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
     int i, k;
     timeAfterPrevClick += time;
     (*window).draw(backSprite);
-    keyboardCommands();
+    if (process.first == 0)
+        keyboardCommands();
 
     for (i = 0; i < width; i++)
     {
@@ -118,42 +119,90 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
 
     if (playerButton->buttonDisplayAndCheck(window, -1, -1) == 1)
     {
-        int w, h, sX, sY;
-        pair <int, int> helper;
-        helper = catchMouse();
-        w = helper.first;
-        h = helper.second;
-        helper = catchMouse();
-        sX = helper.first;
-        sY = helper.second;
-        ObjectInf *obj  = new ObjectInf(w, h, sX, sY, 0, 0, 0, 0); //0 - slime
-        objects.push_back(obj);
-        addToObjSprites(objects.size() - 1);
+        process = {1, 0};
+        inputObject = new ObjectInf(0);
+        sizeChooseUI = new sizeChooseMenu();
     }
 
 
     if (platformButton->buttonDisplayAndCheck(window, -1, -1) == 1)
     {
-        float w, h, sX, sY, eX, eY, speed;
-        pair <int, int> helper;
-        helper = catchMouse();
-        w = helper.first;
-        h = helper.second;
-        helper = catchMouse();
-        sX = helper.first;
-        sY = helper.second;
-        helper = catchMouse();
-        eX = helper.first;
-        eY = helper.second;
-        helper = catchMouse();
-        speed = helper.first;
-        ObjectInf *obj  = new ObjectInf(w, h, sX, sY, eX, eY, speed, 1); //1 - platform
-        objects.push_back(obj);
-        addToObjSprites(objects.size() - 1);
+        process = {2, 0};
+        inputObject = new ObjectInf(1);
+        sizeChooseUI = new sizeChooseMenu();
+        Image sliderBackImage;
+        sliderBackImage.loadFromFile("images\\SpeedSliderBack.png");
+        float sliderWidth = VideoMode::getDesktopMode().width / 3;
+        float sliderHeight = sliderWidth / 4;
+        float sliderStartX = VideoMode::getDesktopMode().width / 2 - sliderWidth / 2;
+        float sliderStartY = VideoMode::getDesktopMode().height / 2 - sliderHeight / 2;
+        float sliderScale = sliderWidth / sliderBackImage.getSize().x;
+        speedSlider = new Slider(sliderStartX + sliderScale * 6, sliderStartY + sliderScale * 3, sliderScale * 8, sliderStartX + sliderWidth / 4 + sliderScale * 6, sliderStartY + sliderHeight / 2, sliderStartX + sliderWidth - sliderScale * 6, sliderStartY + sliderHeight / 2, 1, 5, sliderHeight / 3, 1, "images\\Slider.png");
 
-    }
+
+        sliderBackTex.loadFromImage(sliderBackImage);
+        sliderBackSprite.setTexture(sliderBackTex);
+        sliderBackSprite.setPosition(sliderStartX, sliderStartY);
+        sliderBackSprite.setScale(sliderScale, sliderScale);
+
+        okButton = new Button(sliderStartX + sliderWidth / 2 - 11 * sliderScale / 2, sliderStartY + sliderHeight - sliderScale * 9 / 2, 0, 0, 11, 9, 11 * sliderScale, 9 * sliderScale, "images\\OKButton.png");
+        }
 
     displaySprites(window);
+    if (process.first != 0)
+    {
+        switch (process.second)
+        {
+        case 0:
+        {
+            pair <int, int> sizeChooseUIReturn = sizeChooseUI->display(window);
+            if (sizeChooseUIReturn.first == -1)
+            {
+                process = {0, 0};
+            }
+            if (sizeChooseUIReturn.first > 0)
+            {
+                inputObject->width = sizeChooseUIReturn.first;
+                inputObject->height = sizeChooseUIReturn.second;
+                process.second++;
+            }
+            break;
+        }
+        case 1:
+        {
+            if (Mouse::isButtonPressed(Mouse::Left))
+            {
+                inputObject->startX = (int)((Mouse::getPosition().x - startX) / tilesize / scale);
+                inputObject->startY = (int)((Mouse::getPosition().y - startY) / tilesize / scale);
+                process.second++;
+                if (process.first == 1)
+                    objects.push_back(inputObject), addToObjSprites(objects.size() - 1), process = {0, 0};
+                while(Mouse::isButtonPressed(Mouse::Left)){};
+            }
+            break;
+        }
+        case 2:
+        {
+            if (Mouse::isButtonPressed(Mouse::Left))
+            {
+                inputObject->endX = (int)((Mouse::getPosition().x - startX) / tilesize / scale);
+                inputObject->endY = (int)((Mouse::getPosition().y - startY) / tilesize / scale);
+                process.second++;
+                while(Mouse::isButtonPressed(Mouse::Left)){};
+            }
+            break;
+        }
+        case 3:
+        {
+            window->draw(sliderBackSprite);
+            inputObject->speed = speedSlider->drawSliderGetValue(window);
+            if (okButton->buttonDisplayAndCheck(window, -1, -1) == 1)
+               objects.push_back(inputObject), addToObjSprites(objects.size() - 1), process = {0, 0};
+        }
+        }
+    }
+
+
     Font font;
     font.loadFromFile("images\\mainFont.ttf");
     Text infText("", font, 25);
@@ -256,7 +305,9 @@ int MapForCreating::mapDownload (string mapFilePlace)
         {
             float w, h, sX, sY;
             w = getNumber(mapFile), h = getNumber(mapFile), sX = getNumber(mapFile), sY = getNumber(mapFile);
-            ObjectInf *obj  = new ObjectInf(w, h, sX, sY, 0, 0, 0, 0); //0 - slime
+            ObjectInf *obj  = new ObjectInf(0); //0 - slime
+            obj->width = w, obj->height = h;
+            obj->startX = sX, obj->startY = sY;
             objects.push_back(obj);
             break;
         }
@@ -267,7 +318,11 @@ int MapForCreating::mapDownload (string mapFilePlace)
             sX = getNumber(mapFile), sY = getNumber(mapFile);
             eX = getNumber(mapFile), eY = getNumber(mapFile);
             speed = getNumber(mapFile);
-            ObjectInf *obj  = new ObjectInf(w, h, sX, sY, eX, eY, speed, 1); //1 - platform
+            ObjectInf *obj  = new ObjectInf(1); //1 - platform
+            obj->width = w, obj->height = h;
+            obj->startX = sX, obj->startY = sY;
+            obj->endX = eX, obj->endY = eY;
+            obj->speed = speed;
             objects.push_back(obj);
             break;
         }

@@ -46,7 +46,6 @@ int MyMap::DrawMap(RenderWindow *window, float time)
 
 
     int action = AHI->drawObjects(window, time, AHI);
-
     for (i = 0; i < width; i++)
     {
         for (k = 0; k < height; k++)
@@ -81,7 +80,7 @@ void MyMap::mapDownload (string mapFilePlace)
             tile = getNumber(mapFile);
             tiles[i][k][0] = 0;
             tiles[i][k][1] = tile;
-            if (tile >= 17 && tile <= 32)
+            if (tile <= 16 * 3)
                 swap(tiles[i][k][0], tiles[i][k][1]);
         }
     physicsCreate();

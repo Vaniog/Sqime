@@ -507,7 +507,7 @@
 	<SFML/Window/Window.hpp>
 	<SFML/Graphics/RenderWindow.hpp>
 
-1615116106 c:\users\forva\desktop\projects\sqime\include\button.h
+1616096166 c:\users\forva\desktop\projects\sqime\include\button.h
 	<SFML/Graphics.hpp>
 	<iostream>
 
@@ -517,10 +517,10 @@
 1614715196 source:c:\users\forva\desktop\projects\sqime\dynamicobject.cpp
 	"dynamicObject.h"
 
-1615128008 source:c:\users\forva\desktop\projects\sqime\main.cpp
+1616091094 source:c:\users\forva\desktop\projects\sqime\main.cpp
 	"AllIncludes.h"
 
-1615119927 c:\users\forva\desktop\projects\sqime\include\mapforcreating.h
+1616096533 c:\users\forva\desktop\projects\sqime\include\mapforcreating.h
 	<SFML/Graphics.hpp>
 	<bits/stdc++.h>
 	<Button.h>
@@ -546,13 +546,13 @@
 	<AllHitboxInf.h>
 	<MyMap.h>
 
-1615130878 source:c:\users\forva\desktop\projects\sqime\mapforcreating.cpp
+1616097857 source:c:\users\forva\desktop\projects\sqime\mapforcreating.cpp
 	"MapForCreating.h"
 
-1615127924 source:c:\users\forva\desktop\projects\sqime\mymap.cpp
+1615482283 source:c:\users\forva\desktop\projects\sqime\mymap.cpp
 	"MyMap.h"
 
-1615121507 source:c:\users\forva\desktop\projects\sqime\platform.cpp
+1616099714 source:c:\users\forva\desktop\projects\sqime\platform.cpp
 	<Platform.h>
 
 1615121795 source:c:\users\forva\desktop\projects\sqime\player.cpp

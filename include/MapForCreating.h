@@ -13,21 +13,95 @@ using namespace sf;
 class ObjectInf // for storage of dynamic object on field information, some of values could havent meaning
 {
 public:
-    ObjectInf(float w, float h, float sX, float sY, float eX, float eY, float s, char t)
+    ObjectInf(char t)
     {
-        width = w;
-        height = h;
-        startX = sX;
-        startY = sY;
-        endX = eX;
-        endY = eY;
-        speed = s;
         type = t;
     }
     float width, height;
     float startX, startY;
     float speed, endX, endY;
     int type; // 0-player 1-platform
+};
+
+
+class sizeChooseMenu
+{
+public:
+    sizeChooseMenu()
+    {
+        Image sizeChooseImage;
+        sizeChooseImage.loadFromFile("images\\SizeChooseMenu.png");
+        height = VideoMode::getDesktopMode().height / 2;
+        width = height;
+        scale = width / sizeChooseImage.getSize().x;
+
+        spaceForBorder = width / 8;
+
+        startX = VideoMode::getDesktopMode().width / 2 -  width / 2 + spaceForBorder;
+        startY = VideoMode::getDesktopMode().height / 2 -  height / 2 + spaceForBorder;
+        endX = startX + width - spaceForBorder * 2;
+        endY = startY + height - spaceForBorder * 2;
+        sizeChooseClose = new Button(endX + spaceForBorder - scale * 4, startY - spaceForBorder - scale * 4, 0, 0, 9, 9, 9 * scale, 9 * scale, "images\\CloseSizeChoose.png");
+
+        sizeChooseTexture.loadFromImage(sizeChooseImage);
+        sizeChooseSprite.setTexture(sizeChooseTexture);
+        sizeChooseSprite.setPosition(startX - spaceForBorder, startY - spaceForBorder);
+        sizeChooseSprite.setScale(scale, scale);
+
+        tileWidth = (endX - startX - scale) / 5;
+        sizeChooseRect = new RectangleShape(Vector2f(tileWidth - scale, tileWidth - scale));
+        sizeChooseRect->setOutlineColor(Color(162, 191, 207));
+        sizeChooseRect->setOutlineThickness(scale + 1);
+        sizeChooseRect->setFillColor(Color(0, 0, 0, 0));
+    }
+
+    pair <int, int> display(RenderWindow *window)
+    {
+        pair <int, int> sizes = {0, 0};
+        int mouseCheckReturn = mouseCheck();
+        sizeChooseRect->setSize(Vector2f(tileWidth * valueWidth - scale, tileWidth * valueHeight - scale));
+        sizeChooseRect->setPosition(startX + scale, startY + scale);
+        window->draw(sizeChooseSprite);
+        window->draw(*sizeChooseRect);
+        if (sizeChooseClose->buttonDisplayAndCheck(window, -1, -1) == 1)
+        {
+            sizes.first = -1;
+            return sizes;
+        }
+        else if(mouseCheckReturn == 1)
+        {
+            sizes.first = valueWidth;
+            sizes.second = valueHeight;
+            return sizes;
+        }
+        return sizes;
+    }
+private:
+    Texture sizeChooseTexture;
+    Sprite sizeChooseSprite;
+    float startX, startY, endX, endY, spaceForBorder;
+    float width, height, scale;
+    int valueWidth = 1, valueHeight = 1;
+    float tileWidth;
+    Button *sizeChooseClose;
+    RectangleShape *sizeChooseRect;
+
+    int mouseCheck()
+    {
+        float mouseX = Mouse::getPosition().x;
+        float mouseY = Mouse::getPosition().y;
+        if (mouseX >= startX && mouseX <= endX - scale && mouseY >= startY && mouseY <= endY - scale)
+        {
+            valueWidth = (mouseX - startX) / tileWidth + 1;
+            valueHeight = (mouseY - startY) / tileWidth + 1;
+            if (Mouse::isButtonPressed(Mouse::Left))
+            {
+                while(Mouse::isButtonPressed(Mouse::Left)){};
+                return 1;
+            }
+        }
+        return 0;
+    }
 };
 
 class MapForCreating
@@ -79,5 +153,13 @@ private:
     void feelObjSprites(int amount); // help to download map
     int getNumber(ifstream &mapFile);
     pair <int, int> catchMouse(); // help to input size with help of mouse
+    //size choose UI
+    pair <int, int> process = {0, 0}; // 0 0 for drawing, 1 0 for sizes,  1 1 for coordinates (first number is a type)
+    ObjectInf *inputObject;
+    sizeChooseMenu *sizeChooseUI;
+    Texture sliderBackTex;
+    Sprite sliderBackSprite;
+    Slider *speedSlider;
+    Button *okButton;
 };
 #endif
