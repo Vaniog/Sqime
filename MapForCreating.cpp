@@ -122,6 +122,7 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
         process = {1, 0};
         inputObject = new ObjectInf(0);
         sizeChooseUI = new sizeChooseMenu();
+        buttonsModeSet(0);
     }
 
 
@@ -137,7 +138,7 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
         float sliderStartX = VideoMode::getDesktopMode().width / 2 - sliderWidth / 2;
         float sliderStartY = VideoMode::getDesktopMode().height / 2 - sliderHeight / 2;
         float sliderScale = sliderWidth / sliderBackImage.getSize().x;
-        speedSlider = new Slider(sliderStartX + sliderScale * 6, sliderStartY + sliderScale * 3, sliderScale * 8, sliderStartX + sliderWidth / 4 + sliderScale * 6, sliderStartY + sliderHeight / 2, sliderStartX + sliderWidth - sliderScale * 6, sliderStartY + sliderHeight / 2, 1, 5, sliderHeight / 3, 1, "images\\Slider.png");
+        speedSlider = new Slider(sliderStartX + sliderScale * 4, sliderStartY + sliderScale * 4, sliderScale * 5.5, sliderStartX + sliderWidth / 4 + sliderScale * 6, sliderStartY + sliderHeight / 2, sliderStartX + sliderWidth - sliderScale * 6, sliderStartY + sliderHeight / 2, 0, 5, sliderHeight / 3, 0.1, "images\\Slider.png");
 
 
         sliderBackTex.loadFromImage(sliderBackImage);
@@ -146,9 +147,11 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
         sliderBackSprite.setScale(sliderScale, sliderScale);
 
         okButton = new Button(sliderStartX + sliderWidth / 2 - 11 * sliderScale / 2, sliderStartY + sliderHeight - sliderScale * 9 / 2, 0, 0, 11, 9, 11 * sliderScale, 9 * sliderScale, "images\\OKButton.png");
-        }
+        buttonsModeSet(0);
+    }
 
     displaySprites(window);
+
     if (process.first != 0)
     {
         switch (process.second)
@@ -158,6 +161,7 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
             pair <int, int> sizeChooseUIReturn = sizeChooseUI->display(window);
             if (sizeChooseUIReturn.first == -1)
             {
+                buttonsModeSet(1);
                 process = {0, 0};
             }
             if (sizeChooseUIReturn.first > 0)
@@ -176,7 +180,12 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
                 inputObject->startY = (int)((Mouse::getPosition().y - startY) / tilesize / scale);
                 process.second++;
                 if (process.first == 1)
-                    objects.push_back(inputObject), addToObjSprites(objects.size() - 1), process = {0, 0};
+                {
+                    objects.push_back(inputObject);
+                    addToObjSprites(objects.size() - 1);
+                    buttonsModeSet(1);
+                    process = {0, 0};
+                }
                 while(Mouse::isButtonPressed(Mouse::Left)){};
             }
             break;
@@ -197,7 +206,11 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
             window->draw(sliderBackSprite);
             inputObject->speed = speedSlider->drawSliderGetValue(window);
             if (okButton->buttonDisplayAndCheck(window, -1, -1) == 1)
-               objects.push_back(inputObject), addToObjSprites(objects.size() - 1), process = {0, 0};
+            {
+                objects.push_back(inputObject), addToObjSprites(objects.size() - 1);
+                buttonsModeSet(1);
+                process = {0, 0};
+            }
         }
         }
     }
@@ -590,19 +603,29 @@ int MapForCreating::countNeighbours(int x, int y)
     return ID;
 }
 
-int MapForCreating::getNumber(ifstream &mapFile)
+float MapForCreating::getNumber(ifstream &mapFile)
 {
-    int a = 0;
+    int i;
+    float a = 0;
+    int afterPoint = 0;
     char s = 10;
     while (s == 10 || s == 32)
-    {
         mapFile.get(s);
-        if (mapFile.eof())
-            return -1;
-    }
     while(s != 10 && s != 32)
     {
-        a = a * 10 + s - '0';
+        if (s == '.')
+            afterPoint = 1;
+        else
+            if (afterPoint == 0)
+                a = a * 10 + s - '0';
+            else
+            {
+                float sNumber = s - '0';
+                for (i = 0; i < afterPoint; i++)
+                    sNumber /= 10;
+                a += sNumber;
+                afterPoint++;
+            }
         mapFile.get(s);
     }
     return a;
@@ -617,4 +640,11 @@ pair <int, int> MapForCreating::catchMouse()
         positions.second = (Mouse::getPosition().y - startY) / tilesize / scale;
     while(Mouse::isButtonPressed(Mouse::Left)){}
     return positions;
+}
+
+void MapForCreating::buttonsModeSet(int mode)
+{
+    int i;
+    for (i = 0; i < objSprites.size(); i++)
+        objSprites[i]->buttonModeSet(mode);
 }

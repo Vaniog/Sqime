@@ -36,13 +36,19 @@ int Button::buttonDisplayAndCheck(RenderWindow *window, int xIn, int yIn)
     {
         if (Mouse::isButtonPressed(Mouse::Left))
         {
-            while(Mouse::isButtonPressed(Mouse::Left));
-            return 1;
+            if (buttonMode)
+            {
+                while(Mouse::isButtonPressed(Mouse::Left));
+                return 1;
+            }
         }
         else if (Mouse::isButtonPressed(Mouse::Right))
             {
-                while(Mouse::isButtonPressed(Mouse::Right));
-                return 2;
+                if (buttonMode)
+                {
+                    while(Mouse::isButtonPressed(Mouse::Right));
+                    return 2;
+                }
             }
             else
                 if (isSmall == 0)
@@ -66,4 +72,9 @@ int Button::buttonDisplayAndCheck(RenderWindow *window, int xIn, int yIn)
     if (isMouseOnButton == 1)
         return 3;
     return 0;
+}
+
+void Button::buttonModeSet(int mode)
+{
+    buttonMode = mode;
 }

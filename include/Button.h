@@ -74,12 +74,12 @@ public:
                 if ((mouseX <= lineEndX && mouseX >= lineStartX) && (remTouch == 1 || (mouseY <= lineStartY + sliderDiametr / 2 && mouseY >= lineStartY - sliderDiametr / 2)))
                 {
                     sliderCurX = mouseX, remTouch = 1;
-                }
 
-                if ((sliderCurX - lineStartX) - (int)((sliderCurX - lineStartX) / pixelStep) * pixelStep < pixelStep / 2)
-                    mainValue = (int)((sliderCurX - lineStartX) / pixelStep) + minValue;
-                else
-                    mainValue = (int)((sliderCurX - lineStartX) / pixelStep) + step + minValue;
+                    if ((sliderCurX - lineStartX) - (int)((sliderCurX - lineStartX) / pixelStep) < pixelStep / 2)
+                        mainValue = (int)(((sliderCurX - lineStartX) / pixelStep) / step) * step + minValue;
+                    else
+                        mainValue = (int)(((sliderCurX - lineStartX) / pixelStep) / step) * step + step + minValue;
+                }
             }
             else
                 sliderCurX = lineStartX + (mainValue - minValue) * pixelStep, remTouch = 0;
@@ -96,12 +96,12 @@ public:
                 if ((mouseY <= lineEndY && mouseY >= lineStartY) && (remTouch == 1 || (mouseX <= lineStartX + sliderDiametr / 2 && mouseX >= lineStartX - sliderDiametr / 2)))
                 {
                     sliderCurY = mouseY, remTouch = 1;
-                }
 
-                if ((sliderCurY - lineStartY) - (int)((sliderCurY - lineStartY) / pixelStep) * pixelStep < pixelStep / 2)
-                    mainValue = (int)((sliderCurY - lineStartY) / pixelStep) + minValue;
-                else
-                    mainValue = (int)((sliderCurY - lineStartY) / pixelStep) + step + minValue;
+                    if ((sliderCurY - lineStartY) - (int)((sliderCurY - lineStartY) / pixelStep) * pixelStep < pixelStep / 2)
+                        mainValue = (int)(((sliderCurY - lineStartY) / pixelStep) / step) * step + minValue;
+                    else
+                        mainValue = (int)(((sliderCurY - lineStartY) / pixelStep) / step) * step + step + minValue;
+                }
             }
             else
                 sliderCurY = lineStartY + (mainValue - minValue) * pixelStep, remTouch = 0;
@@ -114,6 +114,8 @@ public:
 
 
         string s = to_string((int)mainValue);
+        if (step < 1)
+            s += "." + to_string((int)((mainValue + 0.001) * 10) % 10);
         valueText->setString(s);
         window->draw(*valueText);
         window->draw(*line);
@@ -144,6 +146,7 @@ public:
     Button(int xIn, int yIn, int startDownloadingFromX, int startDownloadingFromY, int textureW, int textureH, float widthIn, float heightIn, string buttonTexPlace);
 
     int buttonDisplayAndCheck(RenderWindow *window, int xIn, int yIn);
+    void buttonModeSet(int mode); // 1 for on, 0 for off
 private:
     float x, y;
     float width, height; // in pixels
@@ -152,6 +155,7 @@ private:
     int isSmall = 0; // button dont become slower (when you tap it) if it slow
     float scaleX, scaleY;
     float textureW, textureH;
+    int buttonMode = 1; // 1 for on, 0 for off
 };
 
 #endif

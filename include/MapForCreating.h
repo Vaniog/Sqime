@@ -151,7 +151,8 @@ private:
     void displaySprites (RenderWindow *window), displayButtons(RenderWindow * window);
     void clearObjSprites();
     void feelObjSprites(int amount); // help to download map
-    int getNumber(ifstream &mapFile);
+    void buttonsModeSet(int mode); // turn on or off buttons
+    float getNumber(ifstream &mapFile);
     pair <int, int> catchMouse(); // help to input size with help of mouse
     //size choose UI
     pair <int, int> process = {0, 0}; // 0 0 for drawing, 1 0 for sizes,  1 1 for coordinates (first number is a type)

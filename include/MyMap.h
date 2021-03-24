@@ -35,6 +35,6 @@ private:
 
     void mapDownload (string mapFilePlace);
     void physicsCreate();
-    int getNumber(ifstream &mapFile);
+    float getNumber(ifstream &mapFile);
 };
 #endif

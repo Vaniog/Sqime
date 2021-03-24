@@ -138,15 +138,29 @@ void MyMap::physicsCreate()
         }
 }
 
-int MyMap::getNumber(ifstream &mapFile)
+float MyMap::getNumber(ifstream &mapFile)
 {
-    int a = 0;
+    int i;
+    float a = 0;
+    int afterPoint = 0;
     char s = 10;
     while (s == 10 || s == 32)
         mapFile.get(s);
     while(s != 10 && s != 32)
     {
-        a = a * 10 + s - '0';
+        if (s == '.')
+            afterPoint = 1;
+        else
+            if (afterPoint == 0)
+                a = a * 10 + s - '0';
+            else
+            {
+                float sNumber = s - '0';
+                for (i = 0; i < afterPoint; i++)
+                    sNumber /= 10;
+                a += sNumber;
+                afterPoint++;
+            }
         mapFile.get(s);
     }
     return a;
