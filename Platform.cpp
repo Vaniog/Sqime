@@ -13,7 +13,12 @@ Platform::Platform(float startXIn, float startYIn, float endXIn, float endYIn, f
     platformSpeed = speed * 0.00125;
     curX = startX, curY = startY;
     if (startY == endY)
-        dir = 2 - (abs(endX - startX)) / (endX - startX);
+    {
+        if (startX != endX)
+            dir = 2 - (abs(endX - startX)) / (endX - startX);
+        else
+            dir = 0;
+    }
     else
         dir = 1 + (abs(endY - startY)) / (endY - startY);
     if (startX > endX)
@@ -78,6 +83,7 @@ void Platform::movePlatform(float time, AllHitboxInf *AHI)
 {
     AHI->resetDepth();
     float oldX = curX, oldY = curY;
+
     curX += (dir % 2) * (2 - dir) * platformSpeed * time;
     curY += ((dir + 1) % 2) * (dir - 1) * platformSpeed * time;
 
@@ -85,26 +91,62 @@ void Platform::movePlatform(float time, AllHitboxInf *AHI)
 
     if (weightToMove != -1)
     {
-        curX = oldX, curY = oldY;
+        curX = oldX;
+        curY = oldY;
 
-        time *= weight / (weightToMove + weight);
-        curX += (dir % 2) * (2 - dir) * platformSpeed * time;
-        curY += ((dir + 1) % 2) * (dir - 1) * platformSpeed * time;
-        AHI->tryToMoveAll(number, dir, platformSpeed * time, 1);
         if (dir == 1 || dir == 3)
         {
-            if (curX < startX)
+            if (curX <= startX)
                 dir = 1;
-            if (curX > endX)
+            if (curX >= endX)
                 dir = 3;
         }
         else
         {
-            if (curY < startY)
+            if (curY <= startY)
                 dir = 2;
-            if (curY > endY)
+            if (curY >= endY)
                 dir = 0;
         }
+
+        time *= weight / (weightToMove + weight);
+
+        switch (dir % 2)
+        {
+        case 0:
+            curY += ((dir + 1) % 2) * (dir - 1) * platformSpeed * time;
+            if (curY > endY)
+            {
+                curY = endY;
+                break;
+            }
+            if (curY < startY)
+            {
+                curY = startY;
+                break;
+            }
+            AHI->tryToMoveAll(number, dir, platformSpeed * time, 1);
+            break;
+        case 1:
+            curX += (dir % 2) * (2 - dir) * platformSpeed * time;
+            if (curX > endX)
+            {
+                curX = endX;
+                break;
+            }
+            if (curX < startX)
+            {
+                curX = startX;
+                break;
+            }
+            AHI->tryToMoveAll(number, dir, platformSpeed * time, 1);
+            break;
+        }
+
+       /* curX += (dir % 2) * (2 - dir) * platformSpeed * time;
+        curY += ((dir + 1) % 2) * (dir - 1) * platformSpeed * time;
+
+        AHI->tryToMoveAll(number, dir, platformSpeed * time, 1);*/
     }
     else
     {
