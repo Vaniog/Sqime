@@ -31,7 +31,13 @@ Platform::Platform(float startXIn, float startYIn, float endXIn, float endYIn, f
     platformImage.loadFromFile(texPlace);
     platformTexture.loadFromImage(platformImage);
     platformSprite.setTexture(platformTexture);
-    platformSprite.setTextureRect(IntRect(0, 0, tilesize * width, height * tilesize));
+
+    int texStartX = 0, texStartY = 0, i;
+    for (i = 1; i < width; i++)
+        texStartX += i * 16;
+    for (i = 1; i < height; i++)
+        texStartY += i * 16;
+    platformSprite.setTextureRect(IntRect(texStartX, texStartY, tilesize * width, height * tilesize));
     platformSprite.setPosition(startX, startY);
     platformSprite.setScale(MapIn->scale * (tilesize * scale * width) / (tilesize * scale * width), MapIn->scale * (tilesize * scale * height) / (tilesize * scale * height));
 }
@@ -46,13 +52,7 @@ void Platform::displayObject(RenderWindow *window)
 {
     int conturWidth = scale;
     platformSprite.setPosition((int)(curX * scale * tilesize + mapStartX), (int)(curY * scale * tilesize + mapStartY));
-    RectangleShape contur(Vector2f(width * scale * tilesize - conturWidth * 2, height * scale * tilesize - conturWidth * 2));
-    contur.setOutlineThickness(conturWidth);
-    contur.setOutlineColor(Color(32, 47, 57));
-    contur.setFillColor(Color(0, 0, 0, 0));
-    contur.setPosition((int)(curX * scale * tilesize + mapStartX) + conturWidth, (int)(curY * scale * tilesize + mapStartY) + conturWidth);
     window->draw(platformSprite);
-    window->draw(contur);
 }
 
 pair <float, float> Platform::coordinates()
@@ -94,21 +94,6 @@ void Platform::movePlatform(float time, AllHitboxInf *AHI)
         curX = oldX;
         curY = oldY;
 
-        if (dir == 1 || dir == 3)
-        {
-            if (curX <= startX)
-                dir = 1;
-            if (curX >= endX)
-                dir = 3;
-        }
-        else
-        {
-            if (curY <= startY)
-                dir = 2;
-            if (curY >= endY)
-                dir = 0;
-        }
-
         time *= weight / (weightToMove + weight);
 
         switch (dir % 2)
@@ -117,12 +102,18 @@ void Platform::movePlatform(float time, AllHitboxInf *AHI)
             curY += ((dir + 1) % 2) * (dir - 1) * platformSpeed * time;
             if (curY > endY)
             {
-                curY = endY;
+                if (oldY <= endY)
+                    curY = endY, dir = 0;
+                else
+                    dir = 0;
                 break;
             }
             if (curY < startY)
             {
-                curY = startY;
+                if (oldY >= startY)
+                    curY = startY, dir = 2;
+                else
+                    dir = 2;
                 break;
             }
             AHI->tryToMoveAll(number, dir, platformSpeed * time, 1);
@@ -131,22 +122,23 @@ void Platform::movePlatform(float time, AllHitboxInf *AHI)
             curX += (dir % 2) * (2 - dir) * platformSpeed * time;
             if (curX > endX)
             {
-                curX = endX;
+                if (oldX <= endX)
+                    curX = endX, dir = 3;
+                else
+                    dir = 3;
                 break;
             }
             if (curX < startX)
             {
-                curX = startX;
+                if (oldX >= startX)
+                    curX = startX, dir = 1;
+                else
+                    dir = 1;
                 break;
             }
             AHI->tryToMoveAll(number, dir, platformSpeed * time, 1);
             break;
         }
-
-       /* curX += (dir % 2) * (2 - dir) * platformSpeed * time;
-        curY += ((dir + 1) % 2) * (dir - 1) * platformSpeed * time;
-
-        AHI->tryToMoveAll(number, dir, platformSpeed * time, 1);*/
     }
     else
     {

@@ -419,8 +419,14 @@ void MapForCreating::addToObjSprites(int number)
         float h = objects[number]->height;
         float sX = objects[number]->startX;
         float sY = objects[number]->startY;
+
+        int texStartX = 0, texStartY = 0, i;
+        for (i = 1; i < w; i++)
+            texStartX += i * 16;
+        for (i = 1; i < h; i++)
+            texStartY += i * 16;
         Button *button;
-        button = new Button(startX + scale * sX * tilesize, startY + scale * sY * tilesize, 0, 0, 16 * w, 16 * h, w * scale * tilesize, h * scale * tilesize, platformPlace);
+        button = new Button(startX + scale * sX * tilesize, startY + scale * sY * tilesize, texStartX, texStartY, 16 * w, 16 * h, w * scale * tilesize, h * scale * tilesize, platformPlace);
         objSprites.push_back(button);
         break;
     }
