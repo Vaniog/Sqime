@@ -92,6 +92,16 @@ void Player::Update(float &time) // physics moves
         {
             if (fallSpeed >= 0)
                 onGround = 1;
+            else
+            {
+                changeY = (int)curY - curY;
+                if (changeY < 0.02)
+                {
+                    weightToMove = tryToMove(changeY, 2, 0);
+                    if (weightToMove != -1)
+                        tryToMove(changeY * weight / weightToMove, 2, 1);
+                }
+            }
             fallSpeed = 0;
         }
         else
