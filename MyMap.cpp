@@ -131,7 +131,7 @@ void MyMap::physicsCreate()
             int tile = max(tiles[i][k][0], tiles[i][k][1]);
             if (tile >= 1 && tile <= 16)
                 physics[i][k] = 1;
-            if (tile >= 17 && tile <= 48 || tile == 0)
+            if ((tile >= 17 && tile <= 48) || tile == 0)
                 physics[i][k] = 0;
             if (tile >= 49 && tile <= 124)
                 physics[i][k] = (tile - 17) / 16;

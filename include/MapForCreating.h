@@ -41,7 +41,7 @@ public:
         startY = VideoMode::getDesktopMode().height / 2 -  height / 2 + spaceForBorder;
         endX = startX + width - spaceForBorder * 2;
         endY = startY + height - spaceForBorder * 2;
-        sizeChooseClose = new Button(endX + spaceForBorder - scale * 4, startY - spaceForBorder - scale * 4, 0, 0, 9, 9, 9 * scale, 9 * scale, "images\\CloseSizeChoose.png");
+        sizeChooseClose = new Button(endX + spaceForBorder - scale * 4, startY - spaceForBorder - scale * 4, 0, 0, 9, 9, 9 * scale, 9 * scale, "images//CloseSizeChoose.png");
 
         sizeChooseTexture.loadFromImage(sizeChooseImage);
         sizeChooseSprite.setTexture(sizeChooseTexture);

@@ -15,7 +15,6 @@ int main()
     MapForCreating *mainMapForCreating = NULL;
     LevelMenu *mainLevelMenu = NULL;
     MainMenu *mainMainMenu = NULL;
-    AllHitboxInf *AHI = NULL;
 
     window.setFramerateLimit(200);
     Button mainButton(30, 30, 0, 0, 22, 9, 22 * 3, 9 * 3, "images//Butt.png");
@@ -32,7 +31,7 @@ int main()
             time = 50;
         while (window.pollEvent(event))
         {
-            if (event.type == Event::Closed)
+            if (event.type == Event::Closed || Keyboard::isKeyPressed(Keyboard::Q))
                 window.close();
         }
 
@@ -98,9 +97,6 @@ int main()
                 string way = "maps//";
                 string s;
                 cin >> s;
-                if(s[0] == '//')
-                    continue;
-
                 way += s;
                 way += ".txt";
                 mainMapForCreating->mapUpload(way);
@@ -111,8 +107,6 @@ int main()
                 string way = "maps//";
                 string s;
                 cin >> s;
-                if(s[0] == '//')
-                    continue;
                 way += s;
                 way += ".txt";
                 mainMapForCreating->mapDownload(way);

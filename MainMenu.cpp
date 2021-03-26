@@ -2,6 +2,9 @@
 
 MainMenu::MainMenu()
 {
+    playButton = new Button(startX, startY, 0, 0, 128, 32, sizeX, sizeY, "images//PlayButton.png");
+    levelsButton = new Button(startX, startY + (sizeY + spaceY), 0, 0, 128, 32, sizeX, sizeY, "images//LevelsButton.png");
+    createButton = new Button(startX, startY + 2 * (sizeY + spaceY), 0, 0, 128, 32, sizeX, sizeY, "images//CreateButton.png");
     Image backImg;
     backImg.loadFromFile("images//mainMenuBack.png");
     wB = backImg.getSize().x, hB = backImg.getSize().y;

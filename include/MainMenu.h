@@ -22,9 +22,9 @@ private:
 
     float movingSpeed = 0.02, backStartX; // for "parallax" background
 
-    Button *playButton = new Button(startX, startY, 0, 0, 128, 32, sizeX, sizeY, "images//PlayButton.png");
-    Button *levelsButton = new Button(startX, startY + (sizeY + spaceY), 0, 0, 128, 32, sizeX, sizeY, "images//LevelsButton.png");
-    Button *createButton = new Button(startX, startY + 2 * (sizeY + spaceY), 0, 0, 128, 32, sizeX, sizeY, "images//CreateButton.png");
+    Button *playButton;
+    Button *levelsButton;
+    Button *createButton;
 
     Texture backTex;
     int wB, hB; // width and height of background tile
