@@ -17,7 +17,7 @@ int main()
     MainMenu *mainMainMenu = NULL;
     AllHitboxInf *AHI = NULL;
 
-    window.setFramerateLimit(100);
+    window.setFramerateLimit(200);
     Button mainButton(30, 30, 0, 0, 22, 9, 22 * 3, 9 * 3, "images\\Butt.png");
     int lastLevel = 1;
     int levelChoose;

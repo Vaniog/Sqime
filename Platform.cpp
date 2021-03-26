@@ -50,7 +50,6 @@ void Platform::drawObject(float &time)
 
 void Platform::displayObject(RenderWindow *window)
 {
-    int conturWidth = scale;
     platformSprite.setPosition((int)(curX * scale * tilesize + mapStartX), (int)(curY * scale * tilesize + mapStartY));
     window->draw(platformSprite);
 }

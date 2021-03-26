@@ -18,7 +18,7 @@ MainMenu::~MainMenu()
     delete createButton;
 }
 
-MainMenu::drawAndCheckMenu(RenderWindow *window, float time)
+int MainMenu::drawAndCheckMenu(RenderWindow *window, float time)
 {
     int i, k;
     for (i = 0; i <= (VideoMode::getDesktopMode().width - backStartX) / wB / scale; i++)
