@@ -2,7 +2,6 @@
 #define PLAYER_H
 
 #include <bits/stdc++.h>
-#include <windows.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <DynamicObject.h>

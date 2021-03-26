@@ -5,7 +5,6 @@
 #include <SFML/Graphics.hpp>
 #include <fstream>
 #include <bits/stdc++.h>
-#include <windows.h>
 
 using namespace std;
 using namespace sf;
