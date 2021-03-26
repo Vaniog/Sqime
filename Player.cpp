@@ -1,4 +1,4 @@
-#include <dynamicObject.h>
+#include <DynamicObject.h>
 #include "Player.h"
 
 
