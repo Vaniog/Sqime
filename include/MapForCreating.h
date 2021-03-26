@@ -30,7 +30,7 @@ public:
     sizeChooseMenu()
     {
         Image sizeChooseImage;
-        sizeChooseImage.loadFromFile("images\\SizeChooseMenu.png");
+        sizeChooseImage.loadFromFile("images//SizeChooseMenu.png");
         height = VideoMode::getDesktopMode().height / 2;
         width = height;
         scale = width / sizeChooseImage.getSize().x;

@@ -18,7 +18,7 @@ int main()
     AllHitboxInf *AHI = NULL;
 
     window.setFramerateLimit(200);
-    Button mainButton(30, 30, 0, 0, 22, 9, 22 * 3, 9 * 3, "images\\Butt.png");
+    Button mainButton(30, 30, 0, 0, 22, 9, 22 * 3, 9 * 3, "images//Butt.png");
     int lastLevel = 1;
     int levelChoose;
     Clock clock;
@@ -95,10 +95,10 @@ int main()
             if (Keyboard::isKeyPressed(Keyboard::U))
             {
 
-                string way = "maps\\\\";
+                string way = "maps//";
                 string s;
                 cin >> s;
-                if(s[0] == '\\')
+                if(s[0] == '//')
                     continue;
 
                 way += s;
@@ -108,10 +108,10 @@ int main()
             if (Keyboard::isKeyPressed(Keyboard::D))
             {
 
-                string way = "maps\\\\";
+                string way = "maps//";
                 string s;
                 cin >> s;
-                if(s[0] == '\\')
+                if(s[0] == '//')
                     continue;
                 way += s;
                 way += ".txt";
@@ -121,7 +121,7 @@ int main()
             if (timePass > 3)
             {
                 timePass = 0;
-                mainMapForCreating->mapUpload("maps\\level00.txt");
+                mainMapForCreating->mapUpload("maps//level00.txt");
             }
 
             if (mainButton.buttonDisplayAndCheck(&window,-1, -1) == 1)
@@ -131,12 +131,12 @@ int main()
             if (Keyboard::isKeyPressed(Keyboard::N))
             {
                 delete mainMapForCreating;
-                mainMapForCreating = new MapForCreating("images\\Tile7.png", "images\\Background.png", "images\\Slime.png", "images\\Platform.png");
+                mainMapForCreating = new MapForCreating("images//Tile7.png", "images//Background.png", "images//Slime.png", "images//Platform.png");
             }
 
             if (Keyboard::isKeyPressed(Keyboard::T))
             {
-                mainMap = new MyMap("maps\\level00.txt", "images\\Tile7.png", "images\\Background.png");
+                mainMap = new MyMap("maps//level00.txt", "images//Tile7.png", "images//Background.png");
                 lastLevel = 0;
                 process = 1;
                 clock.restart();
@@ -148,7 +148,7 @@ int main()
 
         case -1: //download map and player
         {
-            string way = "maps\\\\level";
+            string way = "maps//level";
 
             char s[3];
             s[0] = '0' + (lastLevel) / 10;
@@ -158,7 +158,7 @@ int main()
             way += s;
             way += ".txt";
 
-            mainMap = new MyMap(way, "images\\Tile7.png", "images\\Background.png");
+            mainMap = new MyMap(way, "images//Tile7.png", "images//Background.png");
             process = 1;
             clock.restart();
             break;
@@ -174,8 +174,8 @@ int main()
 
         case -3://download
         {
-            mainMapForCreating = new MapForCreating("images\\Tile7.png", "images\\Background.png", "images\\Slime.png", "images\\Platform.png");
-            mainMapForCreating->mapDownload("maps\\level00.txt");
+            mainMapForCreating = new MapForCreating("images//Tile7.png", "images//Background.png", "images//Slime.png", "images//Platform.png");
+            mainMapForCreating->mapDownload("maps//level00.txt");
             process = 3;
             clock.restart();
             break;

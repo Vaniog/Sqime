@@ -40,7 +40,7 @@
     backSprite.setPosition(startX, startY);
 
 
-    ifstream mapFile("settings\\tilesButtonsInformation.txt");
+    ifstream mapFile("settings//tilesButtonsInformation.txt");
     if(!mapFile.is_open())
         cout << "Error";
 
@@ -54,7 +54,7 @@
         for (k = 0; k < underbuttonsAmount; k++)
         {
             int tileX = getNumber(mapFile), tileY = getNumber(mapFile);
-            Button *button = new Button(spaceAroundButtons, 100 + spaceForButtons * i, tileX * tilesize, tileY * tilesize, tilesize, tilesize, spaceForButtons - spaceAroundButtons * 2, spaceForButtons - spaceAroundButtons * 2, "images\\Tile7.png");
+            Button *button = new Button(spaceAroundButtons, 100 + spaceForButtons * i, tileX * tilesize, tileY * tilesize, tilesize, tilesize, spaceForButtons - spaceAroundButtons * 2, spaceForButtons - spaceAroundButtons * 2, "images//Tile7.png");
             buttons[i].push_back(button);
             int friendsAmount = getNumber(mapFile);
             int j;
@@ -74,8 +74,8 @@
     playerPlace = playerPlaceIn;
     platformPlace = platformPlaceIn;
 
-    playerButton = new Button(windowWidth - spaceForObjButtons, 200, 0, 0, -1, -1, spaceForObjButtons - spaceAroundButtons * 2, spaceForObjButtons - spaceAroundButtons * 2, "images\\PlayerButton.png");
-    platformButton = new Button(windowWidth - spaceForObjButtons, 200 + spaceForObjButtons, 0, 0, -1, -1, spaceForObjButtons - spaceAroundButtons * 2, spaceForObjButtons - spaceAroundButtons * 2, "images\\PlatformButton.png");
+    playerButton = new Button(windowWidth - spaceForObjButtons, 200, 0, 0, -1, -1, spaceForObjButtons - spaceAroundButtons * 2, spaceForObjButtons - spaceAroundButtons * 2, "images//PlayerButton.png");
+    platformButton = new Button(windowWidth - spaceForObjButtons, 200 + spaceForObjButtons, 0, 0, -1, -1, spaceForObjButtons - spaceAroundButtons * 2, spaceForObjButtons - spaceAroundButtons * 2, "images//PlatformButton.png");
  //   ObjectInf *obj = new ObjectInf(2, 2, 0, 0, 0, 0, 0, 's');
   //  objects.push_back(obj);
 }
@@ -132,13 +132,13 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
         inputObject = new ObjectInf(1);
         sizeChooseUI = new sizeChooseMenu();
         Image sliderBackImage;
-        sliderBackImage.loadFromFile("images\\SpeedSliderBack.png");
+        sliderBackImage.loadFromFile("images//SpeedSliderBack.png");
         float sliderWidth = VideoMode::getDesktopMode().width / 3;
         float sliderHeight = sliderWidth / 4;
         float sliderStartX = VideoMode::getDesktopMode().width / 2 - sliderWidth / 2;
         float sliderStartY = VideoMode::getDesktopMode().height / 2 - sliderHeight / 2;
         float sliderScale = sliderWidth / sliderBackImage.getSize().x;
-        speedSlider = new Slider(sliderStartX + sliderScale * 4, sliderStartY + sliderScale * 4, sliderScale * 5.5, sliderStartX + sliderWidth / 4 + sliderScale * 6, sliderStartY + sliderHeight / 2, sliderStartX + sliderWidth - sliderScale * 6, sliderStartY + sliderHeight / 2, 0, 5, sliderHeight / 3, 0.1, "images\\Slider.png");
+        speedSlider = new Slider(sliderStartX + sliderScale * 4, sliderStartY + sliderScale * 4, sliderScale * 5.5, sliderStartX + sliderWidth / 4 + sliderScale * 6, sliderStartY + sliderHeight / 2, sliderStartX + sliderWidth - sliderScale * 6, sliderStartY + sliderHeight / 2, 0, 5, sliderHeight / 3, 0.1, "images//Slider.png");
 
 
         sliderBackTex.loadFromImage(sliderBackImage);
@@ -146,7 +146,7 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
         sliderBackSprite.setPosition(sliderStartX, sliderStartY);
         sliderBackSprite.setScale(sliderScale, sliderScale);
 
-        okButton = new Button(sliderStartX + sliderWidth / 2 - 11 * sliderScale / 2, sliderStartY + sliderHeight - sliderScale * 9 / 2, 0, 0, 11, 9, 11 * sliderScale, 9 * sliderScale, "images\\OKButton.png");
+        okButton = new Button(sliderStartX + sliderWidth / 2 - 11 * sliderScale / 2, sliderStartY + sliderHeight - sliderScale * 9 / 2, 0, 0, 11, 9, 11 * sliderScale, 9 * sliderScale, "images//OKButton.png");
         buttonsModeSet(0);
     }
 
@@ -217,7 +217,7 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
 
 
     Font font;
-    font.loadFromFile("images\\mainFont.ttf");
+    font.loadFromFile("images//mainFont.ttf");
     Text infText("", font, 25);
     infText.setColor(Color::White);
     infText.setPosition(10 + windowWidth - spaceForObjButtons, 10);

@@ -102,7 +102,7 @@ void MyMap::mapDownload (string mapFilePlace)
             float w, h, sX, sY;
             w = getNumber(mapFile), h = getNumber(mapFile), sX = getNumber(mapFile), sY = getNumber(mapFile);
             DynamicObject *player = NULL;
-            player = new Player("images\\Slime.png", sX, sY, w, h, this, AHI);
+            player = new Player("images//Slime.png", sX, sY, w, h, this, AHI);
             player->setNumber(AHI->addObject(player));
             break;
         }
@@ -113,7 +113,7 @@ void MyMap::mapDownload (string mapFilePlace)
             sX = getNumber(mapFile), sY = getNumber(mapFile);
             eX = getNumber(mapFile), eY = getNumber(mapFile);
             speed = getNumber(mapFile);
-            DynamicObject *platform = new Platform(sX, sY, eX, eY, w, h, speed, "images\\Platform.png", this, AHI);
+            DynamicObject *platform = new Platform(sX, sY, eX, eY, w, h, speed, "images//Platform.png", this, AHI);
             platform->setNumber(AHI->addObject(platform));
             break;
         }

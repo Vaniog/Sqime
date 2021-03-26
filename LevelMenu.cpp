@@ -21,7 +21,7 @@ LevelMenu::LevelMenu()
 
     for (i = 0; i < levelsAmount; i++)
     {
-        Button *button = new Button(startX + i % buttonsInRow * fullSpace , startY + fullSpace * (i / buttonsInRow), 0, 0, 16, 16, spaceForButtons, spaceForButtons, "images\\button.png");
+        Button *button = new Button(startX + i % buttonsInRow * fullSpace , startY + fullSpace * (i / buttonsInRow), 0, 0, 16, 16, spaceForButtons, spaceForButtons, "images//button.png");
         levelsButtons.push_back(button);
     }
 }
@@ -31,7 +31,7 @@ int LevelMenu::drawAndCheckMenu(RenderWindow *window)
     int i;
 
     Font font;
-    font.loadFromFile("images\\mainFont.ttf");
+    font.loadFromFile("images//mainFont.ttf");
     Text levelText("", font, spaceForButtons - spaceForText * 2);
     levelText.setScale(1, 1);
     levelText.setColor(Color(0, 0, 0));

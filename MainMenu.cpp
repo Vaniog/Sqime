@@ -3,7 +3,7 @@
 MainMenu::MainMenu()
 {
     Image backImg;
-    backImg.loadFromFile("images\\mainMenuBack.png");
+    backImg.loadFromFile("images//mainMenuBack.png");
     wB = backImg.getSize().x, hB = backImg.getSize().y;
     backTex.loadFromImage(backImg);
     backSprite.setTexture(backTex);
