@@ -1,10 +1,10 @@
 #include "Button.h"
 
-Button::Button(int xIn, int yIn, int startDownloadingFromX, int startDownloadingFromY, int textureWIn, int textureHIn, float widthIn, float heightIn, string buttonTexPlace)
+Button::Button(int xIn, int yIn, int startDownloadingFromX, int startDownloadingFromY, int textureWIn, int textureHIn, float widthIn, float heightIn, std::string buttonTexPlace)
 {
     x = xIn, y = yIn;
     width = widthIn, height = heightIn;
-    Image buttonImage;
+    sf::Image buttonImage;
     buttonImage.loadFromFile(buttonTexPlace);
     buttonTex.loadFromImage(buttonImage);
     buttonSprite.setTexture(buttonTex);
@@ -13,7 +13,7 @@ Button::Button(int xIn, int yIn, int startDownloadingFromX, int startDownloading
         textureWIn = buttonImage.getSize().x;
         textureHIn = buttonImage.getSize().y;
     }
-    buttonSprite.setTextureRect(IntRect(startDownloadingFromX, startDownloadingFromY, textureWIn, textureHIn));
+    buttonSprite.setTextureRect(sf::IntRect(startDownloadingFromX, startDownloadingFromY, textureWIn, textureHIn));
     buttonSprite.setPosition(x, y);
     textureW = textureWIn;
     textureH = textureHIn;
@@ -22,7 +22,7 @@ Button::Button(int xIn, int yIn, int startDownloadingFromX, int startDownloading
     buttonSprite.setScale(scaleX, scaleY);
 }
 
-int Button::buttonDisplayAndCheck(RenderWindow *window, int xIn, int yIn)
+int Button::buttonDisplayAndCheck(sf::RenderWindow *window, int xIn, int yIn)
 {
     if (xIn != -1)
     {
@@ -30,23 +30,23 @@ int Button::buttonDisplayAndCheck(RenderWindow *window, int xIn, int yIn)
     }
 
     bool isMouseOnButton = 0;
-    int mouseX = Mouse::getPosition().x;
-    int mouseY = Mouse::getPosition().y;
+    int mouseX = sf::Mouse::getPosition().x;
+    int mouseY = sf::Mouse::getPosition().y;
     if (mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height)
     {
-        if (Mouse::isButtonPressed(Mouse::Left))
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {
             if (buttonMode)
             {
-                while(Mouse::isButtonPressed(Mouse::Left));
+                while(sf::Mouse::isButtonPressed(sf::Mouse::Left));
                 return 1;
             }
         }
-        else if (Mouse::isButtonPressed(Mouse::Right))
+        else if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
             {
                 if (buttonMode)
                 {
-                    while(Mouse::isButtonPressed(Mouse::Right));
+                    while(sf::Mouse::isButtonPressed(sf::Mouse::Right));
                     return 2;
                 }
             }

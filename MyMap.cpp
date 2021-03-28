@@ -1,31 +1,31 @@
 #include "MyMap.h"
 
 
-MyMap::MyMap(string mapFilePlace, string tilesPlace, string backgroundPlace)
+MyMap::MyMap(std::string mapFilePlace, std::string tilesPlace, std::string backgroundPlace)
 {
     AHI = new AllHitboxInf(this);
     mapAdress = this;
-    windowWidth = VideoMode::getDesktopMode().width;
-    windowHeight = VideoMode::getDesktopMode().height;
-    Image tileImage;
+    windowWidth = sf::VideoMode::getDesktopMode().width;
+    windowHeight = sf::VideoMode::getDesktopMode().height;
+    sf::Image tileImage;
     tileImage.loadFromFile(tilesPlace);
-    tileImage.createMaskFromColor(Color(254, 254, 254), 0);
+    tileImage.createMaskFromColor(sf::Color(254, 254, 254), 0);
     tilesize = tileImage.getSize().y / 16;
     tileTexture.loadFromImage(tileImage);
     tilesprite.setTexture(tileTexture);
 
     mapDownload(mapFilePlace);
 
-    Image backgroundImage;
+    sf::Image backgroundImage;
     backgroundImage.loadFromFile(backgroundPlace);
     backTex.loadFromFile(backgroundPlace);
     backSprite.setTexture(backTex);
-    backSprite.setTextureRect(IntRect(0, 0, tilesize * width, tilesize * height));
+    backSprite.setTextureRect(sf::IntRect(0, 0, tilesize * width, tilesize * height));
     backSprite.setPosition(startX, startY);
     backSprite.setScale(scale, scale);
 }
 
-int MyMap::DrawMap(RenderWindow *window, float time)
+int MyMap::DrawMap(sf::RenderWindow *window, float time)
 {
     int i, k;
     (*window).draw(backSprite);
@@ -36,7 +36,7 @@ int MyMap::DrawMap(RenderWindow *window, float time)
         {
             if (tiles[i][k][0] != 0)
             {
-                tilesprite.setTextureRect(IntRect(((tiles[i][k][0] - 1) / 16) * tilesize, (tiles[i][k][0] - 1) % 16 * tilesize, tilesize, tilesize));
+                tilesprite.setTextureRect(sf::IntRect(((tiles[i][k][0] - 1) / 16) * tilesize, (tiles[i][k][0] - 1) % 16 * tilesize, tilesize, tilesize));
                 tilesprite.setPosition((int)(startX + i * scale  * tilesize), (int)(startY + k * scale * tilesize));
                 tilesprite.setScale(scale, scale);
                 (*window).draw(tilesprite);
@@ -52,7 +52,7 @@ int MyMap::DrawMap(RenderWindow *window, float time)
         {
             if (tiles[i][k][1] != 0)
             {
-                tilesprite.setTextureRect(IntRect(((tiles[i][k][1] - 1) / 16) * tilesize, (tiles[i][k][1] - 1) % 16 * tilesize, tilesize, tilesize));
+                tilesprite.setTextureRect(sf::IntRect(((tiles[i][k][1] - 1) / 16) * tilesize, (tiles[i][k][1] - 1) % 16 * tilesize, tilesize, tilesize));
                 tilesprite.setPosition((int)(startX + i * scale  * tilesize), (int)(startY + k * scale * tilesize));
                 tilesprite.setScale(scale, scale);
                 (*window).draw(tilesprite);
@@ -64,11 +64,11 @@ int MyMap::DrawMap(RenderWindow *window, float time)
     return action;
 }
 
-void MyMap::mapDownload (string mapFilePlace)
+void MyMap::mapDownload (std::string mapFilePlace)
 {
-    ifstream mapFile(mapFilePlace);
+    std::ifstream mapFile(mapFilePlace);
     if(!mapFile.is_open())
-        cout << "Error";
+        std::cout << "Error";
 
     width = getNumber(mapFile);
     height = getNumber(mapFile);
@@ -81,11 +81,11 @@ void MyMap::mapDownload (string mapFilePlace)
             tiles[i][k][0] = 0;
             tiles[i][k][1] = tile;
             if (tile <= 16 * 3)
-                swap(tiles[i][k][0], tiles[i][k][1]);
+                std::swap(tiles[i][k][0], tiles[i][k][1]);
         }
     physicsCreate();
 
-    scale = min((float)windowWidth / tilesize / width, (float)windowHeight / tilesize / height);
+    scale = std::min((float)windowWidth / tilesize / width, (float)windowHeight / tilesize / height);
     scale -= (scale * tilesize - (int)(scale * tilesize)) / tilesize;
     startX = ((float)windowWidth - scale * tilesize * width) / 2;
     startY = ((float)windowHeight - scale * tilesize * height) / 2;
@@ -128,7 +128,7 @@ void MyMap::physicsCreate()
     for (i = 0; i < width; i++)
         for (k = 0; k < height; k++)
         {
-            int tile = max(tiles[i][k][0], tiles[i][k][1]);
+            int tile = std::max(tiles[i][k][0], tiles[i][k][1]);
             if (tile >= 1 && tile <= 16)
                 physics[i][k] = 1;
             if ((tile >= 17 && tile <= 48) || tile == 0)
@@ -138,7 +138,7 @@ void MyMap::physicsCreate()
         }
 }
 
-float MyMap::getNumber(ifstream &mapFile)
+float MyMap::getNumber(std::ifstream &mapFile)
 {
     int i;
     float a = 0;

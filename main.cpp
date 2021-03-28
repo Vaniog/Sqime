@@ -5,11 +5,11 @@
 
 int main()
 {
-    Event event;
+    sf::Event event;
     int process = -10;
-    int windowWidth = VideoMode::getDesktopMode().width, windowHeight = VideoMode::getDesktopMode().height;
+    int windowWidth = sf::VideoMode::getDesktopMode().width, windowHeight = sf::VideoMode::getDesktopMode().height;
 
-    RenderWindow window(VideoMode(windowWidth, windowHeight), " " , Style::Fullscreen);
+    sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), " " , sf::Style::Fullscreen);
 
     MyMap *mainMap = NULL;
     MapForCreating *mainMapForCreating = NULL;
@@ -20,7 +20,7 @@ int main()
     Button mainButton(30, 30, 0, 0, 22, 9, 22 * 3, 9 * 3, "images//Butt.png");
     int lastLevel = 1;
     int levelChoose;
-    Clock clock;
+    sf::Clock clock;
     float timePass = 0;
     while (window.isOpen())
     {
@@ -31,7 +31,7 @@ int main()
             time = 50;
         while (window.pollEvent(event))
         {
-            if (event.type == Event::Closed || Keyboard::isKeyPressed(Keyboard::Q))
+            if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
                 window.close();
         }
 
@@ -64,7 +64,7 @@ int main()
                 process = -10;
             if (mainButton.buttonDisplayAndCheck(&window,-1, -1) == 1)
                 process = -10, delete mainMap;
-            if(Keyboard::isKeyPressed(Keyboard::R))
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::R))
                 process = -1;
             window.display();
             break;
@@ -89,24 +89,24 @@ int main()
         case 3: //creating
         {
             timePass += time * 1000 * 1000000;
-            window.clear(Color(66, 92, 110));
+            window.clear(sf::Color(66, 92, 110));
             mainMapForCreating->DrawMap(&window, time);
-            if (Keyboard::isKeyPressed(Keyboard::U))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::U))
             {
 
-                string way = "maps//";
-                string s;
-                cin >> s;
+                std::string way = "maps//";
+                std::string s;
+                std::cin >> s;
                 way += s;
                 way += ".txt";
                 mainMapForCreating->mapUpload(way);
             }
-            if (Keyboard::isKeyPressed(Keyboard::D))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
             {
 
-                string way = "maps//";
-                string s;
-                cin >> s;
+                std::string way = "maps//";
+                std::string s;
+                std::cin >> s;
                 way += s;
                 way += ".txt";
                 mainMapForCreating->mapDownload(way);
@@ -122,13 +122,13 @@ int main()
                 process = -10, delete mainMapForCreating;
             window.display();
 
-            if (Keyboard::isKeyPressed(Keyboard::N))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::N))
             {
                 delete mainMapForCreating;
                 mainMapForCreating = new MapForCreating("images//Tile7.png", "images//Background.png", "images//Slime.png", "images//Platform.png");
             }
 
-            if (Keyboard::isKeyPressed(Keyboard::T))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::T))
             {
                 mainMap = new MyMap("maps//level00.txt", "images//Tile7.png", "images//Background.png");
                 lastLevel = 0;
@@ -142,7 +142,7 @@ int main()
 
         case -1: //download map and player
         {
-            string way = "maps//level";
+            std::string way = "maps//level";
 
             char s[3];
             s[0] = '0' + (lastLevel) / 10;

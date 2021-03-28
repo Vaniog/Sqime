@@ -5,7 +5,7 @@ MainMenu::MainMenu()
     playButton = new Button(startX, startY, 0, 0, 128, 32, sizeX, sizeY, "images//PlayButton.png");
     levelsButton = new Button(startX, startY + (sizeY + spaceY), 0, 0, 128, 32, sizeX, sizeY, "images//LevelsButton.png");
     createButton = new Button(startX, startY + 2 * (sizeY + spaceY), 0, 0, 128, 32, sizeX, sizeY, "images//CreateButton.png");
-    Image backImg;
+    sf::Image backImg;
     backImg.loadFromFile("images//mainMenuBack.png");
     wB = backImg.getSize().x, hB = backImg.getSize().y;
     backTex.loadFromImage(backImg);
@@ -21,12 +21,12 @@ MainMenu::~MainMenu()
     delete createButton;
 }
 
-int MainMenu::drawAndCheckMenu(RenderWindow *window, float time)
+int MainMenu::drawAndCheckMenu(sf::RenderWindow *window, float time)
 {
     int i, k;
-    for (i = 0; i <= (VideoMode::getDesktopMode().width - backStartX) / wB / scale; i++)
+    for (i = 0; i <= (sf::VideoMode::getDesktopMode().width - backStartX) / wB / scale; i++)
     {
-        for (k = 0; k <= VideoMode::getDesktopMode().height / hB / scale; k++)
+        for (k = 0; k <= sf::VideoMode::getDesktopMode().height / hB / scale; k++)
             backSprite.setPosition(i * wB * scale + backStartX, k * hB * scale), window->draw(backSprite);
     }
 

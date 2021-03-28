@@ -6,8 +6,6 @@
 #include <Player.h>
 #include <Platform.h>
 #include <DynamicObject.h>
-using namespace std;
-using namespace sf;
 #define maxMapW 50
 #define maxMapH 50
 
@@ -22,19 +20,19 @@ public:
     int startX, startY;
     AllHitboxInf *AHI;
     MyMap *mapAdress = NULL;
-    MyMap(string mapFilePlace, string tilesPlace, string backgroundPlace);
-    int DrawMap(RenderWindow *window, float time);
+    MyMap(std::string mapFilePlace, std::string tilesPlace, std::string backgroundPlace);
+    int DrawMap(sf::RenderWindow *window, float time);
     int getPhysics(int x, int y);
 
 private:
     int tiles[maxMapW][maxMapH][2];
     int physics[maxMapW][maxMapH];
-    Texture tileTexture, backTex;
-    Sprite tilesprite, backSprite;
+    sf::Texture tileTexture, backTex;
+    sf::Sprite tilesprite, backSprite;
     int windowWidth, windowHeight;
 
-    void mapDownload (string mapFilePlace);
+    void mapDownload (std::string mapFilePlace);
     void physicsCreate();
-    float getNumber(ifstream &mapFile);
+    float getNumber(std::ifstream &mapFile);
 };
 #endif

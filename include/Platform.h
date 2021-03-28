@@ -3,8 +3,6 @@
 #include <SFML/Graphics.hpp>
 #include <DynamicObject.h>
 #include <MyMap.h>
-using namespace std;
-using namespace sf;
 class MyMap;
 class AllHitboxInf;
 class Platform: public DynamicObject
@@ -15,11 +13,11 @@ public:
     float weight;
     int number;
 
-    Platform(float startXIn, float startYIn, float endXIn, float endYIn, float widthIn, float heightIn, float speed, string texPlace, MyMap *MapIn, AllHitboxInf *AHIIn);
+    Platform(float startXIn, float startYIn, float endXIn, float endYIn, float widthIn, float heightIn, float speed, std::string texPlace, MyMap *MapIn, AllHitboxInf *AHIIn);
     void drawObject(float &time);
-    void displayObject(RenderWindow *window);
-    pair <float, float> coordinates();
-    pair <float, float> sizes();
+    void displayObject(sf::RenderWindow *window);
+    std::pair <float, float> coordinates();
+    std::pair <float, float> sizes();
     int getNumber();
     void setNumber(int n);
 private:
@@ -30,8 +28,8 @@ private:
     float tilesize;
     float platformSpeed;
     float mapStartX, mapStartY;
-    Texture platformTexture;
-    Sprite platformSprite;
+    sf::Texture platformTexture;
+    sf::Sprite platformSprite;
     AllHitboxInf *AHI;
 
     void movePlatform(float time, AllHitboxInf *AHI);

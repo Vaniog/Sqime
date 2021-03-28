@@ -2,21 +2,21 @@
 #include "Player.h"
 
 
-Player::Player(string playerTexturePlace, int sX, int sY, int w, int h, MyMap *MapIn, AllHitboxInf *AHIIn)
+Player::Player(std::string playerTexturePlace, int sX, int sY, int w, int h, MyMap *MapIn, AllHitboxInf *AHIIn)
 {
     AHI = AHIIn;
-    windowWidth = VideoMode::getDesktopMode().width;
-    windowHeight = VideoMode::getDesktopMode().height;
+    windowWidth = sf::VideoMode::getDesktopMode().width;
+    windowHeight = sf::VideoMode::getDesktopMode().height;
     curX = sX;
     curY = sY;
     tilesize = 16;
     ptilesize = 32;
-    Image playerImage;
+    sf::Image playerImage;
     playerImage.loadFromFile(playerTexturePlace);
-    playerImage.createMaskFromColor(Color(254, 254, 254), 0);
+    playerImage.createMaskFromColor(sf::Color(254, 254, 254), 0);
     playerTexture.loadFromImage(playerImage);
     playerSprite.setTexture(playerTexture);
-    playerSprite.setTextureRect(IntRect(0, 0, ptilesize, ptilesize));
+    playerSprite.setTextureRect(sf::IntRect(0, 0, ptilesize, ptilesize));
     playerSprite.setScale(scale * width / startW * tilesize, scale * height / startH * tilesize);
     width = w * 0.99;
     height = h * 0.99;
@@ -59,7 +59,7 @@ void Player::drawObject(float &time)
     }
 }
 
-void Player::displayObject(RenderWindow *window)
+void Player::displayObject(sf::RenderWindow *window)
 {
     playerSprite.setTexture(playerTexture);
     if (AHI->animationProcess == 0)
@@ -74,7 +74,7 @@ void Player::Update(float &time) // physics moves
 {
     AHI->resetDepth();
 
-    if (Keyboard::isKeyPressed(Keyboard::W) && onGround == 1)
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && onGround == 1)
         fallSpeed -= sqrt(2 * freeFallAcc * (height * heightCoef + 0.4)), onGround = 0;
     if (onGround == 1)
     {
@@ -112,7 +112,7 @@ void Player::Update(float &time) // physics moves
                 if (fallSpeed > 0)
                     onGround = 1, fallSpeed += freeFallAcc * weight / weightToMove / 2;
                 else
-                    fallSpeed += freeFallAcc * time * weightToMove / weight, fallSpeed = min((float)0, fallSpeed);
+                    fallSpeed += freeFallAcc * time * weightToMove / weight, fallSpeed = std::min((float)0, fallSpeed);
             tryToMove(changeY * weight / weightToMove, 2, 1);
         }
     }
@@ -120,21 +120,21 @@ void Player::Update(float &time) // physics moves
 
 
 
-    if (Keyboard::isKeyPressed(Keyboard::A))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
     {
         if (playerSpeed > -maxPlayerXSpeed * 0.25)
             playerSpeed = -maxPlayerXSpeed * 0.25;
-        playerSprite.setTextureRect(IntRect(ptilesize, 0, ptilesize, ptilesize));
+        playerSprite.setTextureRect(sf::IntRect(ptilesize, 0, ptilesize, ptilesize));
         if (playerSpeed - playerXAcc * time >= -maxPlayerXSpeed)
             playerSpeed -= playerXAcc * time;
         else
             playerSpeed = -maxPlayerXSpeed;
     }
-    else if (Keyboard::isKeyPressed(Keyboard::D))
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
         if (playerSpeed < maxPlayerXSpeed * 0.25)
             playerSpeed = maxPlayerXSpeed * 0.25;
-        playerSprite.setTextureRect(IntRect(0, 0, ptilesize, ptilesize));
+        playerSprite.setTextureRect(sf::IntRect(0, 0, ptilesize, ptilesize));
         if (playerSpeed + playerXAcc * time <= maxPlayerXSpeed)
             playerSpeed += playerXAcc * time;
         else
@@ -167,8 +167,8 @@ int Player::isTouching(float newX, float newY, int direction) // check which blo
         float i;
         int block = 0;
         for (i = 0; i < width; i++)
-            block = max(physics[(int)(newX + i)][(int)newY], block);
-        block = max(physics[(int)(newX + width)][(int)newY], block);
+            block = std::max(physics[(int)(newX + i)][(int)newY], block);
+        block = std::max(physics[(int)(newX + width)][(int)newY], block);
         return block;
     }
     case 1:
@@ -178,8 +178,8 @@ int Player::isTouching(float newX, float newY, int direction) // check which blo
         float i;
         int block = 0;
         for (i = 0; i < height; i++)
-            block = max(physics[(int)(newX + width)][(int)(newY + i)], block);
-        block = max(physics[(int)(newX + width)][(int)(newY + height)], block);
+            block = std::max(physics[(int)(newX + width)][(int)(newY + i)], block);
+        block = std::max(physics[(int)(newX + width)][(int)(newY + height)], block);
         return block;
     }
     case 2:
@@ -189,8 +189,8 @@ int Player::isTouching(float newX, float newY, int direction) // check which blo
         float i;
         int block = 0;
         for (i = 0; i < width; i++)
-            block = max(physics[(int)(newX + i)][(int)(newY + height)], block);
-        block = max(physics[(int)(newX + width)][(int)(newY + height)], block);
+            block = std::max(physics[(int)(newX + i)][(int)(newY + height)], block);
+        block = std::max(physics[(int)(newX + width)][(int)(newY + height)], block);
         return block;
     }
     case 3:
@@ -200,8 +200,8 @@ int Player::isTouching(float newX, float newY, int direction) // check which blo
         float i;
         int block = 0;
         for (i = 0; i < height; i++)
-            block = max(physics[(int)(newX)][(int)(newY + i)], block);
-        block = max(physics[(int)(newX)][(int)(newY + height)], block);
+            block = std::max(physics[(int)(newX)][(int)(newY + i)], block);
+        block = std::max(physics[(int)(newX)][(int)(newY + height)], block);
         return block;
     }
     }
@@ -716,8 +716,8 @@ void Player::animationLevelPass(float time) // if you pass level, program call t
         }
         curY -= plungeSpeed * time;
         anCutTex -= plungeSpeed * time * (float)tilesize * 2 / height;
-        playerSprite.setTextureRect(IntRect(0, tilesize * 2 - (int)min(anCutTex, (float)tilesize * 2), tilesize * 2, (int)min(anCutTex, (float)tilesize * 2)));
-        playerSprite.setPosition(curX * scale * tilesize + startX, startY + curY * scale * tilesize + (tilesize * 2 - (int)min(anCutTex, (float)32)) * scale * height / 2);
+        playerSprite.setTextureRect(sf::IntRect(0, tilesize * 2 - (int)std::min(anCutTex, (float)tilesize * 2), tilesize * 2, (int)std::min(anCutTex, (float)tilesize * 2)));
+        playerSprite.setPosition(curX * scale * tilesize + startX, startY + curY * scale * tilesize + (tilesize * 2 - (int)std::min(anCutTex, (float)32)) * scale * height / 2);
         break;
     }
 
@@ -731,7 +731,7 @@ void Player::animationLevelPass(float time) // if you pass level, program call t
         }
         curX += plungeSpeed * time;
         anCutTex -= plungeSpeed * time * (float)tilesize * 2 / width;
-        playerSprite.setTextureRect(IntRect(0, 0, min(anCutTex, (float)tilesize * 2), tilesize * 2));
+        playerSprite.setTextureRect(sf::IntRect(0, 0, std::min(anCutTex, (float)tilesize * 2), tilesize * 2));
         playerSprite.setPosition(curX * scale * tilesize + startX, startY + curY * scale * tilesize);
         break;
     }
@@ -747,7 +747,7 @@ void Player::animationLevelPass(float time) // if you pass level, program call t
         }
         curY += plungeSpeed * time;
         anCutTex -= plungeSpeed * time * (float)tilesize * 2 / height;
-        playerSprite.setTextureRect(IntRect(0, 0, tilesize * 2, min(anCutTex, (float)tilesize * 2)));
+        playerSprite.setTextureRect(sf::IntRect(0, 0, tilesize * 2, std::min(anCutTex, (float)tilesize * 2)));
         playerSprite.setPosition(curX * scale * tilesize + startX, startY + curY * scale * tilesize);
         break;
     }
@@ -762,22 +762,22 @@ void Player::animationLevelPass(float time) // if you pass level, program call t
         }
         curX -= plungeSpeed * time;
         anCutTex -= plungeSpeed * time * (float)tilesize * 2 / width;
-        playerSprite.setTextureRect(IntRect(tilesize * 2 - (int)min(anCutTex, (float)tilesize * 2), 0, (int)min(anCutTex, (float)tilesize * 2), tilesize * 2));
-        playerSprite.setPosition(curX * scale * tilesize + startX + (tilesize * 2 - (int)min(anCutTex, (float)32)) * scale * width / 2, startY + curY * scale * tilesize);
+        playerSprite.setTextureRect(sf::IntRect(tilesize * 2 - (int)std::min(anCutTex, (float)tilesize * 2), 0, (int)std::min(anCutTex, (float)tilesize * 2), tilesize * 2));
+        playerSprite.setPosition(curX * scale * tilesize + startX + (tilesize * 2 - (int)std::min(anCutTex, (float)32)) * scale * width / 2, startY + curY * scale * tilesize);
         break;
     }
     }
 }
 
-pair <float, float> Player::coordinates()
+std::pair <float, float> Player::coordinates()
 {
-    pair <float, float> xy = {curX, curY};
+    std::pair <float, float> xy = {curX, curY};
     return xy;
 }
 
-pair <float, float> Player::sizes()
+std::pair <float, float> Player::sizes()
 {
-    pair <float, float> xy = {width, height};
+    std::pair <float, float> xy = {width, height};
     return xy;
 }
 

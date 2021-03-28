@@ -1,6 +1,6 @@
 #include <Platform.h>
 
-Platform::Platform(float startXIn, float startYIn, float endXIn, float endYIn, float widthIn, float heightIn, float speed, string texPlace, MyMap *MapIn, AllHitboxInf *AHIIn)
+Platform::Platform(float startXIn, float startYIn, float endXIn, float endYIn, float widthIn, float heightIn, float speed, std::string texPlace, MyMap *MapIn, AllHitboxInf *AHIIn)
 {
     AHI = AHIIn;
     scale = MapIn->scale;
@@ -22,12 +22,12 @@ Platform::Platform(float startXIn, float startYIn, float endXIn, float endYIn, f
     else
         dir = 1 + (abs(endY - startY)) / (endY - startY);
     if (startX > endX)
-        swap(startX, endX);
+        std::swap(startX, endX);
     if (startY > endY)
-        swap(startY, endY);
+        std::swap(startY, endY);
 
     int conturWidth = 7;
-    Image platformImage;
+    sf::Image platformImage;
     platformImage.loadFromFile(texPlace);
     platformTexture.loadFromImage(platformImage);
     platformSprite.setTexture(platformTexture);
@@ -37,7 +37,7 @@ Platform::Platform(float startXIn, float startYIn, float endXIn, float endYIn, f
         texStartX += i * 16;
     for (i = 1; i < height; i++)
         texStartY += i * 16;
-    platformSprite.setTextureRect(IntRect(texStartX, texStartY, tilesize * width, height * tilesize));
+    platformSprite.setTextureRect(sf::IntRect(texStartX, texStartY, tilesize * width, height * tilesize));
     platformSprite.setPosition(startX, startY);
     platformSprite.setScale(MapIn->scale * (tilesize * scale * width) / (tilesize * scale * width), MapIn->scale * (tilesize * scale * height) / (tilesize * scale * height));
 }
@@ -48,22 +48,22 @@ void Platform::drawObject(float &time)
         movePlatform(time, AHI);
 }
 
-void Platform::displayObject(RenderWindow *window)
+void Platform::displayObject(sf::RenderWindow *window)
 {
     platformSprite.setPosition((int)(curX * scale * tilesize + mapStartX), (int)(curY * scale * tilesize + mapStartY));
     window->draw(platformSprite);
 }
 
-pair <float, float> Platform::coordinates()
+std::pair <float, float> Platform::coordinates()
 {
-    pair <float, float> xy = {curX, curY};
+    std::pair <float, float> xy = {curX, curY};
     return xy;
 }
 
 
-pair <float, float> Platform::sizes()
+std::pair <float, float> Platform::sizes()
 {
-    pair <float, float> xy = {width, height};
+    std::pair <float, float> xy = {width, height};
     return xy;
 }
 

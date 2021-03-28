@@ -3,8 +3,8 @@
 LevelMenu::LevelMenu()
 {
     int windowWidth, windowHeight;
-    windowWidth = VideoMode::getDesktopMode().width;
-    windowHeight = VideoMode::getDesktopMode().height;
+    windowWidth = sf::VideoMode::getDesktopMode().width;
+    windowHeight = sf::VideoMode::getDesktopMode().height;
 
     levelsAmount = 10; // const (just trust)
     spaceForButtons = 160; // const
@@ -26,15 +26,15 @@ LevelMenu::LevelMenu()
     }
 }
 
-int LevelMenu::drawAndCheckMenu(RenderWindow *window)
+int LevelMenu::drawAndCheckMenu(sf::RenderWindow *window)
 {
     int i;
 
-    Font font;
+    sf::Font font;
     font.loadFromFile("images//mainFont.ttf");
-    Text levelText("", font, spaceForButtons - spaceForText * 2);
+    sf::Text levelText("", font, spaceForButtons - spaceForText * 2);
     levelText.setScale(1, 1);
-    levelText.setColor(Color(0, 0, 0, 255));
+    levelText.setColor(sf::Color(0, 0, 0, 255));
 
     for (i = 0; i < levelsAmount; i++)
     {

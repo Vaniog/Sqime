@@ -3,8 +3,7 @@
 #include <Button.h>
 #include <bits/stdc++.h>
 #include <SFML/Graphics.hpp>
-using namespace std;
-using namespace sf;
+
 class Button;
 class MainMenu // some buttons in mainMenu
 {
@@ -12,10 +11,10 @@ public:
     MainMenu();
     ~MainMenu();
 
-    int drawAndCheckMenu(RenderWindow *window, float time);
+    int drawAndCheckMenu(sf::RenderWindow *window, float time);
 private:
     int sizeX = 128 * 5, sizeY = 32 * 5;
-    int startX = (VideoMode::getDesktopMode().width - sizeX) / 2;
+    int startX = (sf::VideoMode::getDesktopMode().width - sizeX) / 2;
     int startY = 200;
     int spaceY = 50;
     float scale = 3; // all configurable here
@@ -26,9 +25,9 @@ private:
     Button *levelsButton;
     Button *createButton;
 
-    Texture backTex;
+    sf::Texture backTex;
     int wB, hB; // width and height of background tile
-    Sprite backSprite;
+    sf::Sprite backSprite;
 
 };
 

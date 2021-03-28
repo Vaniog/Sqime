@@ -3,14 +3,12 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
-using namespace std;
-using namespace sf;
 
 
 class Slider // Slider help you input inf with slider
 {
 public:
-    Slider(float textX, float textY, int textSize, int lineStartXIn, int lineStartYIn, int lineEndXIn, int lineEndYIn, int minValueIn, int maxValueIn, int sliderDiametrIn, float stepIn, string sliderPlace)
+    Slider(float textX, float textY, int textSize, int lineStartXIn, int lineStartYIn, int lineEndXIn, int lineEndYIn, int minValueIn, int maxValueIn, int sliderDiametrIn, float stepIn, std::string sliderPlace)
     {
         lineStartX = lineStartXIn, lineStartY = lineStartYIn;
         lineEndX = lineEndXIn, lineEndY = lineEndYIn;
@@ -19,7 +17,7 @@ public:
         step = stepIn;
         lineThick = sliderDiametr / 16;
 
-        Image sImage;
+        sf::Image sImage;
         sImage.loadFromFile(sliderPlace);
         scale = sliderDiametr / sImage.getSize().x;
         sliderTexture.loadFromImage(sImage);
@@ -27,26 +25,26 @@ public:
         sliderSprite.setScale(scale, scale);
 
         font.loadFromFile("images//mainFont.ttf");
-        valueText = new Text("", font, textSize);
-        valueText->setFillColor(Color(0, 0, 0));
+        valueText = new sf::Text("", font, textSize);
+        valueText->setFillColor(sf::Color(0, 0, 0));
         valueText->setPosition(textX, textY);
 
         if (lineStartY == lineEndY)
         {
             rotation = 1;
-            line = new RectangleShape(sf::Vector2f(lineEndX - lineStartX, 0));
+            line = new sf::RectangleShape(sf::Vector2f(lineEndX - lineStartX, 0));
             pixelStep = (lineEndX - lineStartX) / (maxValue - minValue);
         }
         else
         {
             rotation = 2;
-            line = new RectangleShape(sf::Vector2f(0, lineEndY - lineStartY));
+            line = new sf::RectangleShape(sf::Vector2f(0, lineEndY - lineStartY));
             pixelStep = (lineEndY - lineStartY) / (maxValue - minValue);
         }
 
         line->setPosition(lineStartX, lineStartY);
         line->setOutlineThickness(lineThick);
-        line->setOutlineColor(Color(32, 47, 57));
+        line->setOutlineColor(sf::Color(32, 47, 57));
 
         mainValue = minValue;
         sliderCurX = lineStartX;
@@ -61,16 +59,16 @@ public:
         delete line;
     }
 
-    float drawSliderGetValue(RenderWindow *window)
+    float drawSliderGetValue(sf::RenderWindow *window)
     {
         switch (rotation)
         {
         case 1:
         {
-            if (Mouse::isButtonPressed(Mouse::Left))
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
             {
-                int mouseX = Mouse::getPosition().x;
-                int mouseY = Mouse::getPosition().y;
+                int mouseX = sf::Mouse::getPosition().x;
+                int mouseY = sf::Mouse::getPosition().y;
                 if ((mouseX <= lineEndX && mouseX >= lineStartX) && (remTouch == 1 || (mouseY <= lineStartY + sliderDiametr / 2 && mouseY >= lineStartY - sliderDiametr / 2)))
                 {
                     sliderCurX = mouseX, remTouch = 1;
@@ -89,10 +87,10 @@ public:
         }
         case 2:
         {
-            if (Mouse::isButtonPressed(Mouse::Left))
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
             {
-                int mouseX = Mouse::getPosition().x;
-                int mouseY = Mouse::getPosition().y;
+                int mouseX = sf::Mouse::getPosition().x;
+                int mouseY = sf::Mouse::getPosition().y;
                 if ((mouseY <= lineEndY && mouseY >= lineStartY) && (remTouch == 1 || (mouseX <= lineStartX + sliderDiametr / 2 && mouseX >= lineStartX - sliderDiametr / 2)))
                 {
                     sliderCurY = mouseY, remTouch = 1;
@@ -113,9 +111,9 @@ public:
 
 
 
-        string s = to_string((int)mainValue);
+        std::string s = std::to_string((int)mainValue);
         if (step < 1)
-            s += "." + to_string((int)((mainValue + 0.001) * 10) % 10);
+            s += "." + std::to_string((int)((mainValue + 0.001) * 10) % 10);
         valueText->setString(s);
         window->draw(*valueText);
         window->draw(*line);
@@ -132,26 +130,26 @@ private:
     float scale;
     int lineThick;
     float mainValue;
-    Texture sliderTexture;
-    Sprite sliderSprite;
-    Font font;
-    Text *valueText;
-    RectangleShape *line;
+    sf::Texture sliderTexture;
+    sf::Sprite sliderSprite;
+    sf::Font font;
+    sf::Text *valueText;
+    sf::RectangleShape *line;
 };
 
 
 class Button // its button
 {
 public:
-    Button(int xIn, int yIn, int startDownloadingFromX, int startDownloadingFromY, int textureW, int textureH, float widthIn, float heightIn, string buttonTexPlace);
+    Button(int xIn, int yIn, int startDownloadingFromX, int startDownloadingFromY, int textureW, int textureH, float widthIn, float heightIn, std::string buttonTexPlace);
 
-    int buttonDisplayAndCheck(RenderWindow *window, int xIn, int yIn);
+    int buttonDisplayAndCheck(sf::RenderWindow *window, int xIn, int yIn);
     void buttonModeSet(int mode); // 1 for on, 0 for off
 private:
     float x, y;
     float width, height; // in pixels
-    Texture buttonTex;
-    Sprite buttonSprite;
+    sf::Texture buttonTex;
+    sf::Sprite buttonSprite;
     int isSmall = 0; // button dont become slower (when you tap it) if it slow
     float scaleX, scaleY;
     float textureW, textureH;

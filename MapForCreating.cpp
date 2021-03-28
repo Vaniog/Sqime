@@ -1,6 +1,6 @@
 #include "MapForCreating.h"
 
- MapForCreating::MapForCreating(string tilesPlace, string backgroundPlace, string playerPlaceIn, string platformPlaceIn)
+ MapForCreating::MapForCreating(std::string tilesPlace, std::string backgroundPlace, std::string playerPlaceIn, std::string platformPlaceIn)
 {
     int i, k;
     for (i = 0; i < MaxMapH; i++)
@@ -11,11 +11,11 @@
             tilesPhysics[k][i] = 0;
     width = 10;
     height = 10;
-    windowWidth = VideoMode::getDesktopMode().width;
-    windowHeight = VideoMode::getDesktopMode().height;
-    Image tileImage;
+    windowWidth = sf::VideoMode::getDesktopMode().width;
+    windowHeight = sf::VideoMode::getDesktopMode().height;
+    sf::Image tileImage;
     tileImage.loadFromFile(tilesPlace);
-    tileImage.createMaskFromColor(Color(254, 254, 254), 0);
+    tileImage.createMaskFromColor(sf::Color(254, 254, 254), 0);
     tilesize = 16;
     tileTexture.loadFromImage(tileImage);
     tilesprite.setTexture(tileTexture);
@@ -24,31 +24,31 @@
     spaceForObjButtons = 200;
     spaceAroundButtons = 5;
 
-    scale = min(((float)windowWidth - spaceForButtons * 10) / tilesize / width, (float)windowHeight / tilesize / height);
+    scale = std::min(((float)windowWidth - spaceForButtons * 10) / tilesize / width, (float)windowHeight / tilesize / height);
 
     startX = spaceForButtons * 5 + (((float)windowWidth - spaceForButtons * 10) - tilesize * scale * width) / 2;
     startY = ((float)windowHeight - scale * tilesize * height) / 2;
     scale -= (scale * tilesize - (int)(scale * tilesize)) / tilesize; //scale * tilesize need to be int
 
-    Image backgroundImage;
+    sf::Image backgroundImage;
     backgroundImage.loadFromFile(backgroundPlace);
 
     backTex.loadFromFile(backgroundPlace);
     backSprite.setTexture(backTex);
-    backSprite.setTextureRect(IntRect(0, 0, tilesize * width, tilesize * height));
+    backSprite.setTextureRect(sf::IntRect(0, 0, tilesize * width, tilesize * height));
     backSprite.setScale(scale, scale);
     backSprite.setPosition(startX, startY);
 
 
-    ifstream mapFile("settings//tilesButtonsInformation.txt");
+    std::ifstream mapFile("settings//tilesButtonsInformation.txt");
     if(!mapFile.is_open())
-        cout << "Error";
+        std::cout << "Error";
 
     buttonsAmount = getNumber(mapFile);
     int allUnderbuttonsAmount = 0;
     for (i = 0; i < buttonsAmount; i++)
     {
-        vector <Button*> a;
+        std::vector <Button*> a;
         buttons.push_back(a);
         int underbuttonsAmount = getNumber(mapFile);
         for (k = 0; k < underbuttonsAmount; k++)
@@ -58,14 +58,14 @@
             buttons[i].push_back(button);
             int friendsAmount = getNumber(mapFile);
             int j;
-            vector <int> friends;
+            std::vector <int> friends;
             for (j = 0; j < friendsAmount; j++)
             {
                 friends.push_back(getNumber(mapFile));
             }
             underButtonsFriends.push_back(friends);
         }
-        vector <int> b = {0, allUnderbuttonsAmount, underbuttonsAmount};
+        std::vector <int> b = {0, allUnderbuttonsAmount, underbuttonsAmount};
         allUnderbuttonsAmount += underbuttonsAmount;
         buttonsActive.push_back(b);
     }
@@ -92,7 +92,7 @@ MapForCreating::~MapForCreating()
         delete objects[i];
 }
 
-void MapForCreating::DrawMap(RenderWindow *window, float time)
+void MapForCreating::DrawMap(sf::RenderWindow *window, float time)
 {
     int i, k;
     timeAfterPrevClick += time;
@@ -106,7 +106,7 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
         {
             if (tiles[i][k] != 0)
             {
-                tilesprite.setTextureRect(IntRect((tiles[i][k] - 1) / 16 * tilesize, (tiles[i][k] - 1) % 16 * (int)tilesize, tilesize, tilesize));
+                tilesprite.setTextureRect(sf::IntRect((tiles[i][k] - 1) / 16 * tilesize, (tiles[i][k] - 1) % 16 * (int)tilesize, tilesize, tilesize));
                 tilesprite.setPosition((int)(startX + i * scale  * tilesize), (int)(startY + k * scale * tilesize));
                 tilesprite.setScale(scale, scale);
                 (*window).draw(tilesprite);
@@ -131,12 +131,12 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
         process = {2, 0};
         inputObject = new ObjectInf(1);
         sizeChooseUI = new sizeChooseMenu();
-        Image sliderBackImage;
+        sf::Image sliderBackImage;
         sliderBackImage.loadFromFile("images//SpeedSliderBack.png");
-        float sliderWidth = VideoMode::getDesktopMode().width / 3;
+        float sliderWidth = sf::VideoMode::getDesktopMode().width / 3;
         float sliderHeight = sliderWidth / 4;
-        float sliderStartX = VideoMode::getDesktopMode().width / 2 - sliderWidth / 2;
-        float sliderStartY = VideoMode::getDesktopMode().height / 2 - sliderHeight / 2;
+        float sliderStartX = sf::VideoMode::getDesktopMode().width / 2 - sliderWidth / 2;
+        float sliderStartY = sf::VideoMode::getDesktopMode().height / 2 - sliderHeight / 2;
         float sliderScale = sliderWidth / sliderBackImage.getSize().x;
         speedSlider = new Slider(sliderStartX + sliderScale * 4, sliderStartY + sliderScale * 4, sliderScale * 5.5, sliderStartX + sliderWidth / 4 + sliderScale * 6, sliderStartY + sliderHeight / 2, sliderStartX + sliderWidth - sliderScale * 6, sliderStartY + sliderHeight / 2, 0, 5, sliderHeight / 3, 0.1, "images//Slider.png");
 
@@ -158,7 +158,7 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
         {
         case 0:
         {
-            pair <int, int> sizeChooseUIReturn = sizeChooseUI->display(window);
+            std::pair <int, int> sizeChooseUIReturn = sizeChooseUI->display(window);
             if (sizeChooseUIReturn.first == -1)
             {
                 buttonsModeSet(1);
@@ -174,10 +174,10 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
         }
         case 1:
         {
-            if (Mouse::isButtonPressed(Mouse::Left))
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
             {
-                inputObject->startX = (int)((Mouse::getPosition().x - startX) / tilesize / scale);
-                inputObject->startY = (int)((Mouse::getPosition().y - startY) / tilesize / scale);
+                inputObject->startX = (int)((sf::Mouse::getPosition().x - startX) / tilesize / scale);
+                inputObject->startY = (int)((sf::Mouse::getPosition().y - startY) / tilesize / scale);
                 process.second++;
                 if (process.first == 1)
                 {
@@ -186,18 +186,18 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
                     buttonsModeSet(1);
                     process = {0, 0};
                 }
-                while(Mouse::isButtonPressed(Mouse::Left)){};
+                while(sf::Mouse::isButtonPressed(sf::Mouse::Left)){};
             }
             break;
         }
         case 2:
         {
-            if (Mouse::isButtonPressed(Mouse::Left))
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
             {
-                inputObject->endX = (int)((Mouse::getPosition().x - startX) / tilesize / scale);
-                inputObject->endY = (int)((Mouse::getPosition().y - startY) / tilesize / scale);
+                inputObject->endX = (int)((sf::Mouse::getPosition().x - startX) / tilesize / scale);
+                inputObject->endY = (int)((sf::Mouse::getPosition().y - startY) / tilesize / scale);
                 process.second++;
-                while(Mouse::isButtonPressed(Mouse::Left)){};
+                while(sf::Mouse::isButtonPressed(sf::Mouse::Left)){};
             }
             break;
         }
@@ -216,22 +216,22 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
     }
 
 
-    Font font;
+    sf::Font font;
     font.loadFromFile("images//mainFont.ttf");
-    Text infText("", font, 25);
-    infText.setColor(Color::White);
+    sf::Text infText("", font, 25);
+    infText.setColor(sf::Color::White);
     infText.setPosition(10 + windowWidth - spaceForObjButtons, 10);
-    string s = to_string((int)width) + "    " + to_string((int)height) + "\n" + to_string((int)((Mouse::getPosition().x - startX) / tilesize / scale)) + "     " +  to_string((int)((Mouse::getPosition().y - startY) / tilesize / scale))
+    std::string s = std::to_string((int)width) + "    " + std::to_string((int)height) + "\n" + std::to_string((int)((sf::Mouse::getPosition().x - startX) / tilesize / scale)) + "     " +  std::to_string((int)((sf::Mouse::getPosition().y - startY) / tilesize / scale))
     + "\n\nD - download \nU - upload\nT - try\nN - new\n";
     infText.setString(s);
     window->draw(infText);
 }
 
-void MapForCreating::mapUpload (string mapFilePlace)
+void MapForCreating::mapUpload (std::string mapFilePlace)
 {
-    ofstream mapFile(mapFilePlace);
+    std::ofstream mapFile(mapFilePlace);
     if(!mapFile.is_open())
-        cout << "FileError\n";
+        std::cout << "FileError\n";
     mapFile << width << "\n";
     mapFile << height << "\n";
     int i, k;
@@ -274,7 +274,7 @@ void MapForCreating::mapUpload (string mapFilePlace)
     mapFile.close();
 }
 
-int MapForCreating::mapDownload (string mapFilePlace)
+int MapForCreating::mapDownload (std::string mapFilePlace)
 {
     int i;
     int k;
@@ -285,9 +285,9 @@ int MapForCreating::mapDownload (string mapFilePlace)
     }
     clearObjSprites();
 
-    ifstream mapFile(mapFilePlace);
+    std::ifstream mapFile(mapFilePlace);
     if(!mapFile.is_open())
-        cout << "Error";
+        std::cout << "Error";
 
     width = getNumber(mapFile);
     if (width == -1)
@@ -349,7 +349,7 @@ int MapForCreating::mapDownload (string mapFilePlace)
 }
 
 
-void MapForCreating::displaySprites(RenderWindow *window)
+void MapForCreating::displaySprites(sf::RenderWindow *window)
 {
     int i;
     for (i = 0; i < objSprites.size(); i++)
@@ -365,7 +365,7 @@ void MapForCreating::displaySprites(RenderWindow *window)
 }
 
 
-void MapForCreating::displayButtons(RenderWindow *window)
+void MapForCreating::displayButtons(sf::RenderWindow *window)
 {
     int i;
     for (i = 0; i < buttonsAmount; i++)
@@ -436,12 +436,12 @@ void MapForCreating::addToObjSprites(int number)
 void MapForCreating::correctPositions()
 {
     clearObjSprites();
-    scale = min(((float)windowWidth - spaceForButtons * 10) / tilesize / width, (float)windowHeight / tilesize / height);
+    scale = std::min(((float)windowWidth - spaceForButtons * 10) / tilesize / width, (float)windowHeight / tilesize / height);
     scale -= (scale * tilesize - (int)(scale * tilesize)) / tilesize;
     startX = spaceForButtons * 5 + (((float)windowWidth - spaceForButtons * 10) - tilesize * scale * width) / 2;
     startY = ((float)windowHeight - scale * tilesize * height) / 2;
 
-    backSprite.setTextureRect(IntRect(0, 0, tilesize * width, tilesize * height));
+    backSprite.setTextureRect(sf::IntRect(0, 0, tilesize * width, tilesize * height));
     backSprite.setScale(scale, scale);
     backSprite.setPosition(startX, startY);
     feelObjSprites(objects.size());
@@ -449,40 +449,40 @@ void MapForCreating::correctPositions()
 
 void MapForCreating::keyboardCommands()
 {
-    if (Keyboard::isKeyPressed(Keyboard::Up) && height < MaxMapH)
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && height < MaxMapH)
     {
-        while(Keyboard::isKeyPressed(Keyboard::Up)){}
+        while(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){}
         height++;
         correctPositions();
     }
 
 
-    if (Keyboard::isKeyPressed(Keyboard::Down) && height > 1)
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && height > 1)
     {
-        while(Keyboard::isKeyPressed(Keyboard::Down)){}
+        while(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){}
         height--;
         correctPositions();
     }
 
-    if (Keyboard::isKeyPressed(Keyboard::Right) && width < MaxMapW)
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && width < MaxMapW)
     {
-        while(Keyboard::isKeyPressed(Keyboard::Right)){}
+        while(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){}
         width++;
         correctPositions();
     }
 
 
-    if (Keyboard::isKeyPressed(Keyboard::Left) && width > 1)
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && width > 1)
     {
-        while(Keyboard::isKeyPressed(Keyboard::Left)){}
+        while(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){}
         width--;
         correctPositions();
     }
 
-    if (Mouse::isButtonPressed(Mouse::Left))
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
     {
-        float mouseX = Mouse::getPosition().x;
-        float mouseY = Mouse::getPosition().y;
+        float mouseX = sf::Mouse::getPosition().x;
+        float mouseY = sf::Mouse::getPosition().y;
 
         if (mouseX >= startX && mouseY >= startY)
         {
@@ -493,10 +493,10 @@ void MapForCreating::keyboardCommands()
         }
     }
 
-    if (Mouse::isButtonPressed(Mouse::Right))
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
     {
-        float mouseX = Mouse::getPosition().x;
-        float mouseY = Mouse::getPosition().y;
+        float mouseX = sf::Mouse::getPosition().x;
+        float mouseY = sf::Mouse::getPosition().y;
 
         if (mouseX >= startX && mouseY >= startY)
         {
@@ -609,7 +609,7 @@ int MapForCreating::countNeighbours(int x, int y)
     return ID;
 }
 
-float MapForCreating::getNumber(ifstream &mapFile)
+float MapForCreating::getNumber(std::ifstream &mapFile)
 {
     int i;
     float a = 0;
@@ -637,14 +637,14 @@ float MapForCreating::getNumber(ifstream &mapFile)
     return a;
 }
 
-pair <int, int> MapForCreating::catchMouse()
+std::pair <int, int> MapForCreating::catchMouse()
 {
-    pair <int, int> positions;
+    std::pair <int, int> positions;
 
-    while(!Mouse::isButtonPressed(Mouse::Left)){}
-        positions.first = (Mouse::getPosition().x - startX) / tilesize / scale;
-        positions.second = (Mouse::getPosition().y - startY) / tilesize / scale;
-    while(Mouse::isButtonPressed(Mouse::Left)){}
+    while(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){}
+        positions.first = (sf::Mouse::getPosition().x - startX) / tilesize / scale;
+        positions.second = (sf::Mouse::getPosition().y - startY) / tilesize / scale;
+    while(sf::Mouse::isButtonPressed(sf::Mouse::Left)){}
     return positions;
 }
 

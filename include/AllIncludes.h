@@ -6,9 +6,6 @@
 #include <fstream>
 #include <bits/stdc++.h>
 
-using namespace std;
-using namespace sf;
-
 #include "AllHitboxInf.h"
 #include "MyMap.h"
 #include "DynamicObject.h"

@@ -25,11 +25,11 @@ int AllHitboxInf::tryToMoveAll(int number, int direction, float distance, int mo
         direction = (direction + 2) % 4, distance = - distance;
 
     int i;
-    pair <float, float> sXY = objects[number]->coordinates(); // start X Y, end X Y
-    pair <float, float> eXY = objects[number]->sizes();
+    std::pair <float, float> sXY = objects[number]->coordinates(); // start X Y, end X Y
+    std::pair <float, float> eXY = objects[number]->sizes();
     eXY.first += sXY.first;
     eXY.second += sXY.second;
-    pair <float, float> realSXY = sXY, realEXY = eXY;
+    std::pair <float, float> realSXY = sXY, realEXY = eXY;
 
 
     switch (direction)
@@ -50,8 +50,8 @@ int AllHitboxInf::tryToMoveAll(int number, int direction, float distance, int mo
 
 
     float weight = 0;
-    pair <float, float> sXY2;
-    pair <float, float> eXY2;
+    std::pair <float, float> sXY2;
+    std::pair <float, float> eXY2;
     for (i = 0; i < objAmount; i++)
         if (i != number)
         {
@@ -103,7 +103,7 @@ int AllHitboxInf::tryToMoveAll(int number, int direction, float distance, int mo
         return weight;
 }
 
-int AllHitboxInf::drawObjects(RenderWindow *window, float time, AllHitboxInf *AHI)
+int AllHitboxInf::drawObjects(sf::RenderWindow *window, float time, AllHitboxInf *AHI)
 {
     int i;
     for (i = 0; i < objAmount; i++)

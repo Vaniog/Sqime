@@ -14,14 +14,14 @@ class Player: public DynamicObject
 public:
     float curX , curY;
     int number = 0;
-    Player(string playerTexturePlace, int startX, int startY, int w, int h, MyMap *MapIn, AllHitboxInf *AHIIn);
+    Player(std::string playerTexturePlace, int startX, int startY, int w, int h, MyMap *MapIn, AllHitboxInf *AHIIn);
     void drawObject(float &time);
-    void displayObject(RenderWindow *window);
+    void displayObject(sf::RenderWindow *window);
     int tryToMove(float distance, int direction, int mode);
     int getNumber();
     void setNumber(int n);
-    pair <float, float> coordinates();
-    pair <float, float> sizes();
+    std::pair <float, float> coordinates();
+    std::pair <float, float> sizes();
 
 private:
     float scale;
@@ -45,8 +45,8 @@ private:
     bool onGround = false;
     int physics[MaxMapW][MaxMapH], tilesize, ptilesize;
     int levelPassCheck();
-    Sprite playerSprite;
-    Texture playerTexture;
+    sf::Sprite playerSprite;
+    sf::Texture playerTexture;
 
     void Update(float &time);
     void animationLevelPass(float time);
