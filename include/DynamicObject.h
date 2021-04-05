@@ -22,6 +22,7 @@ public:
     virtual int tryToSquezze(float distance, int direction, int mode) = 0;
     virtual void drawObject(float &time) = 0;
     virtual void displayObject(RenderWindow *window) = 0;
+    virtual void sendMessage(int mode);
 
     virtual int getNumber() = 0; // help you found objects in array of all objects (AllHitboxInformation)
     virtual void setNumber(int n) = 0;

@@ -2,10 +2,12 @@
 
 DynamicObject::DynamicObject()
 {
-
 }
 
 DynamicObject::~DynamicObject()
 {
+}
 
+void DynamicObject::sendMessage(int mode)
+{
 }

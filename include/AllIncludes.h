@@ -18,5 +18,6 @@ using namespace sf;
 #include "MapForCreating.h"
 #include "Button.h"
 #include "Platform.h"
+#include "DynamicButton.h"
 
 #endif // ALLINCLUDES_H_INCLUDED

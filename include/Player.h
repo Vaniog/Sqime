@@ -9,6 +9,7 @@
 #include <MyMap.h>
 #define MaxMapW 50
 #define MaxMapH 50
+
 class Player: public DynamicObject
 {
 public:

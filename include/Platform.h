@@ -18,6 +18,7 @@ public:
     Platform(float startXIn, float startYIn, float endXIn, float endYIn, float widthIn, float heightIn, float speed, string texPlace, MyMap *MapIn, AllHitboxInf *AHIIn);
     void drawObject(float &time);
     void displayObject(RenderWindow *window);
+    void sendMessage(int mode);
     pair <float, float> coordinates();
     pair <float, float> sizes();
     int getNumber();

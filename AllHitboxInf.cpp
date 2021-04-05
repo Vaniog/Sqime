@@ -22,7 +22,7 @@ int AllHitboxInf::tryToMoveAll(int number, int direction, float distance, int mo
     }
 
     if (distance < 0)
-        direction = (direction + 2) % 4, distance = - distance;
+        direction = (direction + 2) % 4, distance = -distance;
 
     int i;
     pair <float, float> sXY = objects[number]->coordinates(); // start X Y, end X Y
@@ -30,7 +30,6 @@ int AllHitboxInf::tryToMoveAll(int number, int direction, float distance, int mo
     eXY.first += sXY.first;
     eXY.second += sXY.second;
     pair <float, float> realSXY = sXY, realEXY = eXY;
-
 
     switch (direction)
     {
@@ -60,7 +59,6 @@ int AllHitboxInf::tryToMoveAll(int number, int direction, float distance, int mo
 
             eXY2.first += sXY2.first;
             eXY2.second += sXY2.second;
-
 
             if (!(sXY.first < eXY2.first && sXY.second < eXY2.second))
             {
@@ -119,6 +117,10 @@ int AllHitboxInf::drawObjects(RenderWindow *window, float time, AllHitboxInf *AH
     return animationProcess;
 }
 
+void AllHitboxInf::sendMessageToObject(int number, int mode)
+{
+    objects[number]->sendMessage(mode);
+}
 void AllHitboxInf::resetDepth()
 {
     depth = 0;

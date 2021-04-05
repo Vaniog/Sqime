@@ -117,6 +117,14 @@ void MyMap::mapDownload (string mapFilePlace)
             platform->setNumber(AHI->addObject(platform));
             break;
         }
+        case 2:
+            float length, sX, sY, dir;
+            sX = getNumber(mapFile), sY = getNumber(mapFile);
+            length = getNumber(mapFile);
+            dir = getNumber(mapFile);
+            DynamicObject *dynamicButton = new DynamicButton(sX, sY, length, dir, this, AHI, "images//dynamicButton.png");
+            dynamicButton->setNumber(AHI->addObject(dynamicButton));
+            break;
         }
     }
     mapFile.close();

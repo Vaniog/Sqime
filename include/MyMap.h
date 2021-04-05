@@ -5,6 +5,7 @@
 #include <AllHitboxInf.h>
 #include <Player.h>
 #include <Platform.h>
+#include <DynamicButton.h>
 #include <DynamicObject.h>
 using namespace std;
 using namespace sf;

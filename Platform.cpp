@@ -147,6 +147,10 @@ void Platform::movePlatform(float time, AllHitboxInf *AHI)
     }
 }
 
+void Platform::sendMessage(int mode)
+{
+
+}
 int Platform::tryToMove(float distance, int direction, int mode)
 {
     return -1;

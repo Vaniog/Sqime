@@ -61,7 +61,6 @@ void Player::drawObject(float &time)
 
 void Player::displayObject(RenderWindow *window)
 {
-    playerSprite.setTexture(playerTexture);
     if (AHI->animationProcess == 0)
         playerSprite.setPosition(curX * scale * tilesize + startX, startY + curY * scale * tilesize);
     playerSprite.setScale(scale * width / startW * tilesize, scale * height / startH * tilesize);
@@ -75,7 +74,7 @@ void Player::Update(float &time) // physics moves
     AHI->resetDepth();
 
     if (Keyboard::isKeyPressed(Keyboard::W) && onGround == 1)
-        fallSpeed -= sqrt(2 * freeFallAcc * (height * heightCoef + 0.4)), onGround = 0;
+        fallSpeed -= sqrt(2 * freeFallAcc * (height * heightCoef + 0.3)), onGround = 0;
     if (onGround == 1)
     {
         float weightToMove = tryToMove(0.0001, 2, 0);
