@@ -1,7 +1,6 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <bits/stdc++.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <DynamicObject.h>

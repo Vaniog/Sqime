@@ -1,6 +1,5 @@
 #ifndef LEVELMENU_H
 #define LEVELMENU_H
-#include <bits/stdc++.h>
 #include <Button.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>

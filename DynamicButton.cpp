@@ -1,10 +1,16 @@
 #include "DynamicButton.h"
 
-DynamicButton::DynamicButton(int curXIn, int curYIn, int length, int direction, MyMap *mapIn, AllHitboxInf *AHIIn, string DynamicButtonPlace)
+DynamicButton::DynamicButton(int curXIn, int curYIn, int length, int direction, int controlledObjectIn, int buttonControlModeIn, int onObjMode, int offObjMode, MyMap *mapIn, AllHitboxInf *AHIIn, string DynamicButtonPlace)
 {
     AHI = AHIIn;
     curX = curXIn;
     curY = curYIn;
+
+    controlledObject = controlledObjectIn;
+    buttonControlMode = buttonControlModeIn;
+    modesToSend[0] = onObjMode, modesToSend[1] = offObjMode;
+    AHI->sendMessageToObject(controlledObject, modesToSend[0]);
+
     startMapX = mapIn->startX;
     startMapY = mapIn->startY;
     scale = mapIn->scale;
@@ -60,37 +66,37 @@ int DynamicButton::tryToMove(float distance, int direction, int mode)
         switch (direction)
         {
         case 0:
-            if (curY > endY)
+            if (curY - distance > endY)
             {
                 if (mode == 1)
-                    curY -= distance;
+                    curY -= distance, buttonBecome(1);
                 return weight;
             }
             else
                 return - 1;
         case 1:
-            if (curX < endX)
+            if (curX + distance < endX)
             {
                 if (mode == 1)
-                    curX += distance;
+                    curX += distance, buttonBecome(1);
                 return weight;
             }
             else
                 return -1;
         case 2:
-            if (curY < endY)
+            if (curY + distance < endY)
             {
                 if (mode == 1)
-                    curY += distance;
+                    curY += distance, buttonBecome(1);
                 return weight;
             }
             else
                 return - 1;
         case 3:
-            if (curX > endX)
+            if (curX - distance > endX)
             {
                 if (mode == 1)
-                    curX -= distance;
+                    curX -= distance, buttonBecome(1);
                 return weight;
             }
             else
@@ -99,7 +105,11 @@ int DynamicButton::tryToMove(float distance, int direction, int mode)
     }
     if (direction != (dbDirection + 2) % 4)
     {
-        curX = endX, curY = endY;
+        if (mode == 1)
+        {
+            curX = endX, curY = endY;
+            buttonBecome(1);
+        }
         return 0;
     }
     return -1;
@@ -123,6 +133,8 @@ void DynamicButton::drawObject(float &time)
             curY = startY;
             if (AHI->tryToMoveAll(number, dbDirection, -distance, 0) != 0)
                 curY = oldY;
+            else
+                buttonBecome(0);
             }
         break;
     case 1:
@@ -132,6 +144,8 @@ void DynamicButton::drawObject(float &time)
             curX = startX;
             if (AHI->tryToMoveAll(number, dbDirection, -distance, 0) != 0)
                 curX = oldX;
+            else
+                buttonBecome(0);
         }
         break;
     case 2:
@@ -141,6 +155,8 @@ void DynamicButton::drawObject(float &time)
             curY = startY;
             if (AHI->tryToMoveAll(number, dbDirection, -distance, 0) != 0)
                 curY = oldY;
+            else
+                buttonBecome(0);
         }
         break;
     case 3:
@@ -150,6 +166,8 @@ void DynamicButton::drawObject(float &time)
             curX = startX;
             if (AHI->tryToMoveAll(number, dbDirection, -distance, 0) != 0)
                 curX = oldX;
+            else
+                buttonBecome(0);
         }
         break;
     }
@@ -183,4 +201,25 @@ int DynamicButton::getNumber()
 void DynamicButton::setNumber(int n)
 {
     number = n;
+}
+
+void DynamicButton::buttonBecome(int location)
+{
+    switch (buttonControlMode)
+    {
+    case 0:
+        if (location == 0)
+            AHI->sendMessageToObject(controlledObject, modesToSend[0]);
+        else
+            AHI->sendMessageToObject(controlledObject, modesToSend[1]);
+        break;
+    case 1:
+        if (location == 0)
+            modeToSendNow = 1 - modeToSendNow; // turn 1 to 0 and 0 to 1
+        if (location == 1)
+            AHI->sendMessageToObject(controlledObject, modesToSend[modeToSendNow]);
+        break;
+
+
+    }
 }

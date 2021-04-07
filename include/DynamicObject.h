@@ -2,7 +2,6 @@
 #define DYNAMICOBJECT_H
 
 
-#include <bits/stdc++.h>
 #include <SFML/Window/Window.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 

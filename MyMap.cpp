@@ -118,11 +118,14 @@ void MyMap::mapDownload (string mapFilePlace)
             break;
         }
         case 2:
-            float length, sX, sY, dir;
+            float length, sX, sY, dir, controlObj, controlMode, onMode, offMode;
             sX = getNumber(mapFile), sY = getNumber(mapFile);
             length = getNumber(mapFile);
             dir = getNumber(mapFile);
-            DynamicObject *dynamicButton = new DynamicButton(sX, sY, length, dir, this, AHI, "images//dynamicButton.png");
+            controlObj = getNumber(mapFile);
+            controlMode = getNumber(mapFile);
+            offMode = getNumber(mapFile), onMode = getNumber(mapFile);
+            DynamicObject *dynamicButton = new DynamicButton(sX, sY, length, dir, controlObj, controlMode, onMode, offMode, this, AHI, "images//dynamicButton.png");
             dynamicButton->setNumber(AHI->addObject(dynamicButton));
             break;
         }

@@ -1,7 +1,6 @@
 #ifndef MAINMENU_H
 #define MAINMENU_H
 #include <Button.h>
-#include <bits/stdc++.h>
 #include <SFML/Graphics.hpp>
 using namespace std;
 using namespace sf;

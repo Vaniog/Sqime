@@ -5,6 +5,8 @@
 #include <AllHitboxInf.h>
 #include <Player.h>
 #include <Platform.h>
+#include <fstream>
+#include <iostream>
 #include <DynamicButton.h>
 #include <DynamicObject.h>
 using namespace std;

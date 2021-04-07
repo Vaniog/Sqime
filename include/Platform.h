@@ -26,6 +26,8 @@ public:
 private:
     float startX, startY;
     float endX, endY;
+    float startXMain, startYMain;
+    float endXMain, endYMain;
     int dir;
     float scale;
     float tilesize;

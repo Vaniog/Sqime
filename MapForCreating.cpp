@@ -121,7 +121,7 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
     {
         process = {1, 0};
         inputObject = new ObjectInf(0);
-        sizeChooseUI = new sizeChooseMenu();
+        sizeChooseUI = new SizeChooseMenu();
         buttonsModeSet(0);
     }
 
@@ -130,7 +130,7 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
     {
         process = {2, 0};
         inputObject = new ObjectInf(1);
-        sizeChooseUI = new sizeChooseMenu();
+        sizeChooseUI = new SizeChooseMenu();
         Image sliderBackImage;
         sliderBackImage.loadFromFile("images//SpeedSliderBack.png");
         float sliderWidth = VideoMode::getDesktopMode().width / 3;

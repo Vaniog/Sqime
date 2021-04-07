@@ -4,7 +4,6 @@
 //its just for good view, but it use in main
 #include <SFML/Graphics.hpp>
 #include <fstream>
-#include <bits/stdc++.h>
 
 using namespace std;
 using namespace sf;

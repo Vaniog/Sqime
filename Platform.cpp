@@ -26,6 +26,9 @@ Platform::Platform(float startXIn, float startYIn, float endXIn, float endYIn, f
     if (startY > endY)
         swap(startY, endY);
 
+    startXMain = startX, startYMain = startY;
+    endXMain = endX, endYMain = endY;
+
     int conturWidth = 7;
     Image platformImage;
     platformImage.loadFromFile(texPlace);
@@ -82,6 +85,7 @@ void Platform::movePlatform(float time, AllHitboxInf *AHI)
 {
     AHI->resetDepth();
     float oldX = curX, oldY = curY;
+    int oldDir = dir;
 
     curX += (dir % 2) * (2 - dir) * platformSpeed * time;
     curY += ((dir + 1) % 2) * (dir - 1) * platformSpeed * time;
@@ -145,11 +149,40 @@ void Platform::movePlatform(float time, AllHitboxInf *AHI)
         curX = oldX;
         curY = oldY;
     }
+    if (startX == endX && startY == endY && oldX == startX && oldY == startY)
+        dir = oldDir;
 }
 
 void Platform::sendMessage(int mode)
+// modes: 0 - both direction, 1 - plus direction, 2 - minus direction, 3 - stop moving
 {
-
+    switch (mode)
+    {
+    case 0:
+        startX = startXMain;
+        startY = startYMain;
+        endX = endXMain;
+        endY = endYMain;
+        break;
+    case 1:
+        startX = endXMain;
+        startY = endYMain;
+        endX = endXMain;
+        endY = endYMain;
+        break;
+    case 2:
+        startX = startXMain;
+        startY = startYMain;
+        endX = startXMain;
+        endY = startYMain;
+        break;
+    case 3:
+        startX = curX;
+        startY = curY;
+        endX = curX;
+        endY = curY;
+        break;
+    }
 }
 int Platform::tryToMove(float distance, int direction, int mode)
 {
