@@ -5,6 +5,7 @@
 
 int main()
 {
+    DynamicButtonCreatingUI DBC(600, 100, 800);
     Event event;
     int process = -10;
     int windowWidth = VideoMode::getDesktopMode().width, windowHeight = VideoMode::getDesktopMode().height;
@@ -125,7 +126,7 @@ int main()
             if (Keyboard::isKeyPressed(Keyboard::N))
             {
                 delete mainMapForCreating;
-                mainMapForCreating = new MapForCreating("images//Tile7.png", "images//Background.png", "images//Slime.png", "images//Platform.png");
+                mainMapForCreating = new MapForCreating("images//Tile7.png", "images//Background.png", "images//Slime.png", "images//Platform.png", "images//DynamicButton.png");
             }
 
             if (Keyboard::isKeyPressed(Keyboard::T))
@@ -168,7 +169,7 @@ int main()
 
         case -3://download
         {
-            mainMapForCreating = new MapForCreating("images//Tile7.png", "images//Background.png", "images//Slime.png", "images//Platform.png");
+            mainMapForCreating = new MapForCreating("images//Tile7.png", "images//Background.png", "images//Slime.png", "images//Platform.png", "images//DynamicButton.png");
             mainMapForCreating->mapDownload("maps//level00.txt");
             process = 3;
             clock.restart();
@@ -183,6 +184,13 @@ int main()
             break;
         }
 
+        case -20:
+            {
+                window.clear();
+                DBC.draw(&window);
+                window.display();
+                break;
+            }
         }
     }
     return 0;

@@ -38,16 +38,16 @@ int Button::buttonDisplayAndCheck(RenderWindow *window, int xIn, int yIn)
         {
             if (buttonMode)
             {
-                while(Mouse::isButtonPressed(Mouse::Left));
-                return 1;
+                while(Mouse::isButtonPressed(Mouse::Left)){};
+                return 0 + buttonMode;
             }
         }
         else if (Mouse::isButtonPressed(Mouse::Right))
             {
                 if (buttonMode)
                 {
-                    while(Mouse::isButtonPressed(Mouse::Right));
-                    return 2;
+                    while(Mouse::isButtonPressed(Mouse::Right)){};
+                    return 1 + buttonMode;
                 }
             }
             else

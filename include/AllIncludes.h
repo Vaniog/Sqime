@@ -18,5 +18,6 @@ using namespace sf;
 #include "Button.h"
 #include "Platform.h"
 #include "DynamicButton.h"
+#include "DynamicButtonCreatingUI.h"
 
 #endif // ALLINCLUDES_H_INCLUDED

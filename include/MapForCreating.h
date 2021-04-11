@@ -5,6 +5,7 @@
 #include <Button.h>
 #include <Slider.h>
 #include <SizeChooseMenu.h>
+#include "DynamicButtonCreatingUI.h"
 #include <iostream>
 #include <fstream>
 #define MaxMapW 50
@@ -24,6 +25,7 @@ public:
     float startX, startY;
     float speed, endX, endY;
     int type; // 0-player 1-platform
+    int mode, dir, off, on, controlled; //for dynamic button
 };
 
 
@@ -36,7 +38,7 @@ public:
 
     float tilesize;
 
-    MapForCreating(string tilesPlace, string backgroundPlace, string playerPlaceIn, string platformPlaceIn);
+    MapForCreating(string tilesPlace, string backgroundPlace, string playerPlaceIn, string platformPlaceIn, string ButtonPlaceIn);
     ~MapForCreating();
     void DrawMap(RenderWindow *window, float time); // includes all drawings and checks
     void mapUpload(string mapFilePlace); // draw map from file, but file need to be in maps, and you dont need to write txt
@@ -49,7 +51,7 @@ private:
 
     int curTile = 0;
     Texture tileTexture, backTex;
-    string platformPlace, playerPlace;
+    string platformPlace, playerPlace, buttonPlace;
     Sprite tilesprite, backSprite;
     int windowWidth, windowHeight;
     int startX, startY;
@@ -62,6 +64,7 @@ private:
     int playerX, playerY;
     Button *platformButton = NULL;
     Button *playerButton = NULL;
+    Button *buttonButton = NULL;
     vector <vector<Button*>> buttons;
     vector <vector<int>> buttonsActive; // size is [buttonsAmount][2], [0] for active underbutton, [1] for amount of previous underbuttons, [2] for underbuttons amount
     vector <vector<int>> underButtonsFriends; // friendly blocks, this block (connect with underbutton) dont need to build wall with these blocks
@@ -76,13 +79,15 @@ private:
     void displaySprites (RenderWindow *window), displayButtons(RenderWindow * window);
     void clearObjSprites();
     void feelObjSprites(int amount); // help to download map
+    void processCheck(RenderWindow *window);
     void buttonsModeSet(int mode); // turn on or off buttons
     float getNumber(ifstream &mapFile);
     pair <int, int> catchMouse(); // help to input size with help of mouse
     //size choose UI
-    pair <int, int> process = {0, 0}; // 0 0 for drawing, 1 0 for sizes,  1 1 for coordinates (first number is a type)
+    pair <int, int> process = {0, 0}; // 0 0 for classic, 1 0 for sizes,  1 1 for coordinates (first number is a type)
     ObjectInf *inputObject;
     SizeChooseMenu *sizeChooseUI;
+    DynamicButtonCreatingUI *dynamicButtonCreatingUI;
     Texture sliderBackTex;
     Sprite sliderBackSprite;
     Slider *speedSlider;

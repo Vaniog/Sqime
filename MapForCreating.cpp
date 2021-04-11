@@ -1,6 +1,6 @@
 #include "MapForCreating.h"
 
- MapForCreating::MapForCreating(string tilesPlace, string backgroundPlace, string playerPlaceIn, string platformPlaceIn)
+ MapForCreating::MapForCreating(string tilesPlace, string backgroundPlace, string playerPlaceIn, string platformPlaceIn, string buttonPlaceIn)
 {
     int i, k;
     for (i = 0; i < MaxMapH; i++)
@@ -73,9 +73,11 @@
 
     playerPlace = playerPlaceIn;
     platformPlace = platformPlaceIn;
+    buttonPlace = buttonPlaceIn;
 
     playerButton = new Button(windowWidth - spaceForObjButtons, 200, 0, 0, -1, -1, spaceForObjButtons - spaceAroundButtons * 2, spaceForObjButtons - spaceAroundButtons * 2, "images//PlayerButton.png");
     platformButton = new Button(windowWidth - spaceForObjButtons, 200 + spaceForObjButtons, 0, 0, -1, -1, spaceForObjButtons - spaceAroundButtons * 2, spaceForObjButtons - spaceAroundButtons * 2, "images//PlatformButton.png");
+    buttonButton = new Button(windowWidth - spaceForObjButtons, 200 + spaceForObjButtons * 2, 0, 0, -1, -1, spaceForObjButtons - spaceAroundButtons * 2, spaceForObjButtons - spaceAroundButtons * 2, "images//buttonButton.png");
  //   ObjectInf *obj = new ObjectInf(2, 2, 0, 0, 0, 0, 0, 's');
   //  objects.push_back(obj);
 }
@@ -150,13 +152,42 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
         buttonsModeSet(0);
     }
 
+    if (buttonButton->buttonDisplayAndCheck(window, -1, -1) == 1)
+    {
+        process = {3, 4};
+        inputObject = new ObjectInf(2);
+        float menuHeight = (float)VideoMode::getDesktopMode().height / 3 * 2;
+        float menuWidth = menuHeight * 125 / 146;
+        float menuStartX = VideoMode::getDesktopMode().width / 2 - menuWidth / 2;
+        float menuStartY = VideoMode::getDesktopMode().height / 2 - menuHeight / 2;
+        dynamicButtonCreatingUI = new DynamicButtonCreatingUI(menuStartX, menuStartY, menuWidth);
+        buttonsModeSet(4); // and we wait for setting in displaySprites
+    }
+
     displaySprites(window);
 
     if (process.first != 0)
     {
-        switch (process.second)
-        {
-        case 0:
+        processCheck(window);
+    }
+
+
+    Font font;
+    font.loadFromFile("images//mainFont.ttf");
+    Text infText("", font, 25);
+    infText.setColor(Color::White);
+    infText.setPosition(10 + windowWidth - spaceForObjButtons, 10);
+    string s = to_string((int)width) + "    " + to_string((int)height) + "\n" + to_string((int)((Mouse::getPosition().x - startX) / tilesize / scale)) + "     " +  to_string((int)((Mouse::getPosition().y - startY) / tilesize / scale))
+    + "\n\nD - download \nU - upload\nT - try\nN - new\n";
+    infText.setString(s);
+    window->draw(infText);
+}
+
+void MapForCreating::processCheck(RenderWindow *window)
+{
+    switch (process.second)
+    {
+        case 0: // choose sizes
         {
             pair <int, int> sizeChooseUIReturn = sizeChooseUI->display(window);
             if (sizeChooseUIReturn.first == -1)
@@ -172,14 +203,14 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
             }
             break;
         }
-        case 1:
+        case 1: // choose coordinates
         {
             if (Mouse::isButtonPressed(Mouse::Left))
             {
                 inputObject->startX = (int)((Mouse::getPosition().x - startX) / tilesize / scale);
                 inputObject->startY = (int)((Mouse::getPosition().y - startY) / tilesize / scale);
                 process.second++;
-                if (process.first == 1)
+                if (process.first == 1 || process.first == 3)
                 {
                     objects.push_back(inputObject);
                     addToObjSprites(objects.size() - 1);
@@ -190,7 +221,7 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
             }
             break;
         }
-        case 2:
+        case 2: // choose coordinates
         {
             if (Mouse::isButtonPressed(Mouse::Left))
             {
@@ -201,7 +232,7 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
             }
             break;
         }
-        case 3:
+        case 3: // choose speed
         {
             window->draw(sliderBackSprite);
             inputObject->speed = speedSlider->drawSliderGetValue(window);
@@ -211,20 +242,29 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
                 buttonsModeSet(1);
                 process = {0, 0};
             }
+            break;
         }
+        // case 4 is choose controlled platform for dynamicButton
+        case 5:
+        {
+            int dynamicButtonCreatingUIReturn = dynamicButtonCreatingUI->draw(window);
+            if (dynamicButtonCreatingUIReturn == -1)
+            {
+                buttonsModeSet(1);
+                process = {0, 0};
+            }
+            if (dynamicButtonCreatingUIReturn == 1)
+            {
+                inputObject->mode = dynamicButtonCreatingUI->getValue('m');
+                inputObject->off = dynamicButtonCreatingUI->getValue('f');
+                inputObject->on = dynamicButtonCreatingUI->getValue('n');
+                inputObject->dir = dynamicButtonCreatingUI->getValue('d');
+                inputObject->width = dynamicButtonCreatingUI->getValue('l');
+                process.second = 1;
+            }
+            break;
         }
     }
-
-
-    Font font;
-    font.loadFromFile("images//mainFont.ttf");
-    Text infText("", font, 25);
-    infText.setColor(Color::White);
-    infText.setPosition(10 + windowWidth - spaceForObjButtons, 10);
-    string s = to_string((int)width) + "    " + to_string((int)height) + "\n" + to_string((int)((Mouse::getPosition().x - startX) / tilesize / scale)) + "     " +  to_string((int)((Mouse::getPosition().y - startY) / tilesize / scale))
-    + "\n\nD - download \nU - upload\nT - try\nN - new\n";
-    infText.setString(s);
-    window->draw(infText);
 }
 
 void MapForCreating::mapUpload (string mapFilePlace)
@@ -267,6 +307,17 @@ void MapForCreating::mapUpload (string mapFilePlace)
             mapFile << objects[i]->endY << " ";
             mapFile << objects[i]->speed << "\n";
             break;
+        }
+        case 2:
+        {
+            mapFile << objects[i]->startX << " ";
+            mapFile << objects[i]->startY << " ";
+            mapFile << objects[i]->width << " ";
+            mapFile << objects[i]->dir << " ";
+            mapFile << objects[i]->controlled << " ";
+            mapFile << objects[i]->mode << " ";
+            mapFile << objects[i]->off << " ";
+            mapFile << objects[i]->on << "\n";
         }
         }
     }
@@ -339,6 +390,22 @@ int MapForCreating::mapDownload (string mapFilePlace)
             objects.push_back(obj);
             break;
         }
+        case 2:
+            float length, sX, sY, dir, controlObj, controlMode, onMode, offMode;
+            sX = getNumber(mapFile), sY = getNumber(mapFile);
+            length = getNumber(mapFile);
+            dir = getNumber(mapFile);
+            controlObj = getNumber(mapFile);
+            controlMode = getNumber(mapFile);
+            offMode = getNumber(mapFile), onMode = getNumber(mapFile);
+            ObjectInf *obj = new ObjectInf(2);
+            obj->startX = sX, obj->startY = sY;
+            obj->controlled = controlObj;
+            obj->mode = controlMode;
+            obj->on = onMode, obj->off = offMode;
+            obj->dir = dir, obj->width = length;
+            objects.push_back(obj);
+            break;
         }
     }
 
@@ -351,15 +418,22 @@ int MapForCreating::mapDownload (string mapFilePlace)
 
 void MapForCreating::displaySprites(RenderWindow *window)
 {
-    int i;
+    int i, buttonReturn;
     for (i = 0; i < objSprites.size(); i++)
     {
-        if (objSprites[i]->buttonDisplayAndCheck(window, -1, -1) == 2)
+        buttonReturn = objSprites[i]->buttonDisplayAndCheck(window, -1, -1);
+        if (buttonReturn == 2)
         {
             delete objSprites[i];
             objSprites.erase(objSprites.begin() + i);
             delete objects[i];
             objects.erase(objects.begin() + i);
+        }
+        if (buttonReturn == 4 && objects[i]->type == 1) // choose controlled platform for dynamic button
+        {
+            inputObject->controlled = i;
+            process.second++;
+            buttonsModeSet(1);
         }
     }
 }
@@ -427,6 +501,35 @@ void MapForCreating::addToObjSprites(int number)
             texStartY += i * 16;
         Button *button;
         button = new Button(startX + scale * sX * tilesize, startY + scale * sY * tilesize, texStartX, texStartY, 16 * w, 16 * h, w * scale * tilesize, h * scale * tilesize, platformPlace);
+        objSprites.push_back(button);
+        break;
+    }
+    case 2:
+    {
+        float w = objects[number]->width;
+        float h = objects[number]->height;
+        float sX = objects[number]->startX;
+        float sY = objects[number]->startY;
+
+        int texStartX = 0, i;
+        for (i = 1; i < w; i++)
+            texStartX += i * 16;
+        Button *button;
+        switch(objects[number]->dir)
+        {
+        case 0:
+            button = new Button(startX + scale * sX * tilesize, startY + scale * sY * tilesize, texStartX, 0, 16 * w, 6, w * scale * tilesize, 6 * scale, buttonPlace);
+            break;
+        case 2:
+            button = new Button(startX + scale * sX * tilesize, startY + scale * sY * tilesize + 10 * scale, texStartX, 0, 16 * w, 6, w * scale * tilesize, 6 * scale, buttonPlace);
+            break;
+        case 3:
+            button = new Button(startX + scale * sX * tilesize, startY + scale * sY * tilesize, 0, texStartX + 6, 6, 16 * w, 6 * scale, w * scale * tilesize, buttonPlace);
+            break;
+        case 1:
+            button = new Button(startX + scale * sX * tilesize + 10 * scale, startY + scale * sY * tilesize, 0, texStartX + 6, 6, 16 * w, 6 * scale, w * scale * tilesize, buttonPlace);
+            break;
+        }
         objSprites.push_back(button);
         break;
     }

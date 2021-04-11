@@ -8,39 +8,41 @@ DynamicButton::DynamicButton(int curXIn, int curYIn, int length, int direction, 
 
     controlledObject = controlledObjectIn;
     buttonControlMode = buttonControlModeIn;
-    modesToSend[0] = onObjMode, modesToSend[1] = offObjMode;
+    modesToSend[0] = offObjMode, modesToSend[1] = onObjMode;
     AHI->sendMessageToObject(controlledObject, modesToSend[0]);
 
     startMapX = mapIn->startX;
     startMapY = mapIn->startY;
     scale = mapIn->scale;
     tilesize = mapIn->tilesize;
-    float thickness = (float)5 / 16;
+    float thickness = (float)6 / 16;
     switch (direction)
     {
     case 0:
         height = thickness;
         width = length;
+        curY -= 1 / 16;
         endX = curX;
         endY = curY - height;
         break;
     case 1:
         height = length;
         width = thickness;
-        curX += 1 - thickness;
+        curX += 1 - thickness + 1 / 16;
         endX = curX + width;
         endY = curY;
         break;
     case 2:
         height = thickness;
         width = length;
-        curY += 1 - thickness;
+        curY += 1 - thickness + 1 / 16;
         endX = curX;
         endY = curY + height;
         break;
     case 3:
         height = length;
         width = thickness;
+        curX -= 1 / 16;
         endX = curX - width;
         endY = curY;
         break;
@@ -51,7 +53,21 @@ DynamicButton::DynamicButton(int curXIn, int curYIn, int length, int direction, 
     dbImage.loadFromFile(DynamicButtonPlace);
     dbTexture.loadFromImage(dbImage);
     dbSprite.setTexture(dbTexture);
-    dbSprite.setScale((width * tilesize + (direction % 2)) / dbImage.getSize().x * scale, (height * tilesize  - (direction % 2 - 1)) / dbImage.getSize().y * scale);
+    if (direction % 2 == 0)
+    {
+        int texStartX = 0, i;
+        for (i = 1; i < length; i++)
+            texStartX += i * 16;
+        dbSprite.setTextureRect(IntRect(texStartX, 0, tilesize * length, 6));
+    }
+    else
+    {
+        int texStartY = 0, i;
+        for (i = 1; i < length; i++)
+            texStartY += i * 16;
+        dbSprite.setTextureRect(IntRect(0, texStartY + 6, 6, tilesize * length));
+    }
+    dbSprite.setScale(scale, scale);
 }
 
 DynamicButton::~DynamicButton()
@@ -129,44 +145,48 @@ void DynamicButton::drawObject(float &time)
     case 0:
         if (curY != startY)
         {
-            distance = (startY - curY) + 0.01;
-            curY = startY;
+            distance = (startY - curY);
+            distance = min(distance, (float)0.02);
+            curY += distance;
             if (AHI->tryToMoveAll(number, dbDirection, -distance, 0) != 0)
                 curY = oldY;
-            else
+            else if (curY == startY)
                 buttonBecome(0);
             }
         break;
     case 1:
         if (curX != startX)
         {
-            distance = (curX - startX) + 0.01;
-            curX = startX;
+            distance = (curX - startX);
+            distance = min(distance, (float)0.02);
+            curX -= distance;
             if (AHI->tryToMoveAll(number, dbDirection, -distance, 0) != 0)
                 curX = oldX;
-            else
+            else if (curX = startX)
                 buttonBecome(0);
         }
         break;
     case 2:
         if (curY != startY)
         {
-            distance = (curY - startY) + 0.01;
-            curY = startY;
+            distance = (curY - startY);
+            distance = min(distance, (float)0.02);
+            curY -= distance;
             if (AHI->tryToMoveAll(number, dbDirection, -distance, 0) != 0)
                 curY = oldY;
-            else
+            else if (curY == startY)
                 buttonBecome(0);
         }
         break;
     case 3:
         if (curX != startX)
         {
-            distance = (startX - curX) + 0.01;
-            curX = startX;
+            distance = (startX - curX);
+            distance = min(distance, (float)0.02);
+            curX += distance;
             if (AHI->tryToMoveAll(number, dbDirection, -distance, 0) != 0)
                 curX = oldX;
-            else
+            else if (curX == startX)
                 buttonBecome(0);
         }
         break;
