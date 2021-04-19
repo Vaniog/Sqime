@@ -62,10 +62,19 @@ int AllHitboxInf::tryToMoveAll(int number, int direction, float distance, int mo
 
             if (!(sXY.first < eXY2.first && sXY.second < eXY2.second))
             {
-                if (realSXY.first <= eXY2.first - 0.1 && sXY2.first <= realEXY.first - 0.1 && eXY2.second <= realSXY.second && eXY2.second + 0.05 >= realSXY.second)
-                    if(objects[number]->type() != 'p')
-                        if (objects[i]->type() != 'm' || objects[number]->type() != 'm')
-                            objects[i]->tryToMove(distance, direction, mode);
+                if (realSXY.first <= eXY2.first - 0.2 && sXY2.first <= realEXY.first - 0.2 && eXY2.second <= realSXY.second && eXY2.second + 0.1 >= realSXY.second)
+                {
+                    bool action = true;
+                    if (direction == 0 || direction == 2 && objects[number]->type() != 'm')
+                        action = false;
+
+                    if (action)
+                    {
+                        if (objects[i]->type() == 'b')
+                            sendMessageToObject(i, distance * (2 - direction));
+                        objects[i]->tryToMove(distance, direction, mode);
+                    }
+                }
                 continue;
             }
 
@@ -74,14 +83,14 @@ int AllHitboxInf::tryToMoveAll(int number, int direction, float distance, int mo
                 continue;
             }
             float deltaWeight;
-           // cout << number << " " << i << " " << direction << " " << distance << " " << mode << "\n";
+            //cout << number << " " << i << " " << distance << " " << direction << " " << mode << "\n";
             deltaWeight = objects[i]->tryToMove(distance, direction, 0);
-            if (deltaWeight == -1)
+            if (deltaWeight == -1 && objects[number]->type() != 'b')
             {
                 deltaWeight = objects[i]->tryToSquezze(distance, direction, 0);
                 if (deltaWeight == -1)
                 {
-                   // cout << "return -1\n";
+                   //   cout << objects[number]->type() << " return -1\n";
                     return -1;
                 }
                 else
@@ -117,9 +126,9 @@ int AllHitboxInf::drawObjects(RenderWindow *window, float time, AllHitboxInf *AH
     return animationProcess;
 }
 
-void AllHitboxInf::sendMessageToObject(int number, int mode)
+void AllHitboxInf::sendMessageToObject(int number, float message)
 {
-    objects[number]->sendMessage(mode);
+    objects[number]->sendMessage(message);
 }
 void AllHitboxInf::resetDepth()
 {

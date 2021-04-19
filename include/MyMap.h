@@ -5,6 +5,7 @@
 #include <AllHitboxInf.h>
 #include <Player.h>
 #include <Platform.h>
+#include <Box.h>
 #include <fstream>
 #include <iostream>
 #include <DynamicButton.h>

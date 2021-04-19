@@ -91,7 +91,6 @@ void Platform::movePlatform(float time, AllHitboxInf *AHI)
     curY += ((dir + 1) % 2) * (dir - 1) * platformSpeed * time;
 
     float weightToMove = AHI->tryToMoveAll(number, dir, platformSpeed * time, 0);
-
     if (weightToMove != -1)
     {
         curX = oldX;
@@ -103,40 +102,94 @@ void Platform::movePlatform(float time, AllHitboxInf *AHI)
         {
         case 0:
             curY += ((dir + 1) % 2) * (dir - 1) * platformSpeed * time;
+          //  AHI->tryToMoveAll(number, dir, platformSpeed * time, 1);
             if (curY > endY)
             {
                 if (oldY <= endY)
+                {
                     curY = endY, dir = 0;
+                    if (AHI->tryToMoveAll(number, 2, endY - oldY, 0) != -1)
+                        AHI->tryToMoveAll(number, 2, endY - oldY, 1);
+                    else
+                        curY = oldY;
+                }
                 else
+                {
+                    curY = oldY - platformSpeed * time;
+                    if (AHI->tryToMoveAll(number, 0, platformSpeed * time, 0) != -1)
+                        AHI->tryToMoveAll(number, 0, platformSpeed * time, 1);
+                    else
+                        curY = oldY;
                     dir = 0;
+                }
                 break;
             }
             if (curY < startY)
             {
                 if (oldY >= startY)
+                {
                     curY = startY, dir = 2;
+                    if (AHI->tryToMoveAll(number, 0, oldY - startY, 0) != -1)
+                        AHI->tryToMoveAll(number, 0, oldY - startY, 1);
+                    else
+                        curY = oldY;
+                }
                 else
+                {
+                    curY = oldY + platformSpeed * time;
+                    if (AHI->tryToMoveAll(number, 2, platformSpeed * time, 0) != -1)
+                        AHI->tryToMoveAll(number, 2, platformSpeed * time, 1);
+                    else
+                        curY = oldY;
                     dir = 2;
+                }
                 break;
             }
             AHI->tryToMoveAll(number, dir, platformSpeed * time, 1);
             break;
         case 1:
             curX += (dir % 2) * (2 - dir) * platformSpeed * time;
+          //  AHI->tryToMoveAll(number, dir, platformSpeed * time, 1);
             if (curX > endX)
             {
                 if (oldX <= endX)
+                {
                     curX = endX, dir = 3;
+                    if (AHI->tryToMoveAll(number, 1, endX - oldX, 0) != -1)
+                        AHI->tryToMoveAll(number, 1, endX - oldX, 1);
+                    else
+                        curX = oldX;
+                }
                 else
+                {
+                    curX = oldX - platformSpeed * time;
+                    if (AHI->tryToMoveAll(number, 3, platformSpeed * time, 0) != -1)
+                        AHI->tryToMoveAll(number, 3, platformSpeed * time, 1);
+                    else
+                        curX = oldX;
                     dir = 3;
+                }
                 break;
             }
             if (curX < startX)
             {
                 if (oldX >= startX)
+                {
                     curX = startX, dir = 1;
+                    if (AHI->tryToMoveAll(number, 3, oldX - startX, 0) != -1)
+                        AHI->tryToMoveAll(number, 3, oldX - startX, 1);
+                    else
+                        curX = oldX;
+                }
                 else
+                {
+                    curX = oldX + platformSpeed * time;
+                    if (AHI->tryToMoveAll(number, 1, platformSpeed * time, 0) != -1)
+                        AHI->tryToMoveAll(number, 1, platformSpeed * time, 1);
+                    else
+                        curX = oldX;
                     dir = 1;
+                }
                 break;
             }
             AHI->tryToMoveAll(number, dir, platformSpeed * time, 1);
@@ -153,9 +206,10 @@ void Platform::movePlatform(float time, AllHitboxInf *AHI)
         dir = oldDir;
 }
 
-void Platform::sendMessage(int mode)
+void Platform::sendMessage(float message)
 // modes: 0 - both direction, 1 - plus direction, 2 - minus direction, 3 - stop moving
 {
+    int mode = message;
     switch (mode)
     {
     case 0:

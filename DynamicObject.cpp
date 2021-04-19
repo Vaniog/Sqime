@@ -8,6 +8,6 @@ DynamicObject::~DynamicObject()
 {
 }
 
-void DynamicObject::sendMessage(int mode)
+void DynamicObject::sendMessage(float message)
 {
 }

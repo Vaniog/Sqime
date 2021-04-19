@@ -1,6 +1,6 @@
 #include "MapForCreating.h"
 
- MapForCreating::MapForCreating(string tilesPlace, string backgroundPlace, string playerPlaceIn, string platformPlaceIn, string buttonPlaceIn)
+ MapForCreating::MapForCreating(string tilesPlace, string backgroundPlace, string playerPlaceIn, string platformPlaceIn, string buttonPlaceIn, string boxPlaceIn)
 {
     int i, k;
     for (i = 0; i < MaxMapH; i++)
@@ -74,10 +74,12 @@
     playerPlace = playerPlaceIn;
     platformPlace = platformPlaceIn;
     buttonPlace = buttonPlaceIn;
+    boxPlace = boxPlaceIn;
 
     playerButton = new Button(windowWidth - spaceForObjButtons, 200, 0, 0, -1, -1, spaceForObjButtons - spaceAroundButtons * 2, spaceForObjButtons - spaceAroundButtons * 2, "images//PlayerButton.png");
     platformButton = new Button(windowWidth - spaceForObjButtons, 200 + spaceForObjButtons, 0, 0, -1, -1, spaceForObjButtons - spaceAroundButtons * 2, spaceForObjButtons - spaceAroundButtons * 2, "images//PlatformButton.png");
     buttonButton = new Button(windowWidth - spaceForObjButtons, 200 + spaceForObjButtons * 2, 0, 0, -1, -1, spaceForObjButtons - spaceAroundButtons * 2, spaceForObjButtons - spaceAroundButtons * 2, "images//buttonButton.png");
+    boxButton = new Button(windowWidth - spaceForObjButtons, 200 + spaceForObjButtons * 3, 0, 0, -1, -1, spaceForObjButtons - spaceAroundButtons * 2, spaceForObjButtons - spaceAroundButtons * 2, "images//boxButton.png");
  //   ObjectInf *obj = new ObjectInf(2, 2, 0, 0, 0, 0, 0, 's');
   //  objects.push_back(obj);
 }
@@ -127,6 +129,13 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
         buttonsModeSet(0);
     }
 
+    if (boxButton->buttonDisplayAndCheck(window, -1, -1) == 1)
+    {
+        process = {4, 0};
+        inputObject = new ObjectInf(3);
+        sizeChooseUI = new SizeChooseMenu();
+        buttonsModeSet(0);
+    }
 
     if (platformButton->buttonDisplayAndCheck(window, -1, -1) == 1)
     {
@@ -210,7 +219,7 @@ void MapForCreating::processCheck(RenderWindow *window)
                 inputObject->startX = (int)((Mouse::getPosition().x - startX) / tilesize / scale);
                 inputObject->startY = (int)((Mouse::getPosition().y - startY) / tilesize / scale);
                 process.second++;
-                if (process.first == 1 || process.first == 3)
+                if (process.first == 1 || process.first == 3 || process.first == 4) //player or button or box
                 {
                     objects.push_back(inputObject);
                     addToObjSprites(objects.size() - 1);
@@ -318,6 +327,15 @@ void MapForCreating::mapUpload (string mapFilePlace)
             mapFile << objects[i]->mode << " ";
             mapFile << objects[i]->off << " ";
             mapFile << objects[i]->on << "\n";
+            break;
+        }
+        case 3:
+        {
+            mapFile << objects[i]->width << " ";
+            mapFile << objects[i]->height << " ";
+            mapFile << objects[i]->startX << " ";
+            mapFile << objects[i]->startY << "\n";
+            break;
         }
         }
     }
@@ -391,6 +409,7 @@ int MapForCreating::mapDownload (string mapFilePlace)
             break;
         }
         case 2:
+        {
             float length, sX, sY, dir, controlObj, controlMode, onMode, offMode;
             sX = getNumber(mapFile), sY = getNumber(mapFile);
             length = getNumber(mapFile);
@@ -406,6 +425,17 @@ int MapForCreating::mapDownload (string mapFilePlace)
             obj->dir = dir, obj->width = length;
             objects.push_back(obj);
             break;
+        }
+        case 3:
+        {
+            float w, h, sX, sY;
+            w = getNumber(mapFile), h = getNumber(mapFile), sX = getNumber(mapFile), sY = getNumber(mapFile);
+            ObjectInf *obj  = new ObjectInf(3); //3 - box
+            obj->width = w, obj->height = h;
+            obj->startX = sX, obj->startY = sY;
+            objects.push_back(obj);
+            break;
+        }
         }
     }
 
@@ -518,21 +548,38 @@ void MapForCreating::addToObjSprites(int number)
         switch(objects[number]->dir)
         {
         case 0:
-            button = new Button(startX + scale * sX * tilesize, startY + scale * sY * tilesize, texStartX, 0, 16 * w, 6, w * scale * tilesize, 6 * scale, buttonPlace);
+            button = new Button(startX + scale * sX * tilesize, startY + scale * sY * tilesize - scale, texStartX, 0, 16 * w, 6, w * scale * tilesize, 6 * scale, buttonPlace);
             break;
         case 2:
-            button = new Button(startX + scale * sX * tilesize, startY + scale * sY * tilesize + 10 * scale, texStartX, 0, 16 * w, 6, w * scale * tilesize, 6 * scale, buttonPlace);
+            button = new Button(startX + scale * sX * tilesize, startY + scale * sY * tilesize + 10 * scale + scale, texStartX, 0, 16 * w, 6, w * scale * tilesize, 6 * scale, buttonPlace);
             break;
         case 3:
-            button = new Button(startX + scale * sX * tilesize, startY + scale * sY * tilesize, 0, texStartX + 6, 6, 16 * w, 6 * scale, w * scale * tilesize, buttonPlace);
+            button = new Button(startX + scale * sX * tilesize - scale, startY + scale * sY * tilesize, 0, texStartX + 6, 6, 16 * w, 6 * scale, w * scale * tilesize, buttonPlace);
             break;
         case 1:
-            button = new Button(startX + scale * sX * tilesize + 10 * scale, startY + scale * sY * tilesize, 0, texStartX + 6, 6, 16 * w, 6 * scale, w * scale * tilesize, buttonPlace);
+            button = new Button(startX + scale * sX * tilesize + 10 * scale + scale, startY + scale * sY * tilesize, 0, texStartX + 6, 6, 16 * w, 6 * scale, w * scale * tilesize, buttonPlace);
             break;
         }
         objSprites.push_back(button);
         break;
     }
+    case 3:
+    {
+        float w = objects[number]->width;
+        float h = objects[number]->height;
+        float sX = objects[number]->startX;
+        float sY = objects[number]->startY;
+        Button *button;
+        int texStartX = 0, texStartY = 0, i;
+        for (i = 1; i < w; i++)
+            texStartX += i * 16;
+        for (i = 1; i < h; i++)
+            texStartY += i * 16;
+        button = new Button(startX + scale * sX * tilesize, startY + scale * sY * tilesize, texStartX, texStartY, w * tilesize, h * tilesize, w * scale * tilesize, h * scale * tilesize, boxPlace);
+        objSprites.push_back(button);
+        break;
+    }
+
     }
 }
 

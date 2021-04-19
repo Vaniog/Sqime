@@ -9,6 +9,8 @@ Player::Player(string playerTexturePlace, int sX, int sY, int w, int h, MyMap *M
     windowHeight = VideoMode::getDesktopMode().height;
     curX = sX;
     curY = sY;
+    realX = curX;
+    realY = curY;
     tilesize = 16;
     ptilesize = 32;
     Image playerImage;
@@ -18,8 +20,8 @@ Player::Player(string playerTexturePlace, int sX, int sY, int w, int h, MyMap *M
     playerSprite.setTexture(playerTexture);
     playerSprite.setTextureRect(IntRect(0, 0, ptilesize, ptilesize));
     playerSprite.setScale(scale * width / startW * tilesize, scale * height / startH * tilesize);
-    width = w * 0.99;
-    height = h * 0.99;
+    width = w * 0.999;
+    height = h * 0.999;
     heightCoef = 1 / (height / ((int)height + 1));
     volume = width * height;
     weight = 100;
@@ -33,7 +35,7 @@ Player::Player(string playerTexturePlace, int sX, int sY, int w, int h, MyMap *M
     fallSpeed = 0;
     freeFallAcc = 0.00005;
     maxFallSpeed = 0.04;
-    onGround = 1;
+    onGround = 0;
     mapWidth = MapIn->width;
     mapHeight = MapIn->height;
 
@@ -62,7 +64,7 @@ void Player::drawObject(float &time)
 void Player::displayObject(RenderWindow *window)
 {
     if (AHI->animationProcess == 0)
-        playerSprite.setPosition(curX * scale * tilesize + startX, startY + curY * scale * tilesize);
+        playerSprite.setPosition(curX * scale * tilesize + startX, startY + realY * scale * tilesize);
     playerSprite.setScale(scale * width / startW * tilesize, scale * height / startH * tilesize);
     window->draw(playerSprite);
 }
@@ -72,52 +74,6 @@ void Player::displayObject(RenderWindow *window)
 void Player::Update(float &time) // physics moves
 {
     AHI->resetDepth();
-
-    if (Keyboard::isKeyPressed(Keyboard::W) && onGround == 1)
-        fallSpeed -= sqrt(2 * freeFallAcc * (height * heightCoef + 0.3)), onGround = 0;
-    if (onGround == 1)
-    {
-        float weightToMove = tryToMove(0.0001, 2, 0);
-        if (weightToMove != -1)
-            onGround = 0;
-    }
-    else
-    {
-        float changeY = fallSpeed * time + freeFallAcc * time * time / 2;
-        if (fallSpeed > maxFallSpeed)
-            fallSpeed = maxFallSpeed;
-        float weightToMove = tryToMove(changeY, 2, 0);
-        if (weightToMove == -1)
-        {
-            if (fallSpeed >= 0)
-                onGround = 1;
-            else
-            {
-                changeY = (int)curY - curY;
-                if (changeY < 0.02)
-                {
-                    weightToMove = tryToMove(changeY, 2, 0);
-                    if (weightToMove != -1)
-                        tryToMove(changeY * weight / weightToMove, 2, 1);
-                }
-            }
-            fallSpeed = 0;
-        }
-        else
-        {
-            if (weightToMove <= weight * 2)
-                fallSpeed += freeFallAcc * time;
-            else
-                if (fallSpeed > 0)
-                    onGround = 1, fallSpeed += freeFallAcc * weight / weightToMove / 2;
-                else
-                    fallSpeed += freeFallAcc * time * weightToMove / weight, fallSpeed = min((float)0, fallSpeed);
-            tryToMove(changeY * weight / weightToMove, 2, 1);
-        }
-    }
-
-
-
 
     if (Keyboard::isKeyPressed(Keyboard::A))
     {
@@ -141,17 +97,99 @@ void Player::Update(float &time) // physics moves
     }
     else
         playerSpeed = 0;
+
     float weightToMove = -1;
     if (playerSpeed != 0)
     {
         weightToMove = tryToMove(playerSpeed * time, 1, 0);
     }
+    //<< weightToMove << "\n";
+
+
     if(weightToMove != -1)
     {
         tryToMove(playerSpeed * time * weight / (weightToMove), 1, 1);
     }
     else
         playerSpeed = 0;
+
+    //try to go to real Y
+    float oldY;
+    if (lastCurY == curY)
+    {
+        if (tryToMove(realY - curY, 2, 0))
+            tryToMove(realY - curY, 2, 1);
+        else
+            curY = oldY;
+    }
+    else
+        realY = curY;
+
+    if (Keyboard::isKeyPressed(Keyboard::W) && onGround == 1)
+        fallSpeed -= sqrt(2 * freeFallAcc * (height * heightCoef + 0.3)), onGround = 0;
+    if (onGround == 1)
+    {
+        float weightToMove = tryToMove(0.0001, 2, 0);
+        if (weightToMove != -1)
+            onGround = 0;
+    }
+    else
+    {
+        float changeY = fallSpeed * time + freeFallAcc * time * time / 2;
+        if (fallSpeed > maxFallSpeed)
+            fallSpeed = maxFallSpeed;
+        float weightToMove = tryToMove(changeY, 2, 0);
+        if (weightToMove == -1)
+        {
+            if (fallSpeed >= 0)
+                onGround = 1;
+            else
+            {
+                changeY = (int)curY - curY;
+                if (abs(changeY) < 0.01)
+                {
+                    weightToMove = tryToMove(changeY, 2, 0);
+                    if (weightToMove != -1)
+                        tryToMove(changeY * weight / weightToMove, 2, 1);
+                }
+            }
+            fallSpeed = 0;
+        }
+        else
+        {
+            if (weightToMove <= weight * 2)
+                fallSpeed += freeFallAcc * time;
+            else
+                if (fallSpeed > 0)
+                    onGround = 1, fallSpeed += freeFallAcc * weight / weightToMove / 2;
+                else
+                    fallSpeed += freeFallAcc * time * weightToMove / weight, fallSpeed = min((float)0, fallSpeed);
+            tryToMove(changeY * weight / weightToMove, 2, 1);
+        }
+    }
+    realY = curY;
+
+    //try to set down on int position
+    if (onGround == 0 && (int)(curY + height + 1) - (curY + height) < 0.05)
+    {
+        float oldY = curY;
+        float changeY = (int)(curY + height + 1) - (curY + height);
+        if (tryToMove(changeY, 2, 0))
+            tryToMove(changeY, 2, 1);
+        else
+            curY = oldY;
+
+    }
+    else if (onGround == 0 && curY + height - (int)(curY + height) < 0.05)
+    {
+        float oldY = curY;
+        float changeY = curY + height - (int)(curY + height);
+        if (tryToMove(changeY, 0, 0))
+            tryToMove(changeY, 0, 1);
+        else
+            curY = oldY;
+    }
+    lastCurY = curY;
 }
 
 
@@ -163,33 +201,43 @@ int Player::isTouching(float newX, float newY, int direction) // check which blo
     {
         if (newY < 0)
             return 1;
-        float i;
+        float i = 0;
         int block = 0;
-        for (i = 0; i < width; i++)
+        if (newX < (int)newX + 0.00001)
+            i++;
+        for (; i < width; i++)
             block = max(physics[(int)(newX + i)][(int)newY], block);
-        block = max(physics[(int)(newX + width)][(int)newY], block);
+        if (newX + width > (int)(newX + width) + 0.00001)
+            block = max(physics[(int)(newX + width)][(int)newY], block);
         return block;
     }
     case 1:
     {
         if (newX + width > mapWidth)
             return 1;
-        float i;
+        float i = 0;
         int block = 0;
         for (i = 0; i < height; i++)
             block = max(physics[(int)(newX + width)][(int)(newY + i)], block);
-        block = max(physics[(int)(newX + width)][(int)(newY + height)], block);
+
+        if (newY + height > (int)(newY + height) + 0.00001)
+           block = max(physics[(int)(newX + width)][(int)(newY + height)], block);
         return block;
     }
     case 2:
     {
         if (newY + height > mapHeight)
             return 1;
-        float i;
+        float i = 0;
         int block = 0;
-        for (i = 0; i < width; i++)
+
+        if ((int)(newX + 0.00001) > (int)newX)
+            i++, cout << newX + 1 << "\n";
+        for (; i < width; i++)
             block = max(physics[(int)(newX + i)][(int)(newY + height)], block);
-        block = max(physics[(int)(newX + width)][(int)(newY + height)], block);
+
+        if (newX + width > (int)(newX + width) + 0.00001)
+            block = max(physics[(int)(newX + width)][(int)(newY + height)], block);
         return block;
     }
     case 3:
@@ -198,9 +246,12 @@ int Player::isTouching(float newX, float newY, int direction) // check which blo
             return 1;
         float i;
         int block = 0;
+
         for (i = 0; i < height; i++)
             block = max(physics[(int)(newX)][(int)(newY + i)], block);
-        block = max(physics[(int)(newX)][(int)(newY + height)], block);
+
+        if (newY + height > (int)(newY + height) + 0.00001)
+            block = max(physics[(int)(newX)][(int)(newY + height)], block);
         return block;
     }
     }
@@ -326,6 +377,8 @@ int Player::tryToSquezze(float distance, int direction, int mode)
         float oldX = curX;
         float weightToMove1, weightToMove2;
         float returnWeight = weight * width * sqrt(width);
+        if (curY - (int)(curY) < 0.000001)
+            curY += 0.000001;
         width += changeW;
         height -= distance;
 
@@ -407,6 +460,8 @@ int Player::tryToSquezze(float distance, int direction, int mode)
         curY += distance;
         width += changeW;
         height -= distance;
+        if (curY + height - (int)(curY + height) < 0.000001)
+            curY -= 0.000001;
 
         curX = oldX - changeW / 2;
         if (isTouching(curX, curY, 1) == 0 && isTouching(curX, curY, 3) == 0)
@@ -487,31 +542,13 @@ int Player::tryToSquezze(float distance, int direction, int mode)
         float oldY = curY;
         float weightToMove1, weightToMove2;
         float returnWeight = weight * height * sqrt(height);
-        curX += distance;
+
         height += changeH;
+        float endX = curX + width;
+        curX += distance;
         width -= distance;
-
-
-        curY = oldY - changeH;
-        if (isTouching(curX, curY, 0) == 0)
-        {
-            weightToMove1 = AHI->tryToMoveAll(number, 0, changeH, 0);
-            if(weightToMove1 != -1)
-            {
-                if (mode == 1)
-                {
-                    AHI->tryToMoveAll(number, 0, changeH, 1);
-                }
-                else
-                {
-                    height -= changeH;
-                    width += distance;
-                    curX -= distance;
-                    curY = oldY;
-                }
-                return returnWeight + weightToMove1;
-            }
-        }
+        if (curX + width > endX)
+            width -= curX + width - endX;
 
         curY = oldY - changeH / 2;
         if (isTouching(curX, curY, 2) == 0 && isTouching(curX, curY, 0) == 0)
@@ -523,6 +560,7 @@ int Player::tryToSquezze(float distance, int direction, int mode)
                 if (mode == 1)
                 {
                     AHI->tryToMoveAll(number, 0, changeH / 2, 1), AHI->tryToMoveAll(number, 2, changeH / 2, 1);
+                    lastCurY = curY;
                 }
                 else
                 {
@@ -537,6 +575,28 @@ int Player::tryToSquezze(float distance, int direction, int mode)
         }
 
 
+        curY = oldY - changeH;
+        if (isTouching(curX, curY, 0) == 0)
+        {
+            weightToMove1 = AHI->tryToMoveAll(number, 0, changeH, 0);
+            if(weightToMove1 != -1)
+            {
+                if (mode == 1)
+                {
+                    AHI->tryToMoveAll(number, 0, changeH, 1);
+                    lastCurY = curY;
+                }
+                else
+                {
+                    height -= changeH;
+                    width += distance;
+                    curX -= distance;
+                    curY = oldY;
+                }
+                return returnWeight + weightToMove1;
+            }
+        }
+
         curY = oldY;
         if (isTouching(curX, curY, 2) == 0)
         {
@@ -546,6 +606,7 @@ int Player::tryToSquezze(float distance, int direction, int mode)
                 if (mode == 1)
                 {
                     AHI->tryToMoveAll(number, 2, changeH, 1);
+                    lastCurY = curY;
                 }
                 else
                 {
@@ -584,6 +645,7 @@ int Player::tryToSquezze(float distance, int direction, int mode)
                 if (mode == 1)
                 {
                     AHI->tryToMoveAll(number, 0, changeH / 2, 1), AHI->tryToMoveAll(number, 2, changeH / 2, 1);
+                    lastCurY = curY;
                 }
                 else
                 {
@@ -605,6 +667,7 @@ int Player::tryToSquezze(float distance, int direction, int mode)
                 if (mode == 1)
                 {
                     AHI->tryToMoveAll(number, 2, changeH, 1);
+                    lastCurY = curY;
                 }
                 else
                 {
@@ -624,6 +687,7 @@ int Player::tryToSquezze(float distance, int direction, int mode)
                 if (mode == 1)
                 {
                     AHI->tryToMoveAll(number, 0, changeH, 1);
+                    lastCurY = curY;
                 }
                 else
                 {
@@ -647,7 +711,7 @@ int Player::levelPassCheck() // check if player passed level
     int i;
     float aD = 0.1; // around distance, its what we add to hitbox around
     float sD = 0.1; // side distance, its distance, on what we need neutral block under point (if we watch direction 2)
-    float sD2 = 0.1; // assumption in side
+    float sD2 = 0.01; // assumption in side
 
     float x[4] = {curX, curX + width, curX + width, curX};
     float y[4] = {curY, curY, curY + height, curY + height};
@@ -659,7 +723,7 @@ int Player::levelPassCheck() // check if player passed level
 
     for (i = 4; i < 8; i++)
         x2[i] = x[1] + aD;
-    y2[4] = y[1] - sD, y2[5] = y[1], y2[6] = y[2], y2[7] = y[2] + sD;      // right side
+    y2[4] = y[1] - sD, y2[5] = y[1] + sD2, y2[6] = y[2] - sD2, y2[7] = y[2] + sD;      // right side
 
     x2[8] = x[0] - sD, x2[9] = x[0] + sD2, x2[10] = x[1] - sD2, x2[11] = x[1] + sD;
     for (i = 8; i < 12; i++)
@@ -667,7 +731,7 @@ int Player::levelPassCheck() // check if player passed level
 
     for (i = 12; i < 16; i++)
         x2[i] = x[0] - aD;
-    y2[12] = y[1] - sD, y2[13] = y[1], y2[14] = y[2], y2[15] = y[2] + sD;        // left side
+    y2[12] = y[1] - sD, y2[13] = y[1] + sD2, y2[14] = y[2] - sD2, y2[15] = y[2] + sD;        // left side
     }
 
     int rem = -1;
@@ -793,3 +857,4 @@ void Player::setNumber(int n)
 {
     number = n;
 }
+

@@ -126,7 +126,7 @@ int main()
             if (Keyboard::isKeyPressed(Keyboard::N))
             {
                 delete mainMapForCreating;
-                mainMapForCreating = new MapForCreating("images//Tile7.png", "images//Background.png", "images//Slime.png", "images//Platform.png", "images//DynamicButton.png");
+                mainMapForCreating = new MapForCreating("images//Tile7.png", "images//Background.png", "images//Slime.png", "images//Platform.png", "images//DynamicButton.png", "images//HeavyBox.png");
             }
 
             if (Keyboard::isKeyPressed(Keyboard::T))
@@ -169,7 +169,7 @@ int main()
 
         case -3://download
         {
-            mainMapForCreating = new MapForCreating("images//Tile7.png", "images//Background.png", "images//Slime.png", "images//Platform.png", "images//DynamicButton.png");
+            mainMapForCreating = new MapForCreating("images//Tile7.png", "images//Background.png", "images//Slime.png", "images//Platform.png", "images//DynamicButton.png", "images//HeavyBox.png");
             mainMapForCreating->mapDownload("maps//level00.txt");
             process = 3;
             clock.restart();

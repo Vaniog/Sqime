@@ -38,7 +38,7 @@ public:
 
     float tilesize;
 
-    MapForCreating(string tilesPlace, string backgroundPlace, string playerPlaceIn, string platformPlaceIn, string ButtonPlaceIn);
+    MapForCreating(string tilesPlace, string backgroundPlace, string playerPlaceIn, string platformPlaceIn, string buttonPlaceIn, string boxPlaceIn);
     ~MapForCreating();
     void DrawMap(RenderWindow *window, float time); // includes all drawings and checks
     void mapUpload(string mapFilePlace); // draw map from file, but file need to be in maps, and you dont need to write txt
@@ -51,7 +51,7 @@ private:
 
     int curTile = 0;
     Texture tileTexture, backTex;
-    string platformPlace, playerPlace, buttonPlace;
+    string platformPlace, playerPlace, buttonPlace, boxPlace;
     Sprite tilesprite, backSprite;
     int windowWidth, windowHeight;
     int startX, startY;
@@ -65,6 +65,7 @@ private:
     Button *platformButton = NULL;
     Button *playerButton = NULL;
     Button *buttonButton = NULL;
+    Button *boxButton = 0;
     vector <vector<Button*>> buttons;
     vector <vector<int>> buttonsActive; // size is [buttonsAmount][2], [0] for active underbutton, [1] for amount of previous underbuttons, [2] for underbuttons amount
     vector <vector<int>> underButtonsFriends; // friendly blocks, this block (connect with underbutton) dont need to build wall with these blocks

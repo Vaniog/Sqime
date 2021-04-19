@@ -21,29 +21,29 @@ DynamicButton::DynamicButton(int curXIn, int curYIn, int length, int direction, 
     case 0:
         height = thickness;
         width = length;
-        curY -= 1 / 16;
+        curY -= (float)1 / 16;
         endX = curX;
-        endY = curY - height;
+        endY = curY - height - 0.01;
         break;
     case 1:
         height = length;
         width = thickness;
-        curX += 1 - thickness + 1 / 16;
-        endX = curX + width;
+        curX += 1 - thickness + (float)1 / 16;
+        endX = curX + width + 0.01;
         endY = curY;
         break;
     case 2:
         height = thickness;
         width = length;
-        curY += 1 - thickness + 1 / 16;
+        curY += 1 - thickness + (float)1 / 16;
         endX = curX;
-        endY = curY + height;
+        endY = curY + height + 0.01;
         break;
     case 3:
         height = length;
         width = thickness;
-        curX -= 1 / 16;
-        endX = curX - width;
+        curX -= (float)1 / 16;
+        endX = curX - width - 0.01;
         endY = curY;
         break;
     }

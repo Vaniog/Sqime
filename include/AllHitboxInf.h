@@ -12,7 +12,7 @@ public:
     int drawObjects(RenderWindow *window, float time, AllHitboxInf *AHI);
     void resetDepth();
 
-    void sendMessageToObject(int number, int mode);
+    void sendMessageToObject(int number, float message);
     int animationProcess = 0; // 0 - level passing, 1 - level passed animation 2 - level passed
     MyMap *mainMap;
 private:

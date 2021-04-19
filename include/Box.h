@@ -1,22 +1,21 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef BOX_H
+#define BOX_H
+
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <DynamicObject.h>
 #include <AllHitboxInf.h>
 #include <MyMap.h>
-#include <FloatComparation.h>
 #define MaxMapW 50
 #define MaxMapH 50
 
-class Player: public DynamicObject
+class Box: public DynamicObject
 {
 public:
     float curX , curY;
-    float realX, realY;
     int number = 0;
-    Player(string playerTexturePlace, int startX, int startY, int w, int h, MyMap *MapIn, AllHitboxInf *AHIIn);
+    Box(string boxTexturePlace, int startX, int startY, int w, int h, MyMap *MapIn, AllHitboxInf *AHIIn);
     void drawObject(float &time);
     void displayObject(RenderWindow *window);
     int tryToMove(float distance, int direction, int mode);
@@ -27,36 +26,25 @@ public:
 
 private:
     float scale;
-    float playerSpeed;
-    float heightCoef;
     float weight;
-    float maxPlayerXSpeed, playerXAcc;
-
     float freeFallAcc, fallSpeed, maxFallSpeed;
-    float lastCurY;
+    float realY, lastCurY;
 
     float startX, startY;
     float mapWidth, mapHeight;
     float height, width;
-    float volume;
-    float startH, startW;
-    float anEX, anEY, anCutTex = 37;
-    int anDir;
 
     AllHitboxInf *AHI;
     int windowWidth, windowHeight;
     bool onGround = false;
     int physics[MaxMapW][MaxMapH], tilesize, ptilesize;
-    int levelPassCheck();
-    Sprite playerSprite;
-    Texture playerTexture;
+    Sprite boxSprite;
+    Texture boxTexture;
 
     void Update(float &time);
-    void animationLevelPass(float time);
 
     int isTouching(float newX, float newY, int direction);
     int tryToSquezze(float distance, int direction, int mode);
     char type();
 };
-
-#endif
+#endif // BOX_H
