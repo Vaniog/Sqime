@@ -149,60 +149,48 @@ void Box::Update(float &time) // physics moves
 
 int Box::isTouching(float newX, float newY, int direction) // check which block box touch in this direction
 {
-    switch(direction)
+    int block = 0;
+    bool wasStop = 0;
+    float i = -1, k = -1;
+    while(i < width)
     {
-    case 0:
+        i++;
+        if (i > width)
+            i = width;
+        k = -1;
+        while (k < height)
+        {
+            k++;
+            if (k > height)
+            {
+                if (newY + height == (int)(newY + height))
+                {
+                    continue;
+                }
+                else
+                    k = height;
+            }
+
+            if (newX + i < 0 || newX + i >= mapWidth || newY + k < 0 || newY + k >= mapHeight)
+                return 1;
+            block = physics[(int)(newX + i)][(int)(newY + k)];
+            if (block == 0)
+                continue;
+            if (block >= 1 && block <= 4)
+                if (block - 1 == (direction + 2) % 4)
+                    wasStop = 1;
+            if (block >= 6 && block <= 9)
+                return block - 4;
+            if (block == 5)
+                wasStop = 1;
+        }
+    }
+    if (wasStop)
     {
-        if (newY < 0)
-            return 1;
-        float i;
-        int block = 0;
-
-        for (i = 0; i < width; i++)
-            block = max(physics[(int)(newX + i)][(int)newY], block);
-
-        block = max(physics[(int)(newX + width)][(int)newY], block);
-        return block;
+        return 1;
     }
-    case 1:
-    {
-        if (newX + width > mapWidth)
-            return 1;
-        float i;
-        int block = 0;
-        for (i = 0; i < height; i++)
-            block = max(physics[(int)(newX + width)][(int)(newY + i)], block);
 
-        block = max(physics[(int)(newX + width)][(int)(newY + height)], block);
-        return block;
-    }
-    case 2:
-    {
-        if (newY + height > mapHeight)
-            return 1;
-        float i;
-        int block = 0;
-
-        for (i = 0; i < width; i++)
-            block = max(physics[(int)(newX + i)][(int)(newY + height)], block);
-
-        block = max(physics[(int)(newX + width)][(int)(newY + height)], block);
-        return block;
-    }
-    case 3:
-    {
-        if (newX < 0)
-            return 1;
-        float i;
-        int block = 0;
-
-        for (i = 0; i < height; i++)
-            block = max(physics[(int)(newX)][(int)(newY + i)], block);
-
-        block = max(physics[(int)(newX)][(int)(newY + height)], block);
-        return block;
-    }
-    }
+    return 0;
 }
 
 int Box::tryToMove(float distance, int direction, int mode) // mode 0 for check possible 1 for moving

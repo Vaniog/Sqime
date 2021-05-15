@@ -1,11 +1,7 @@
 #include "AllIncludes.h"
 
-
-
-
 int main()
 {
-    DynamicButtonCreatingUI DBC(600, 100, 800);
     Event event;
     int process = -10;
     int windowWidth = VideoMode::getDesktopMode().width, windowHeight = VideoMode::getDesktopMode().height;
@@ -16,6 +12,9 @@ int main()
     MapForCreating *mainMapForCreating = NULL;
     LevelMenu *mainLevelMenu = NULL;
     MainMenu *mainMainMenu = NULL;
+    LevelMap *mainLevelMap = NULL;
+    int mainLevelMapWidth = 1000, mainLevelMapHeight = 1000;
+    int mainLevelMapCurX, mainLevelMapCurY, mainLevelMapMaxY, mainLevelMapSpeed = 3;
 
     window.setFramerateLimit(200);
     Button mainButton(30, 30, 0, 0, 22, 9, 22 * 3, 9 * 3, "images//Butt.png");
@@ -44,10 +43,10 @@ int main()
             switch(mainMainMenu->drawAndCheckMenu(&window, time)) // 1-play 2-levels 3-create 0-nothing
             {
             case 1:
-                process = -1, delete mainMainMenu;
+                process = -1, delete mainMainMenu, window.close();
                 break;
             case 2:
-                process = -2, delete mainMainMenu;
+                process = -2;
                 break;
             case 3:
                 process = -3, delete mainMainMenu;
@@ -140,6 +139,31 @@ int main()
             break;
         }
 
+        case 4:
+        {
+            window.clear();
+            mainMainMenu->drawAndCheckMenu(&window, time, 1);
+
+            if (mainLevelMapCurY > mainLevelMapMaxY)
+            {
+                mainLevelMapCurY -= mainLevelMapSpeed * time;
+                if (mainLevelMapCurY < mainLevelMapMaxY)
+                    mainLevelMapCurY = mainLevelMapMaxY;
+                mainLevelMap->display(&window, time, mainLevelMapCurX, mainLevelMapCurY);
+            }
+            else
+            {
+                int level = mainLevelMap->display(&window, time);
+                if (level != 0)
+                    mainLevelMap->levelPassedAdd(level);
+            }
+
+            if (mainButton.buttonDisplayAndCheck(&window, -1, -1) == 1)
+                process = -10, delete mainLevelMap, delete mainMainMenu;
+
+            window.display();
+            break;
+        }
 
         case -1: //download map and player
         {
@@ -167,6 +191,17 @@ int main()
             break;
         }
 
+        case -4:// download LevelMap
+        {
+            mainLevelMap = new LevelMap(mainLevelMapWidth);
+            process = 4;
+            mainLevelMapCurY = VideoMode::getDesktopMode().height;
+            mainLevelMapMaxY = (VideoMode::getDesktopMode().height - mainLevelMapHeight) / 2;
+            mainLevelMapCurX = (VideoMode::getDesktopMode().width - mainLevelMapWidth) / 2;
+            clock.restart();
+            break;
+        }
+
         case -3://download
         {
             mainMapForCreating = new MapForCreating("images//Tile7.png", "images//Background.png", "images//Slime.png", "images//Platform.png", "images//DynamicButton.png", "images//HeavyBox.png");
@@ -184,13 +219,6 @@ int main()
             break;
         }
 
-        case -20:
-            {
-                window.clear();
-                DBC.draw(&window);
-                window.display();
-                break;
-            }
         }
     }
     return 0;

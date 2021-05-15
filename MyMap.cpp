@@ -151,12 +151,21 @@ void MyMap::physicsCreate()
         for (k = 0; k < height; k++)
         {
             int tile = max(tiles[i][k][0], tiles[i][k][1]);
-            if (tile >= 1 && tile <= 16)
-                physics[i][k] = 1;
-            if ((tile >= 17 && tile <= 48) || tile == 0)
+            if (tile == 0)
+            {
                 physics[i][k] = 0;
-            if (tile >= 49 && tile <= 124)
-                physics[i][k] = (tile - 17) / 16;
+                continue;
+            }
+            tile = (tile - 1) / 16;
+
+            if (tile == 0)
+                physics[i][k] = 5; // 5
+            if (tile >= 1 && tile <= 2)
+                physics[i][k] = 0;
+            if (tile >= 3 && tile <= 6)
+                physics[i][k] = tile + 3; // from 6 to 9
+            if (tile >= 7 && tile <= 10)
+                physics[i][k] = tile - 6; // from 1 to 4
         }
 }
 

@@ -31,6 +31,7 @@ Player::Player(string playerTexturePlace, int sX, int sY, int w, int h, MyMap *M
     startY = MapIn->startY;
     playerSpeed = 0;
     maxPlayerXSpeed = 0.0035;
+    moveSpeed = 0.002;
     playerXAcc = 0.000004;
     fallSpeed = 0;
     freeFallAcc = 0.00005;
@@ -75,6 +76,15 @@ void Player::Update(float &time) // physics moves
 {
     AHI->resetDepth();
 
+    if (Keyboard::isKeyPressed(Keyboard::Right))
+        if (AHI->tryToMoveAll(number, 1, moveSpeed * time, 0) != -1)
+            AHI->tryToMoveAll(number, 1, moveSpeed * time, 1);
+
+    if (Keyboard::isKeyPressed(Keyboard::Left))
+        if (AHI->tryToMoveAll(number, 3, moveSpeed * time, 0) != -1)
+            AHI->tryToMoveAll(number, 3, moveSpeed * time, 1);
+
+
     if (Keyboard::isKeyPressed(Keyboard::A))
     {
         if (playerSpeed > -maxPlayerXSpeed * 0.25)
@@ -101,7 +111,9 @@ void Player::Update(float &time) // physics moves
     float weightToMove = -1;
     if (playerSpeed != 0)
     {
+
         weightToMove = tryToMove(playerSpeed * time, 1, 0);
+
     }
     //<< weightToMove << "\n";
 
@@ -113,8 +125,17 @@ void Player::Update(float &time) // physics moves
     else
         playerSpeed = 0;
 
+    if (playerSpeed > 0 && (int)(curX + 1) - curX < 0.03)
+        if (tryToMove((int)(curX + 1) - curX, 1, 0) != -1)
+            tryToMove((int)(curX + 1) - curX, 1, 1);
+
+    if (playerSpeed < 0 && curX - (int)curX < 0.03)
+        if (tryToMove(curX - (int)curX, 3, 0) != -1)
+            tryToMove(curX - (int)curX, 3, 1);
+
     //try to go to real Y
-    float oldY;
+    float oldY = curY;
+    float wasMoved = 0;
     if (lastCurY == curY)
     {
         if (tryToMove(realY - curY, 2, 0))
@@ -123,7 +144,9 @@ void Player::Update(float &time) // physics moves
             curY = oldY;
     }
     else
-        realY = curY;
+    {
+        wasMoved = 1;
+    }
 
     if (Keyboard::isKeyPressed(Keyboard::W) && onGround == 1)
         fallSpeed -= sqrt(2 * freeFallAcc * (height * heightCoef + 0.3)), onGround = 0;
@@ -170,7 +193,7 @@ void Player::Update(float &time) // physics moves
     realY = curY;
 
     //try to set down on int position
-    if (onGround == 0 && (int)(curY + height + 1) - (curY + height) < 0.05)
+    if (onGround == 0 && (int)(curY + height + 1) - (curY + height) < 0.05 && !wasMoved)
     {
         float oldY = curY;
         float changeY = (int)(curY + height + 1) - (curY + height);
@@ -178,9 +201,8 @@ void Player::Update(float &time) // physics moves
             tryToMove(changeY, 2, 1);
         else
             curY = oldY;
-
     }
-    else if (onGround == 0 && curY + height - (int)(curY + height) < 0.05)
+    else if (onGround == 0 && curY + height - (int)(curY + height) < 0.05 && !wasMoved)
     {
         float oldY = curY;
         float changeY = curY + height - (int)(curY + height);
@@ -192,70 +214,52 @@ void Player::Update(float &time) // physics moves
     lastCurY = curY;
 }
 
-
-int Player::isTouching(float newX, float newY, int direction) // check which block player touch in this direction
+int Player::isTouching(float newX, float newY, int direction)
 {
-    switch(direction)
+    int block = 0;
+    bool wasStop = 0;
+    float i = -1, k = -1;
+    while(i < width)
     {
-    case 0:
+        i++;
+        if (i > width)
+            i = width;
+        k = -1;
+        while (k < height)
+        {
+            k++;
+            if (k > height)
+            {
+                if (newY + height == (int)(newY + height))
+                {
+                    continue;
+                }
+                else
+                    k = height;
+            }
+
+            if (newX + i < 0 || newX + i >= mapWidth || newY + k < 0 || newY + k >= mapHeight)
+                return 1;
+            block = physics[(int)(newX + i)][(int)(newY + k)];
+            if (block == 0)
+                continue;
+            if (block >= 1 && block <= 4)
+                if (block - 1 == (direction + 2) % 4)
+                    wasStop = 1;
+            if (block >= 6 && block <= 9)
+                return block - 4;
+            if (block == 5)
+                wasStop = 1;
+        }
+    }
+    if (wasStop)
     {
-        if (newY < 0)
-            return 1;
-        float i = 0;
-        int block = 0;
-        if (newX < (int)newX + 0.00001)
-            i++;
-        for (; i < width; i++)
-            block = max(physics[(int)(newX + i)][(int)newY], block);
-        if (newX + width > (int)(newX + width) + 0.00001)
-            block = max(physics[(int)(newX + width)][(int)newY], block);
-        return block;
+        return 1;
     }
-    case 1:
-    {
-        if (newX + width > mapWidth)
-            return 1;
-        float i = 0;
-        int block = 0;
-        for (i = 0; i < height; i++)
-            block = max(physics[(int)(newX + width)][(int)(newY + i)], block);
 
-        if (newY + height > (int)(newY + height) + 0.00001)
-           block = max(physics[(int)(newX + width)][(int)(newY + height)], block);
-        return block;
-    }
-    case 2:
-    {
-        if (newY + height > mapHeight)
-            return 1;
-        float i = 0;
-        int block = 0;
-
-        if ((int)(newX + 0.00001) > (int)newX)
-            i++, cout << newX + 1 << "\n";
-        for (; i < width; i++)
-            block = max(physics[(int)(newX + i)][(int)(newY + height)], block);
-
-        if (newX + width > (int)(newX + width) + 0.00001)
-            block = max(physics[(int)(newX + width)][(int)(newY + height)], block);
-        return block;
-    }
-    case 3:
-    {
-        if (newX < 0)
-            return 1;
-        float i;
-        int block = 0;
-
-        for (i = 0; i < height; i++)
-            block = max(physics[(int)(newX)][(int)(newY + i)], block);
-
-        if (newY + height > (int)(newY + height) + 0.00001)
-            block = max(physics[(int)(newX)][(int)(newY + height)], block);
-        return block;
-    }
-    }
+    return 0;
 }
+
 
 int Player::tryToMove(float distance, int direction, int mode) // mode 0 for check possible 1 for moving
 {
@@ -737,7 +741,7 @@ int Player::levelPassCheck() // check if player passed level
     int rem = -1;
     for (i = 0; i < 16; i += 4)
     {
-        int passBlock = (i / 4 + 2) % 4 + 2;
+        int passBlock = (i / 4 + 2) % 4 + 6;
         if (physics[(int)x2[i]][(int)y2[i]] != passBlock && physics[(int)x2[i + 1]][(int)y2[i + 1]] == passBlock && physics[(int)x2[i + 2]][(int)y2[i + 2]] == passBlock && physics[(int)x2[i + 3]][(int)y2[i + 3]] != passBlock)
             rem = i / 4;
     }

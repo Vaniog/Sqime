@@ -11,7 +11,7 @@ public:
     MainMenu();
     ~MainMenu();
 
-    int drawAndCheckMenu(RenderWindow *window, float time);
+    int drawAndCheckMenu(RenderWindow *window, float time, bool off = 0);
 private:
     int sizeX = 128 * 5, sizeY = 32 * 5;
     int startX = (VideoMode::getDesktopMode().width - sizeX) / 2;
@@ -21,8 +21,8 @@ private:
 
     float movingSpeed = 0.02, backStartX; // for "parallax" background
 
-    Button *playButton;
-    Button *levelsButton;
+    Button *exitButton;
+    Button *mapButton;
     Button *createButton;
 
     Texture backTex;

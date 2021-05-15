@@ -31,7 +31,7 @@ private:
     float heightCoef;
     float weight;
     float maxPlayerXSpeed, playerXAcc;
-
+    float moveSpeed;
     float freeFallAcc, fallSpeed, maxFallSpeed;
     float lastCurY;
 

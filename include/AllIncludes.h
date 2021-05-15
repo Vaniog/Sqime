@@ -19,5 +19,6 @@ using namespace sf;
 #include "Platform.h"
 #include "DynamicButton.h"
 #include "DynamicButtonCreatingUI.h"
+#include <LevelMap.h>
 
 #endif // ALLINCLUDES_H_INCLUDED

@@ -53,7 +53,7 @@
         int underbuttonsAmount = getNumber(mapFile);
         for (k = 0; k < underbuttonsAmount; k++)
         {
-            int tileX = getNumber(mapFile), tileY = getNumber(mapFile);
+            int tileX = getNumber(mapFile), tileY = getNumber(mapFile) + 15;
             Button *button = new Button(spaceAroundButtons, 100 + spaceForButtons * i, tileX * tilesize, tileY * tilesize, tilesize, tilesize, spaceForButtons - spaceAroundButtons * 2, spaceForButtons - spaceAroundButtons * 2, "images//Tile7.png");
             buttons[i].push_back(button);
             int friendsAmount = getNumber(mapFile);
@@ -69,6 +69,7 @@
         allUnderbuttonsAmount += underbuttonsAmount;
         buttonsActive.push_back(b);
     }
+
     mapFile.close();
 
     playerPlace = playerPlaceIn;
@@ -98,6 +99,7 @@ MapForCreating::~MapForCreating()
 
 void MapForCreating::DrawMap(RenderWindow *window, float time)
 {
+
     int i, k;
     timeAfterPrevClick += time;
     (*window).draw(backSprite);
@@ -463,7 +465,7 @@ void MapForCreating::displaySprites(RenderWindow *window)
         {
             inputObject->controlled = i;
             process.second++;
-            buttonsModeSet(1);
+            buttonsModeSet(0);
         }
     }
 }
