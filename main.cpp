@@ -288,7 +288,6 @@ int main()
                     animationProcess = 0;
                     mainLevelMap->startShowingNewLevel(lastLevel);
                     process = 4;
-                    cout << 1;
                     break;
 
                 }
@@ -340,7 +339,8 @@ int main()
 
         case -4:// download LevelMap
         {
-            mainLevelMap = new LevelMap(mainLevelMapWidth);
+            if (mainLevelMap == NULL)
+                mainLevelMap = new LevelMap(mainLevelMapWidth);
             process = 4;
             mainLevelMapCurY = VideoMode::getDesktopMode().height;
             mainLevelMapMaxY = (VideoMode::getDesktopMode().height - mainLevelMapHeight) / 2;
