@@ -141,7 +141,7 @@ int LevelMap::display (RenderWindow *window, float time, float newX, float newY)
                 else
                     lastGamma = 0, lastTouched = i;
 
-                square.setFillColor(Color(122, 155, 177, lastGamma));
+                square.setFillColor(Color(74, 103, 119, lastGamma));
                 square.setPosition(curX + ((float)startX / tilesize + levelsButtons[i].first) * tilesize * scale, curY + ((float)startY / tilesize + levelsButtons[i].second) * tilesize * scale);
                 window->draw(square);
                 continue;
@@ -153,6 +153,20 @@ int LevelMap::display (RenderWindow *window, float time, float newX, float newY)
     mapLabyrinthSprite.setPosition(curX, curY);
     window->draw(mapLabyrinthSprite);
 
+    if (newLevel && showingTimer < 1)
+    {
+        if (showingTimer < 0.2)
+            showPart(newLevel, window, 255);
+        else
+            showPart(newLevel, window, (1 - (showingTimer - 0.2) / 0.8) * 255);
+        showingTimer += time / 4000;
+        return 0;
+    }
+    else
+    {
+        newLevel = 0;
+        showingTimer = 0;
+    }
     return levelChoosed;
 }
 
@@ -222,6 +236,49 @@ void LevelMap::resetFiles()
 
     levelsPassedFile.close();
 }
+
+void LevelMap::startShowingNewLevel(int newLevelIn)
+{
+    bool start = 1;
+    for (int i = 0; i < levelsPassed.size(); i++)
+        if (levelsPassed[i] == newLevelIn)
+            start = 0;
+    if (start)
+    {
+        levelPassedAdd(newLevelIn);
+        showingTimer = 0;
+        newLevel = newLevelIn;
+    }
+}
+
+void LevelMap::showPart(int level, RenderWindow *window, float gamma)
+{
+    int darkerTiles[7][6];
+    for (int i = 0; i < 7; i++)
+        for (int k = 0; k < 6; k++)
+            darkerTiles[i][k] = 0;
+
+
+    RectangleShape square(Vector2f(tilesize * scale, tilesize * scale));
+    square.setFillColor(Color(255, 231, 150, gamma));
+    for (int i = 0; i < mapTilesForLevels[level - 1].size(); i++)
+        darkerTiles[mapTilesForLevels[level - 1][i].first][mapTilesForLevels[level - 1][i].second] = 1;
+
+    Image mapLabyrinthFullImg, mapLabyrinthImg;
+    mapLabyrinthFullImg.loadFromFile("images//MapPaper.png");
+    mapLabyrinthImg.create(mapLabyrinthFullImg.getSize().x, mapLabyrinthFullImg.getSize().y, Color(0, 0, 0, 0));
+    for (int i = 0; i < 7; i++)
+        for (int k = 0; k < 6; k++)
+        {
+            if(darkerTiles[i][k] == 1)
+            {
+                square.setPosition(curX + ((float)startX / tilesize + i) * tilesize * scale, curY + ((float)startY / tilesize + k) * tilesize * scale);
+                window->draw(square);
+            }
+        }
+
+}
+
 
 float LevelMap::getNumber(ifstream &file)
 {

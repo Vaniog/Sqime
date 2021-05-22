@@ -20,8 +20,8 @@ Player::Player(string playerTexturePlace, int sX, int sY, int w, int h, MyMap *M
     playerSprite.setTexture(playerTexture);
     playerSprite.setTextureRect(IntRect(0, 0, ptilesize, ptilesize));
     playerSprite.setScale(scale * width / startW * tilesize, scale * height / startH * tilesize);
-    width = w * 0.999;
-    height = h * 0.999;
+    width = w * 0.997;
+    height = h * 0.997;
     heightCoef = 1 / (height / ((int)height + 1));
     volume = width * height;
     weight = 100;
@@ -249,13 +249,16 @@ int Player::isTouching(float newX, float newY, int direction)
             if (block >= 6 && block <= 9)
                 return block - 4;
             if (block == 5)
+            {
                 wasStop = 1;
+            }
         }
     }
     if (wasStop)
     {
         return 1;
     }
+
 
     return 0;
 }
@@ -602,6 +605,8 @@ int Player::tryToSquezze(float distance, int direction, int mode)
         }
 
         curY = oldY;
+        while(curY > oldY)
+            curY -= 0.000001;
         if (isTouching(curX, curY, 2) == 0)
         {
             weightToMove1 = AHI->tryToMoveAll(number, 2, changeH, 0);
@@ -683,6 +688,8 @@ int Player::tryToSquezze(float distance, int direction, int mode)
         }
 
         curY = oldY - changeH;
+        while(curY > oldY - changeH)
+            curY -= 0.000001;
         if (isTouching(curX, curY, 0) == 0)
         {
             weightToMove1 = AHI->tryToMoveAll(number, 0, changeH, 0);

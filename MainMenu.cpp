@@ -21,6 +21,7 @@ MainMenu::MainMenu()
     backImg.loadFromFile("images//mainMenuBack.png");
     wB = backImg.getSize().x, hB = backImg.getSize().y;
     backTex.loadFromImage(backImg);
+    int i = 10; while(i){i--;};
     backSprite.setTexture(backTex);
     backSprite.setScale(buttonsScale, buttonsScale);
     scale = buttonsScale;
@@ -64,3 +65,4 @@ int MainMenu::drawAndCheckMenu(RenderWindow *window, float time, bool off)
         returnValue = 3;
     return returnValue;
 }
+

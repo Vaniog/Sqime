@@ -1,5 +1,56 @@
 #include "AllIncludes.h"
 
+
+void darkWindow(RenderWindow *window, float gamma)
+{
+    RectangleShape square(Vector2f(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height));
+    square.setPosition(0, 0);
+
+    square.setFillColor(Color(0, 0, 0, gamma));
+    window->draw(square);
+}
+
+class Darkness
+{
+public:
+    Darkness(RenderWindow *windowIn, float lengthIn, int processIn)
+    {
+        window = windowIn;
+        length = lengthIn;
+        process = processIn;
+    }
+    int update(float time)
+    {
+        switch(process)
+        {
+        case -1:
+            darkWindow(window, (length - timePass) / length * 255);
+            timePass += time;
+            if (timePass > length)
+                return 0;
+            return 1;
+        case 1:
+            darkWindow(window, (timePass) / length * 255);
+            timePass += time;
+            if (timePass > length)
+                return 0;
+            return 1;
+        case 0:
+            darkWindow(window, 255);
+            timePass += time;
+            if (timePass > length)
+                return 0;
+            return 1;
+
+        }
+    }
+    RenderWindow *window;
+    float length, timePass = 0;
+    int process;
+};
+
+
+
 int main()
 {
     Event event;
@@ -22,6 +73,11 @@ int main()
     int levelChoose;
     Clock clock;
     float timePass = 0;
+    float animationTimer = 0;
+    int animationProcess = 0;
+    int darknessProcessSet = 0, processPassed = 0;
+    Darkness *darkness = NULL;
+
     while (window.isOpen())
     {
         float time = clock.getElapsedTime().asMicroseconds();
@@ -43,30 +99,57 @@ int main()
             switch(mainMainMenu->drawAndCheckMenu(&window, time)) // 1-play 2-levels 3-create 0-nothing
             {
             case 1:
-                process = -1, delete mainMainMenu, window.close();
+                process = -1, window.close();
                 break;
             case 2:
-                process = -2;
+                process = -4;
                 break;
             case 3:
-                process = -3, delete mainMainMenu;
+                process = -3;
+                break;
+            default:
                 break;
             }
-            window.display();
             break;
         }
 
         case 1: //play
         {
             //cout << "Start:\n";
+            if (processPassed == 1)
+            {
+                if (darknessProcessSet == 0)
+                {
+                    processPassed = 0;
+                    darknessProcessSet = 1;
+                    process = 0;
+                    darkness = new Darkness(&window, 2, -1);
+                    delete mainMap;
+                    break;
+                }
+                window.clear();
+                mainMap->DrawMap(&window, time);
+                break;
+            }
             window.clear();
             if(mainMap->DrawMap(&window, time) == 2) // 2 - level passed
-                process = -10;
+            {
+                if (lastLevel != 0)
+                    process = 5;
+                else
+                    process = 0;
+            }
+
             if (mainButton.buttonDisplayAndCheck(&window,-1, -1) == 1)
-                process = -10, delete mainMap;
+            {
+                darkness = new Darkness(&window, 2, 1);
+                darknessProcessSet = 1;
+                processPassed = 1;
+                clock.restart();
+            }
+
             if(Keyboard::isKeyPressed(Keyboard::R))
                 process = -1;
-            window.display();
             break;
         }
 
@@ -76,13 +159,12 @@ int main()
 
             if (mainButton.buttonDisplayAndCheck(&window,-1, -1) == 1)
             {
-                process = -10, delete mainLevelMenu;
+                process = 0, delete mainLevelMenu, clock.restart();
                 continue;
             }
             levelChoose = mainLevelMenu->drawAndCheckMenu(&window);
             if (levelChoose != 0)
                 lastLevel = levelChoose, delete mainLevelMenu, process = -1;
-            window.display();
             break;
         }
 
@@ -119,7 +201,7 @@ int main()
             }
 
             if (mainButton.buttonDisplayAndCheck(&window,-1, -1) == 1)
-                process = -10, delete mainMapForCreating;
+                process = 0, delete mainMapForCreating, clock.restart();
             window.display();
 
             if (Keyboard::isKeyPressed(Keyboard::N))
@@ -155,18 +237,80 @@ int main()
             {
                 int level = mainLevelMap->display(&window, time);
                 if (level != 0)
-                    mainLevelMap->levelPassedAdd(level);
+                    lastLevel = level, process = -1;
+
             }
 
             if (mainButton.buttonDisplayAndCheck(&window, -1, -1) == 1)
-                process = -10, delete mainLevelMap, delete mainMainMenu;
+                process = 0, clock.restart();
 
-            window.display();
             break;
         }
 
-        case -1: //download map and player
+
+        case 5: //level was passed
         {
+            window.clear();
+            animationTimer += time / 500;
+            if (animationTimer < 2)
+            {
+                switch(animationProcess)
+                {
+                case 0:
+                    mainMap->DrawMap(&window, time);
+                    darkWindow(&window, animationTimer / 2 * 255);
+                    break;
+                case 1:
+                    darkWindow(&window, 255);
+                    break;
+                case 2:
+                    mainMainMenu->drawAndCheckMenu(&window, time, 1);
+                    mainLevelMap->display(&window, time);
+                    darkWindow(&window, (2 - animationTimer) / 2 * 255);
+                    break;
+
+                }
+            }
+            else
+                switch(animationProcess)
+                {
+                case 0:
+                    delete mainMap;
+                    animationTimer = 0;
+                    animationProcess++;
+                    break;
+                case 1:
+                    animationTimer = 0;
+                    animationProcess++;
+                    break;
+                case 2:
+                    animationTimer = 0;
+                    animationProcess = 0;
+                    mainLevelMap->startShowingNewLevel(lastLevel);
+                    process = 4;
+                    cout << 1;
+                    break;
+
+                }
+            break;
+
+        }
+
+
+
+        case -1: //download map
+        {
+            if (processPassed == -1)
+            {
+                if (darknessProcessSet == 0)
+                {
+                    process = 1, processPassed = 0;
+                    darknessProcessSet = 1;
+                    darkness = new Darkness(&window, 2, -1);
+                }
+                break;
+            }
+
             string way = "maps//level";
 
             char s[3];
@@ -178,8 +322,12 @@ int main()
             way += ".txt";
 
             mainMap = new MyMap(way, "images//Tile7.png", "images//Background.png");
-            process = 1;
+            //process = 1;
             clock.restart();
+
+            processPassed = -1;
+            darkness = new Darkness(&window, 2, 1);
+            darknessProcessSet = 1;
             break;
         }
 
@@ -187,7 +335,6 @@ int main()
         {
             mainLevelMenu = new LevelMenu;
             process = 2;
-            clock.restart();
             break;
         }
 
@@ -220,6 +367,14 @@ int main()
         }
 
         }
+
+
+        if (darknessProcessSet)
+        {
+            if(!(darkness->update(time / 500)))
+                darknessProcessSet = 0, delete darkness;
+        }
+        window.display();
     }
     return 0;
 }

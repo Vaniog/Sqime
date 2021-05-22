@@ -45,6 +45,7 @@ int MyMap::DrawMap(RenderWindow *window, float time)
     }
 
 
+
     int action = AHI->drawObjects(window, time, AHI);
     for (i = 0; i < width; i++)
     {

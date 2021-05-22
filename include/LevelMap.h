@@ -18,6 +18,7 @@ public:
 
     int display (RenderWindow *window, float time, float newX = -1, float newY = -1);
     int levelPassedAdd(int levelNumber);
+    void startShowingNewLevel(int newLevelIn);
 
     ~LevelMap();
 private:
@@ -37,6 +38,11 @@ private:
     int lastTouched = -1;
     float lastGamma = 0;
     float gammaChangeSpeed = 0.6;
+
+    float showingTimer = 0;
+    int newLevel = 0;
+
+    void showPart(int level, RenderWindow *window, float gamma);
 
     void resetLabyrinth();
     void resetFiles();
