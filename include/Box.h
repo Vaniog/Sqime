@@ -1,7 +1,7 @@
 #ifndef BOX_H
 #define BOX_H
 
-
+#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <DynamicObject.h>
@@ -9,6 +9,8 @@
 #include <MyMap.h>
 #define MaxMapW 50
 #define MaxMapH 50
+using namespace std;
+using namespace sf;
 
 class Box: public DynamicObject
 {

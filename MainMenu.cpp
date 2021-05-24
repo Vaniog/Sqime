@@ -50,7 +50,7 @@ int MainMenu::drawAndCheckMenu(RenderWindow *window, float time, bool off)
     }
 
     int i, k;
-    int returnValue;
+    int returnValue = 0;
     for (i = 0; i <= (VideoMode::getDesktopMode().width - backStartX) / wB / scale; i++)
     {
         for (k = 0; k <= VideoMode::getDesktopMode().height / hB / scale; k++)

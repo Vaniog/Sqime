@@ -34,6 +34,7 @@ private:
     float moveSpeed;
     float freeFallAcc, fallSpeed, maxFallSpeed;
     float lastCurY;
+    int lastDir;
 
     float startX, startY;
     float mapWidth, mapHeight;

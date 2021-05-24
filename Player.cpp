@@ -94,6 +94,7 @@ void Player::Update(float &time) // physics moves
             playerSpeed -= playerXAcc * time;
         else
             playerSpeed = -maxPlayerXSpeed;
+        lastDir = 3;
     }
     else if (Keyboard::isKeyPressed(Keyboard::D))
     {
@@ -104,9 +105,10 @@ void Player::Update(float &time) // physics moves
             playerSpeed += playerXAcc * time;
         else
             playerSpeed = maxPlayerXSpeed;
+        lastDir = 1;
     }
     else
-        playerSpeed = 0;
+        playerSpeed = 0, lastDir = -1;
 
     float weightToMove = -1;
     if (playerSpeed != 0)
@@ -125,11 +127,11 @@ void Player::Update(float &time) // physics moves
     else
         playerSpeed = 0;
 
-    if (playerSpeed > 0 && (int)(curX + 1) - curX < 0.03)
-        if (tryToMove((int)(curX + 1) - curX, 1, 0) != -1)
-            tryToMove((int)(curX + 1) - curX, 1, 1);
+    if (playerSpeed > 0 && (int)(curX + 1) - curX < 0.04)
+        if (tryToMove((int)(curX + 1) - curX + 0.00001, 1, 0) != -1)
+            tryToMove((int)(curX + 1) - curX + 0.00001, 1, 1), cout << curX << " " << curX + width << "\n";
 
-    if (playerSpeed < 0 && curX - (int)curX < 0.03)
+    if (playerSpeed < 0 && curX - (int)curX < 0.04)
         if (tryToMove(curX - (int)curX, 3, 0) != -1)
             tryToMove(curX - (int)curX, 3, 1);
 
@@ -369,7 +371,10 @@ int Player::tryToMove(float distance, int direction, int mode) // mode 0 for che
 
     if (mode == 0)
         curX = oldX, curY = oldY;
-    return weightToMove + weight;
+    if (lastDir == (direction + 2) % 4)
+        return weightToMove + weight * 4;
+    else
+        return weightToMove + weight;
 }
 
 int Player::tryToSquezze(float distance, int direction, int mode)
