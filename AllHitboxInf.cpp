@@ -13,7 +13,7 @@ int AllHitboxInf::addObject(DynamicObject *obj)
     return objAmount - 1;
 }
 
-int AllHitboxInf::tryToMoveAll(int number, int direction, float distance, int mode)
+int AllHitboxInf::tryToMoveAll(int number, int direction, long double distance, int mode)
 {
     depth++;
     if (depth > 3000)
@@ -25,11 +25,11 @@ int AllHitboxInf::tryToMoveAll(int number, int direction, float distance, int mo
         direction = (direction + 2) % 4, distance = -distance;
 
     int i;
-    pair <float, float> sXY = objects[number]->coordinates(); // start X Y, end X Y
-    pair <float, float> eXY = objects[number]->sizes();
+    pair <long double, long double> sXY = objects[number]->coordinates(); // start X Y, end X Y
+    pair <long double, long double> eXY = objects[number]->sizes();
     eXY.first += sXY.first;
     eXY.second += sXY.second;
-    pair <float, float> realSXY = sXY, realEXY = eXY;
+    pair <long double, long double> realSXY = sXY, realEXY = eXY;
 
     switch (direction)
     {
@@ -48,9 +48,9 @@ int AllHitboxInf::tryToMoveAll(int number, int direction, float distance, int mo
     }
 
 
-    float weight = 0;
-    pair <float, float> sXY2;
-    pair <float, float> eXY2;
+    long double weight = 0;
+    pair <long double, long double> sXY2;
+    pair <long double, long double> eXY2;
     for (i = 0; i < objAmount; i++)
         if (i != number)
         {
@@ -82,7 +82,7 @@ int AllHitboxInf::tryToMoveAll(int number, int direction, float distance, int mo
             {
                 continue;
             }
-            float deltaWeight;
+            long double deltaWeight;
             //cout << number << " " << i << " " << distance << " " << direction << " " << mode << "\n";
             deltaWeight = objects[i]->tryToMove(distance, direction, 0);
             if (deltaWeight == -1 && objects[number]->type() != 'b')
@@ -110,7 +110,7 @@ int AllHitboxInf::tryToMoveAll(int number, int direction, float distance, int mo
         return weight;
 }
 
-int AllHitboxInf::drawObjects(RenderWindow *window, float time, AllHitboxInf *AHI)
+int AllHitboxInf::drawObjects(RenderWindow *window, long double time, AllHitboxInf *AHI)
 {
     int i;
     for (i = 0; i < objAmount; i++)
@@ -126,7 +126,7 @@ int AllHitboxInf::drawObjects(RenderWindow *window, float time, AllHitboxInf *AH
     return animationProcess;
 }
 
-void AllHitboxInf::sendMessageToObject(int number, float message)
+void AllHitboxInf::sendMessageToObject(int number, long double message)
 {
     objects[number]->sendMessage(message);
 }

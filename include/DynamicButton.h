@@ -14,24 +14,24 @@ class DynamicButton : public DynamicObject
         ~DynamicButton();
 
         char type();
-        pair <float, float> coordinates();
-        pair <float, float> sizes();
+        pair <long double, long double> coordinates();
+        pair <long double, long double> sizes();
 
-        int tryToMove(float distance, int direction, int mode);
-        int tryToSquezze(float distance, int direction, int mode);
-        void drawObject(float &time);
+        int tryToMove(long double distance, int direction, int mode);
+        int tryToSquezze(long double distance, int direction, int mode);
+        void drawObject(long double &time);
         void displayObject(RenderWindow *window);
 
         int getNumber();
         void setNumber(int n);
     private:
         AllHitboxInf *AHI;
-        float width, height;
+        long double width, height;
         int startMapX, startMapY;
-        float startX, startY;
-        float curX, curY;
-        float endX, endY;
-        float tilesize, scale;
+        long double startX, startY;
+        long double curX, curY;
+        long double endX, endY;
+        long double tilesize, scale;
         int number;
         int dbDirection;
         Texture dbTexture; // db - Dynamic Button

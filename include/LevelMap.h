@@ -16,7 +16,7 @@ class LevelMap
 public:
     LevelMap(int width);
 
-    int display (RenderWindow *window, float time, float newX = -1, float newY = -1);
+    int display (RenderWindow *window, long double time, long double newX = -1, long double newY = -1);
     int levelPassedAdd(int levelNumber);
     void startShowingNewLevel(int newLevelIn);
 
@@ -30,23 +30,23 @@ private:
     vector <pair <int, int>> levelsButtons; // coords of buttons
     vector <pair<int, int>> levelsCoords;
 
-    float curX = 0, curY = 0, scale;
+    long double curX = 0, curY = 0, scale;
     int tilesize, startX, startY;
     Texture mapPaperTexture, mapLabyrinthTexture;
     Sprite mapPaperSprite, mapLabyrinthSprite;
 
     int lastTouched = -1;
-    float lastGamma = 0;
-    float gammaChangeSpeed = 0.6;
+    long double lastGamma = 0;
+    long double gammaChangeSpeed = 0.6;
 
-    float showingTimer = 0;
+    long double showingTimer = 0;
     int newLevel = 0;
 
-    void showPart(int level, RenderWindow *window, float gamma);
+    void showPart(int level, RenderWindow *window, long double gamma);
 
     void resetLabyrinth();
     void resetFiles();
-    float getNumber(ifstream &file);
+    long double getNumber(ifstream &file);
 
 };
 

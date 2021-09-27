@@ -24,10 +24,10 @@
     spaceForObjButtons = 200;
     spaceAroundButtons = 5;
 
-    scale = min(((float)windowWidth - spaceForButtons * 10) / tilesize / width, (float)windowHeight / tilesize / height);
+    scale = min(((long double)windowWidth - spaceForButtons * 10) / tilesize / width, (long double)windowHeight / tilesize / height);
 
-    startX = spaceForButtons * 5 + (((float)windowWidth - spaceForButtons * 10) - tilesize * scale * width) / 2;
-    startY = ((float)windowHeight - scale * tilesize * height) / 2;
+    startX = spaceForButtons * 5 + (((long double)windowWidth - spaceForButtons * 10) - tilesize * scale * width) / 2;
+    startY = ((long double)windowHeight - scale * tilesize * height) / 2;
     scale -= (scale * tilesize - (int)(scale * tilesize)) / tilesize; //scale * tilesize need to be int
 
     Image backgroundImage;
@@ -97,7 +97,7 @@ MapForCreating::~MapForCreating()
         delete objects[i];
 }
 
-void MapForCreating::DrawMap(RenderWindow *window, float time)
+void MapForCreating::DrawMap(RenderWindow *window, long double time)
 {
 
     int i, k;
@@ -146,11 +146,11 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
         sizeChooseUI = new SizeChooseMenu();
         Image sliderBackImage;
         sliderBackImage.loadFromFile("images//SpeedSliderBack.png");
-        float sliderWidth = VideoMode::getDesktopMode().width / 3;
-        float sliderHeight = sliderWidth / 4;
-        float sliderStartX = VideoMode::getDesktopMode().width / 2 - sliderWidth / 2;
-        float sliderStartY = VideoMode::getDesktopMode().height / 2 - sliderHeight / 2;
-        float sliderScale = sliderWidth / sliderBackImage.getSize().x;
+        long double sliderWidth = VideoMode::getDesktopMode().width / 3;
+        long double sliderHeight = sliderWidth / 4;
+        long double sliderStartX = VideoMode::getDesktopMode().width / 2 - sliderWidth / 2;
+        long double sliderStartY = VideoMode::getDesktopMode().height / 2 - sliderHeight / 2;
+        long double sliderScale = sliderWidth / sliderBackImage.getSize().x;
         speedSlider = new Slider(sliderStartX + sliderScale * 4, sliderStartY + sliderScale * 4, sliderScale * 5.5, sliderStartX + sliderWidth / 4 + sliderScale * 6, sliderStartY + sliderHeight / 2, sliderStartX + sliderWidth - sliderScale * 6, sliderStartY + sliderHeight / 2, 0, 5, sliderHeight / 3, 0.1, "images//Slider.png");
 
 
@@ -167,10 +167,10 @@ void MapForCreating::DrawMap(RenderWindow *window, float time)
     {
         process = {3, 4};
         inputObject = new ObjectInf(2);
-        float menuHeight = (float)VideoMode::getDesktopMode().height / 3 * 2;
-        float menuWidth = menuHeight * 125 / 146;
-        float menuStartX = VideoMode::getDesktopMode().width / 2 - menuWidth / 2;
-        float menuStartY = VideoMode::getDesktopMode().height / 2 - menuHeight / 2;
+        long double menuHeight = (long double)VideoMode::getDesktopMode().height / 3 * 2;
+        long double menuWidth = menuHeight * 125 / 146;
+        long double menuStartX = VideoMode::getDesktopMode().width / 2 - menuWidth / 2;
+        long double menuStartY = VideoMode::getDesktopMode().height / 2 - menuHeight / 2;
         dynamicButtonCreatingUI = new DynamicButtonCreatingUI(menuStartX, menuStartY, menuWidth);
         buttonsModeSet(4); // and we wait for setting in displaySprites
     }
@@ -387,7 +387,7 @@ int MapForCreating::mapDownload (string mapFilePlace)
         {
         case 0:
         {
-            float w, h, sX, sY;
+            long double w, h, sX, sY;
             w = getNumber(mapFile), h = getNumber(mapFile), sX = getNumber(mapFile), sY = getNumber(mapFile);
             ObjectInf *obj  = new ObjectInf(0); //0 - slime
             obj->width = w, obj->height = h;
@@ -397,7 +397,7 @@ int MapForCreating::mapDownload (string mapFilePlace)
         }
         case 1:
         {
-            float w, h, sX, sY, eX, eY, speed;
+            long double w, h, sX, sY, eX, eY, speed;
             w = getNumber(mapFile), h = getNumber(mapFile);
             sX = getNumber(mapFile), sY = getNumber(mapFile);
             eX = getNumber(mapFile), eY = getNumber(mapFile);
@@ -412,7 +412,7 @@ int MapForCreating::mapDownload (string mapFilePlace)
         }
         case 2:
         {
-            float length, sX, sY, dir, controlObj, controlMode, onMode, offMode;
+            long double length, sX, sY, dir, controlObj, controlMode, onMode, offMode;
             sX = getNumber(mapFile), sY = getNumber(mapFile);
             length = getNumber(mapFile);
             dir = getNumber(mapFile);
@@ -430,7 +430,7 @@ int MapForCreating::mapDownload (string mapFilePlace)
         }
         case 3:
         {
-            float w, h, sX, sY;
+            long double w, h, sX, sY;
             w = getNumber(mapFile), h = getNumber(mapFile), sX = getNumber(mapFile), sY = getNumber(mapFile);
             ObjectInf *obj  = new ObjectInf(3); //3 - box
             obj->width = w, obj->height = h;
@@ -456,10 +456,43 @@ void MapForCreating::displaySprites(RenderWindow *window)
         buttonReturn = objSprites[i]->buttonDisplayAndCheck(window, -1, -1);
         if (buttonReturn == 2)
         {
-            delete objSprites[i];
-            objSprites.erase(objSprites.begin() + i);
-            delete objects[i];
-            objects.erase(objects.begin() + i);
+            vector <int> deleted;
+
+            if (objects[i]->type == 1)
+                deleted.push_back(i);
+            else
+            {
+                delete objSprites[i];
+                objSprites.erase(objSprites.begin() + i);
+                delete objects[i];
+                objects.erase(objects.begin() + i);
+            }
+
+            if (deleted.size() != 0)
+            {
+                for(int k = 0; k < objects.size(); k++)
+                    if (objects[k]->type == 2)
+                    {
+                        if (objects[k]->controlled == i)
+                        {
+                            deleted.push_back(k);
+                            continue;
+                        }
+                        int controlled = objects[k]->controlled;
+                        for (int j = 0; j < deleted.size(); j++)
+                            if (controlled > deleted[j])
+                                objects[k]->controlled--;
+                    }
+                    sort(deleted.begin(), deleted.end());
+                for (int j = 0; j < deleted.size(); j++)
+                {
+                    int del = deleted[j];
+                    delete objSprites[del - j];
+                    objSprites.erase(objSprites.begin() + del - j);
+                    delete objects[del - j];
+                    objects.erase(objects.begin() + del - j);
+                }
+            }
         }
         if (buttonReturn == 4 && objects[i]->type == 1) // choose controlled platform for dynamic button
         {
@@ -509,10 +542,10 @@ void MapForCreating::addToObjSprites(int number)
     {
     case 0:
     {
-        float w = objects[number]->width;
-        float h = objects[number]->height;
-        float sX = objects[number]->startX;
-        float sY = objects[number]->startY;
+        long double w = objects[number]->width;
+        long double h = objects[number]->height;
+        long double sX = objects[number]->startX;
+        long double sY = objects[number]->startY;
         Button *button;
         button = new Button(startX + scale * sX * tilesize, startY + scale * sY * tilesize, 0, 0, 32, 32, w * scale * tilesize, h * scale * tilesize, playerPlace);
         objSprites.push_back(button);
@@ -521,10 +554,10 @@ void MapForCreating::addToObjSprites(int number)
 
     case 1:
     {
-        float w = objects[number]->width;
-        float h = objects[number]->height;
-        float sX = objects[number]->startX;
-        float sY = objects[number]->startY;
+        long double w = objects[number]->width;
+        long double h = objects[number]->height;
+        long double sX = objects[number]->startX;
+        long double sY = objects[number]->startY;
 
         int texStartX = 0, texStartY = 0, i;
         for (i = 1; i < w; i++)
@@ -538,10 +571,10 @@ void MapForCreating::addToObjSprites(int number)
     }
     case 2:
     {
-        float w = objects[number]->width;
-        float h = objects[number]->height;
-        float sX = objects[number]->startX;
-        float sY = objects[number]->startY;
+        long double w = objects[number]->width;
+        long double h = objects[number]->height;
+        long double sX = objects[number]->startX;
+        long double sY = objects[number]->startY;
 
         int texStartX = 0, i;
         for (i = 1; i < w; i++)
@@ -567,10 +600,10 @@ void MapForCreating::addToObjSprites(int number)
     }
     case 3:
     {
-        float w = objects[number]->width;
-        float h = objects[number]->height;
-        float sX = objects[number]->startX;
-        float sY = objects[number]->startY;
+        long double w = objects[number]->width;
+        long double h = objects[number]->height;
+        long double sX = objects[number]->startX;
+        long double sY = objects[number]->startY;
         Button *button;
         int texStartX = 0, texStartY = 0, i;
         for (i = 1; i < w; i++)
@@ -588,10 +621,10 @@ void MapForCreating::addToObjSprites(int number)
 void MapForCreating::correctPositions()
 {
     clearObjSprites();
-    scale = min(((float)windowWidth - spaceForButtons * 10) / tilesize / width, (float)windowHeight / tilesize / height);
+    scale = min(((long double)windowWidth - spaceForButtons * 10) / tilesize / width, (long double)windowHeight / tilesize / height);
     scale -= (scale * tilesize - (int)(scale * tilesize)) / tilesize;
-    startX = spaceForButtons * 5 + (((float)windowWidth - spaceForButtons * 10) - tilesize * scale * width) / 2;
-    startY = ((float)windowHeight - scale * tilesize * height) / 2;
+    startX = spaceForButtons * 5 + (((long double)windowWidth - spaceForButtons * 10) - tilesize * scale * width) / 2;
+    startY = ((long double)windowHeight - scale * tilesize * height) / 2;
 
     backSprite.setTextureRect(IntRect(0, 0, tilesize * width, tilesize * height));
     backSprite.setScale(scale, scale);
@@ -633,8 +666,8 @@ void MapForCreating::keyboardCommands()
 
     if (Mouse::isButtonPressed(Mouse::Left))
     {
-        float mouseX = Mouse::getPosition().x;
-        float mouseY = Mouse::getPosition().y;
+        long double mouseX = Mouse::getPosition().x;
+        long double mouseY = Mouse::getPosition().y;
 
         if (mouseX >= startX && mouseY >= startY)
         {
@@ -647,8 +680,8 @@ void MapForCreating::keyboardCommands()
 
     if (Mouse::isButtonPressed(Mouse::Right))
     {
-        float mouseX = Mouse::getPosition().x;
-        float mouseY = Mouse::getPosition().y;
+        long double mouseX = Mouse::getPosition().x;
+        long double mouseY = Mouse::getPosition().y;
 
         if (mouseX >= startX && mouseY >= startY)
         {
@@ -761,10 +794,10 @@ int MapForCreating::countNeighbours(int x, int y)
     return ID;
 }
 
-float MapForCreating::getNumber(ifstream &mapFile)
+long double MapForCreating::getNumber(ifstream &mapFile)
 {
     int i;
-    float a = 0;
+    long double a = 0;
     int afterPoint = 0;
     char s = 10;
     while (s == 10 || s == 32)
@@ -778,7 +811,7 @@ float MapForCreating::getNumber(ifstream &mapFile)
                 a = a * 10 + s - '0';
             else
             {
-                float sNumber = s - '0';
+                long double sNumber = s - '0';
                 for (i = 0; i < afterPoint; i++)
                     sNumber /= 10;
                 a += sNumber;

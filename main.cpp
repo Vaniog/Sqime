@@ -1,7 +1,7 @@
 #include "AllIncludes.h"
 
 
-void darkWindow(RenderWindow *window, float gamma)
+void darkWindow(RenderWindow *window, long double gamma)
 {
     RectangleShape square(Vector2f(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height));
     square.setPosition(0, 0);
@@ -13,13 +13,13 @@ void darkWindow(RenderWindow *window, float gamma)
 class Darkness
 {
 public:
-    Darkness(RenderWindow *windowIn, float lengthIn, int processIn)
+    Darkness(RenderWindow *windowIn, long double lengthIn, int processIn)
     {
         window = windowIn;
         length = lengthIn;
         process = processIn;
     }
-    int update(float time)
+    int update(long double time)
     {
         switch(process)
         {
@@ -45,9 +45,86 @@ public:
         }
     }
     RenderWindow *window;
-    float length, timePass = 0;
+    long double length, timePass = 0;
     int process;
 };
+
+
+
+class CreatedLevels
+{
+public:
+
+    CreatedLevels(int startX, int startY, int height)
+    {
+        Image backImg, levelImg, delImg;
+        backImg.loadFromFile("images//CreatedMap.png");
+        int widthImg = backImg.getSize().x, heightImg = backImg.getSize().y;
+        scale = height / heightImg;
+
+        backTex.loadFromFile("images//CreatedMap.png");
+        levelTex.loadFromFile("images//LevelCreated.png");
+        delTex.loadFromFile("images//Delete.png");
+
+        this->startX = startX, this->startY = startY;
+        backSprite.setPosition(startX, startY);
+
+        ifstream levelsCreatedFile("settings//levelsCreated.txt");
+        levelsCreatedFile >> levelsAmount;
+
+        slider = new Slider(0, 0, 0, startX + (widthImg) * scale, startY + 10 * scale, startX + (widthImg) * scale, startY + (heightImg - 10) * scale, 0, levelsAmount - 4, scale * 4, 1, "images//Slider.png");
+
+        backSprite.setTexture(backTex), backSprite.setScale(scale, scale);
+        levelSprite.setTexture(levelTex), levelSprite.setScale(scale, scale);
+        delSprite.setTexture(delTex), delSprite.setScale(scale, scale);
+
+    }
+
+    int draw(RenderWindow *window, long double time)
+    {
+        int levelChoosed = 0;
+        if (levelsAmount > 4)
+            levelChoosed = slider->drawSliderGetValue(window);
+
+        Font font;
+        font.loadFromFile("images//mainFont.ttf");
+        Text levelNumber("", font, scale * 6);
+        levelNumber.setFillColor(Color(27, 35, 40));
+        levelNumber.setStyle(Text::Bold);
+
+        window->draw(backSprite);
+
+        int xSpace = 16, ySpace = 10;
+        long double mouseX = (long double)Mouse::getPosition().x / scale;
+        long double mouseY = (long double)Mouse::getPosition().y / scale;
+        int levelPressed = 0;
+
+        for (int i = 0; i < 4; i++)
+            if (i < levelsAmount)
+            {
+                levelSprite.setPosition(xSpace * scale, ySpace * scale + i * (12) * scale);
+                if (mouseX >= xSpace && mouseY >= ySpace + i * (12) && mouseX <= xSpace + 41 && mouseY <= ySpace + i * (12) + 9)
+                    levelPressed = i + levelChoosed;
+
+                levelNumber.setString(to_string(i + levelChoosed));
+                levelNumber.setPosition(xSpace * scale + 28 * scale, ySpace * scale + i * (12) * scale + scale);
+
+                window->draw(levelSprite), window->draw(levelNumber);
+            }
+
+        return levelPressed;
+    }
+
+private:
+    Texture backTex, levelTex, delTex;
+    Sprite backSprite, levelSprite, delSprite;
+    long double scale;
+    int levelsAmount;
+    int startX, startY;
+    Slider *slider = NULL;
+
+};
+
 
 
 
@@ -67,20 +144,22 @@ int main()
     int mainLevelMapWidth = 1000, mainLevelMapHeight = 1000;
     int mainLevelMapCurX, mainLevelMapCurY, mainLevelMapMaxY, mainLevelMapSpeed = 3;
 
+    CreatedLevels CL(0, 0, 500);
+
     window.setFramerateLimit(200);
     Button mainButton(30, 30, 0, 0, 22, 9, 22 * 3, 9 * 3, "images//Butt.png");
     int lastLevel = 1;
     int levelChoose;
     Clock clock;
-    float timePass = 0;
-    float animationTimer = 0;
+    long double timePass = 0;
+    long double animationTimer = 0;
     int animationProcess = 0;
     int darknessProcessSet = 0, processPassed = 0;
     Darkness *darkness = NULL;
 
     while (window.isOpen())
     {
-        float time = clock.getElapsedTime().asMicroseconds();
+        long double time = clock.getElapsedTime().asMicroseconds();
         clock.restart();
         time = time/1000;
         if (time > 50)
@@ -363,6 +442,14 @@ int main()
             mainMainMenu = new MainMenu;
             process = 0;
             clock.restart();
+            break;
+        }
+
+        case 20:
+        {
+            window.clear();
+            CL.draw(&window, time);
+            window.display();
             break;
         }
 

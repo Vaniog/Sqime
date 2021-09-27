@@ -1,6 +1,6 @@
 #include "Slider.h"
 
-Slider::Slider(float textX, float textY, int textSize, int lineStartXIn, int lineStartYIn, int lineEndXIn, int lineEndYIn, int minValueIn, int maxValueIn, int sliderDiametrIn, float stepIn, string sliderPlace)
+Slider::Slider(long double textX, long double textY, int textSize, int lineStartXIn, int lineStartYIn, int lineEndXIn, int lineEndYIn, int minValueIn, int maxValueIn, int sliderDiametrIn, long double stepIn, string sliderPlace)
 {
     lineStartX = lineStartXIn, lineStartY = lineStartYIn;
     lineEndX = lineEndXIn, lineEndY = lineEndYIn;
@@ -51,7 +51,7 @@ Slider::~Slider()
     delete line;
 }
 
-float Slider::drawSliderGetValue(RenderWindow *window)
+long double Slider::drawSliderGetValue(RenderWindow *window)
 {
     switch (rotation)
     {

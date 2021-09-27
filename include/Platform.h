@@ -10,36 +10,36 @@ class AllHitboxInf;
 class Platform: public DynamicObject
 {
 public:
-    float curX, curY;
-    float width, height;
-    float weight;
+    long double curX, curY;
+    long double width, height;
+    long double weight;
     int number;
 
-    Platform(float startXIn, float startYIn, float endXIn, float endYIn, float widthIn, float heightIn, float speed, string texPlace, MyMap *MapIn, AllHitboxInf *AHIIn);
-    void drawObject(float &time);
+    Platform(long double startXIn, long double startYIn, long double endXIn, long double endYIn, long double widthIn, long double heightIn, long double speed, string texPlace, MyMap *MapIn, AllHitboxInf *AHIIn);
+    void drawObject(long double &time);
     void displayObject(RenderWindow *window);
-    void sendMessage(float message);
-    pair <float, float> coordinates();
-    pair <float, float> sizes();
+    void sendMessage(long double message);
+    pair <long double, long double> coordinates();
+    pair <long double, long double> sizes();
     int getNumber();
     void setNumber(int n);
 private:
-    float startX, startY;
-    float endX, endY;
-    float startXMain, startYMain;
-    float endXMain, endYMain;
+    long double startX, startY;
+    long double endX, endY;
+    long double startXMain, startYMain;
+    long double endXMain, endYMain;
     int dir;
-    float scale;
-    float tilesize;
-    float platformSpeed;
-    float mapStartX, mapStartY;
+    long double scale;
+    long double tilesize;
+    long double platformSpeed;
+    long double mapStartX, mapStartY;
     Texture platformTexture;
     Sprite platformSprite;
     AllHitboxInf *AHI;
 
-    void movePlatform(float time, AllHitboxInf *AHI);
-    int tryToMove(float distance, int direction, int mode); // return -1;
-    int tryToSquezze(float distance, int direction, int mode);
+    void movePlatform(long double time, AllHitboxInf *AHI);
+    int tryToMove(long double distance, int direction, int mode); // return -1;
+    int tryToSquezze(long double distance, int direction, int mode);
     char type();
 };
 

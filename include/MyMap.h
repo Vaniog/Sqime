@@ -20,14 +20,14 @@ class Player;
 class MyMap
 {
 public:
-    float width, height; // in tiles
-    float tilesize;
-    float scale;
+    long double width, height; // in tiles
+    long double tilesize;
+    long double scale;
     int startX, startY;
     AllHitboxInf *AHI;
     MyMap *mapAdress = NULL;
     MyMap(string mapFilePlace, string tilesPlace, string backgroundPlace);
-    int DrawMap(RenderWindow *window, float time);
+    int DrawMap(RenderWindow *window, long double time);
     int getPhysics(int x, int y);
 
 private:
@@ -39,6 +39,6 @@ private:
 
     void mapDownload (string mapFilePlace);
     void physicsCreate();
-    float getNumber(ifstream &mapFile);
+    long double getNumber(ifstream &mapFile);
 };
 #endif

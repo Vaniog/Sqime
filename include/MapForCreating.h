@@ -21,10 +21,10 @@ public:
     {
         type = t;
     }
-    float width, height;
-    float startX, startY;
-    float speed, endX, endY;
-    int type; // 0-player 1-platform
+    long double width, height;
+    long double startX, startY;
+    long double speed, endX, endY;
+    int type; // 0-player 1-platform 2 - dynamic button
     int mode, dir, off, on, controlled; //for dynamic button
 };
 
@@ -34,18 +34,18 @@ public:
 class MapForCreating
 {
 public:
-    float width, height;
+    long double width, height;
 
-    float tilesize;
+    long double tilesize;
 
     MapForCreating(string tilesPlace, string backgroundPlace, string playerPlaceIn, string platformPlaceIn, string buttonPlaceIn, string boxPlaceIn);
     ~MapForCreating();
-    void DrawMap(RenderWindow *window, float time); // includes all drawings and checks
+    void DrawMap(RenderWindow *window, long double time); // includes all drawings and checks
     void mapUpload(string mapFilePlace); // draw map from file, but file need to be in maps, and you dont need to write txt
     int mapDownload(string mapFilePlace);
 
 private:
-    float spaceForButtons, spaceAroundButtons, spaceForObjButtons; //
+    long double spaceForButtons, spaceAroundButtons, spaceForObjButtons; //
 
     int tiles[MaxMapW][MaxMapH], tilesPhysics[MaxMapW][MaxMapH]; // tiles for textures, tilesphysics for block type
 
@@ -56,9 +56,9 @@ private:
     int windowWidth, windowHeight;
     int startX, startY;
     int backWidth, backHeight;
-    float backScaleX, backScaleY;
-    float scale;
-    float timeAfterPrevClick; // help check double tap
+    long double backScaleX, backScaleY;
+    long double scale;
+    long double timeAfterPrevClick; // help check double tap
     int prevClick; // help check double tap
     int buttonsAmount;
     int playerX, playerY;
@@ -82,7 +82,7 @@ private:
     void feelObjSprites(int amount); // help to download map
     void processCheck(RenderWindow *window);
     void buttonsModeSet(int mode); // turn on or off buttons
-    float getNumber(ifstream &mapFile);
+    long double getNumber(ifstream &mapFile);
     pair <int, int> catchMouse(); // help to input size with help of mouse
     //size choose UI
     pair <int, int> process = {0, 0}; // 0 0 for classic, 1 0 for sizes,  1 1 for coordinates (first number is a type)

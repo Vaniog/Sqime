@@ -1,6 +1,6 @@
 #include "Button.h"
 
-Button::Button(int xIn, int yIn, int startDownloadingFromX, int startDownloadingFromY, int textureWIn, int textureHIn, float widthIn, float heightIn, string buttonTexPlace)
+Button::Button(int xIn, int yIn, int startDownloadingFromX, int startDownloadingFromY, int textureWIn, int textureHIn, long double widthIn, long double heightIn, string buttonTexPlace)
 {
     x = xIn, y = yIn;
     width = widthIn, height = heightIn;

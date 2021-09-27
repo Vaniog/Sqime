@@ -25,7 +25,7 @@ MyMap::MyMap(string mapFilePlace, string tilesPlace, string backgroundPlace)
     backSprite.setScale(scale, scale);
 }
 
-int MyMap::DrawMap(RenderWindow *window, float time)
+int MyMap::DrawMap(RenderWindow *window, long double time)
 {
     int i, k;
     (*window).draw(backSprite);
@@ -86,10 +86,10 @@ void MyMap::mapDownload (string mapFilePlace)
         }
     physicsCreate();
 
-    scale = min((float)windowWidth / tilesize / width, (float)windowHeight / tilesize / height);
+    scale = min((long double)windowWidth / tilesize / width, (long double)windowHeight / tilesize / height);
     scale -= (scale * tilesize - (int)(scale * tilesize)) / tilesize;
-    startX = ((float)windowWidth - scale * tilesize * width) / 2;
-    startY = ((float)windowHeight - scale * tilesize * height) / 2;
+    startX = ((long double)windowWidth - scale * tilesize * width) / 2;
+    startY = ((long double)windowHeight - scale * tilesize * height) / 2;
 
     AHI = new AllHitboxInf(this);
     int amount = getNumber(mapFile);
@@ -100,7 +100,7 @@ void MyMap::mapDownload (string mapFilePlace)
         {
         case 0:
         {
-            float w, h, sX, sY;
+            long double w, h, sX, sY;
             w = getNumber(mapFile), h = getNumber(mapFile), sX = getNumber(mapFile), sY = getNumber(mapFile);
             DynamicObject *player = NULL;
             player = new Player("images//Slime.png", sX, sY, w, h, this, AHI);
@@ -109,7 +109,7 @@ void MyMap::mapDownload (string mapFilePlace)
         }
         case 1:
         {
-            float w, h, sX, sY, eX, eY, speed;
+            long double w, h, sX, sY, eX, eY, speed;
             w = getNumber(mapFile), h = getNumber(mapFile);
             sX = getNumber(mapFile), sY = getNumber(mapFile);
             eX = getNumber(mapFile), eY = getNumber(mapFile);
@@ -120,7 +120,7 @@ void MyMap::mapDownload (string mapFilePlace)
         }
         case 2:
         {
-            float length, sX, sY, dir, controlObj, controlMode, onMode, offMode;
+            long double length, sX, sY, dir, controlObj, controlMode, onMode, offMode;
             sX = getNumber(mapFile), sY = getNumber(mapFile);
             length = getNumber(mapFile);
             dir = getNumber(mapFile);
@@ -133,7 +133,7 @@ void MyMap::mapDownload (string mapFilePlace)
         }
         case 3:
         {
-            float w, h, sX, sY;
+            long double w, h, sX, sY;
             w = getNumber(mapFile), h = getNumber(mapFile), sX = getNumber(mapFile), sY = getNumber(mapFile);
             DynamicObject *box = NULL;
             box = new Box("images//HeavyBox.png", sX, sY, w, h, this, AHI);
@@ -170,10 +170,10 @@ void MyMap::physicsCreate()
         }
 }
 
-float MyMap::getNumber(ifstream &mapFile)
+long double MyMap::getNumber(ifstream &mapFile)
 {
     int i;
-    float a = 0;
+    long double a = 0;
     int afterPoint = 0;
     char s = 10;
     while (s == 10 || s == 32)
@@ -187,7 +187,7 @@ float MyMap::getNumber(ifstream &mapFile)
                 a = a * 10 + s - '0';
             else
             {
-                float sNumber = s - '0';
+                long double sNumber = s - '0';
                 for (i = 0; i < afterPoint; i++)
                     sNumber /= 10;
                 a += sNumber;

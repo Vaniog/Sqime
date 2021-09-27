@@ -107,22 +107,22 @@ LevelMap::LevelMap(int width)
 
 }
 
-int LevelMap::display (RenderWindow *window, float time, float newX, float newY)
+int LevelMap::display (RenderWindow *window, long double time, long double newX, long double newY)
 {
     if (newX != -1)
         curX = newX, curY = newY;
-    float levelChoosed = 0;
+    long double levelChoosed = 0;
     mapPaperSprite.setPosition(curX, curY);
     window->draw(mapPaperSprite);
 
-    float mouseX = (Mouse::getPosition().x - curX) / tilesize / scale - (float)startX / tilesize, mouseY = (Mouse::getPosition().y - curY) / tilesize / scale - (float)startY / tilesize;
+    long double mouseX = (Mouse::getPosition().x - curX) / tilesize / scale - (long double)startX / tilesize, mouseY = (Mouse::getPosition().y - curY) / tilesize / scale - (long double)startY / tilesize;
 
     RectangleShape square(Vector2f(tilesize * scale, tilesize * scale));
 
     for (int i = 0; i < levelsPassed.size(); i++)
     {
         square.setFillColor(Color(230, 181, 96, 255));
-        square.setPosition(curX + ((float)startX / tilesize + levelsCoords[levelsPassed[i] - 1].first) * tilesize * scale, curY + ((float)startY / tilesize + levelsCoords[levelsPassed[i] - 1].second) * tilesize * scale);
+        square.setPosition(curX + ((long double)startX / tilesize + levelsCoords[levelsPassed[i] - 1].first) * tilesize * scale, curY + ((long double)startY / tilesize + levelsCoords[levelsPassed[i] - 1].second) * tilesize * scale);
         window->draw(square);
     }
 
@@ -142,7 +142,7 @@ int LevelMap::display (RenderWindow *window, float time, float newX, float newY)
                     lastGamma = 0, lastTouched = i;
 
                 square.setFillColor(Color(74, 103, 119, lastGamma));
-                square.setPosition(curX + ((float)startX / tilesize + levelsButtons[i].first) * tilesize * scale, curY + ((float)startY / tilesize + levelsButtons[i].second) * tilesize * scale);
+                square.setPosition(curX + ((long double)startX / tilesize + levelsButtons[i].first) * tilesize * scale, curY + ((long double)startY / tilesize + levelsButtons[i].second) * tilesize * scale);
                 window->draw(square);
                 continue;
             }
@@ -251,7 +251,7 @@ void LevelMap::startShowingNewLevel(int newLevelIn)
     }
 }
 
-void LevelMap::showPart(int level, RenderWindow *window, float gamma)
+void LevelMap::showPart(int level, RenderWindow *window, long double gamma)
 {
     int darkerTiles[7][6];
     for (int i = 0; i < 7; i++)
@@ -272,7 +272,7 @@ void LevelMap::showPart(int level, RenderWindow *window, float gamma)
         {
             if(darkerTiles[i][k] == 1)
             {
-                square.setPosition(curX + ((float)startX / tilesize + i) * tilesize * scale, curY + ((float)startY / tilesize + k) * tilesize * scale);
+                square.setPosition(curX + ((long double)startX / tilesize + i) * tilesize * scale, curY + ((long double)startY / tilesize + k) * tilesize * scale);
                 window->draw(square);
             }
         }
@@ -280,10 +280,10 @@ void LevelMap::showPart(int level, RenderWindow *window, float gamma)
 }
 
 
-float LevelMap::getNumber(ifstream &file)
+long double LevelMap::getNumber(ifstream &file)
 {
     int i;
-    float a = 0;
+    long double a = 0;
     int afterPoint = 0;
     char s = 10;
     while (s == 10 || s == 32)
@@ -297,7 +297,7 @@ float LevelMap::getNumber(ifstream &file)
                 a = a * 10 + s - '0';
             else
             {
-                float sNumber = s - '0';
+                long double sNumber = s - '0';
                 for (i = 0; i < afterPoint; i++)
                     sNumber /= 10;
                 a += sNumber;

@@ -6,42 +6,42 @@
 #include <DynamicObject.h>
 #include <AllHitboxInf.h>
 #include <MyMap.h>
-#include <FloatComparation.h>
+#include <floatComparation.h>
 #define MaxMapW 50
 #define MaxMapH 50
 
 class Player: public DynamicObject
 {
 public:
-    float curX , curY;
-    float realX, realY;
+    long double curX , curY;
+    long double realX, realY;
     int number = 0;
     Player(string playerTexturePlace, int startX, int startY, int w, int h, MyMap *MapIn, AllHitboxInf *AHIIn);
-    void drawObject(float &time);
+    void drawObject(long double &time);
     void displayObject(RenderWindow *window);
-    int tryToMove(float distance, int direction, int mode);
+    int tryToMove(long double distance, int direction, int mode);
     int getNumber();
     void setNumber(int n);
-    pair <float, float> coordinates();
-    pair <float, float> sizes();
+    pair <long double, long double> coordinates();
+    pair <long double, long double> sizes();
 
 private:
-    float scale;
-    float playerSpeed;
-    float heightCoef;
-    float weight;
-    float maxPlayerXSpeed, playerXAcc;
-    float moveSpeed;
-    float freeFallAcc, fallSpeed, maxFallSpeed;
-    float lastCurY;
+    long double scale;
+    long double playerSpeed;
+    long double heightCoef;
+    long double weight;
+    long double maxPlayerXSpeed, playerXAcc;
+    long double moveSpeed;
+    long double freeFallAcc, fallSpeed, maxFallSpeed;
+    long double lastCurY;
     int lastDir;
 
-    float startX, startY;
-    float mapWidth, mapHeight;
-    float height, width;
-    float volume;
-    float startH, startW;
-    float anEX, anEY, anCutTex = 37;
+    long double startX, startY;
+    long double mapWidth, mapHeight;
+    long double height, width;
+    long double volume;
+    long double startH, startW;
+    long double anEX, anEY, anCutTex = 37;
     int anDir;
 
     AllHitboxInf *AHI;
@@ -52,11 +52,11 @@ private:
     Sprite playerSprite;
     Texture playerTexture;
 
-    void Update(float &time);
-    void animationLevelPass(float time);
+    void Update(long double &time);
+    void animationLevelPass(long double time);
 
-    int isTouching(float newX, float newY, int direction);
-    int tryToSquezze(float distance, int direction, int mode);
+    int isTouching(long double newX, long double newY, int direction);
+    int tryToSquezze(long double distance, int direction, int mode);
     char type();
 };
 

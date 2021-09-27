@@ -2,7 +2,7 @@
 
 MainMenu::MainMenu()
 {
-    float buttonsScale = 5;
+    long double buttonsScale = 5;
     int mBSizeX = 68, mBSizeY = 44;
     int cBSizeX = 84, cBSizeY = 48;
     int eBSizeX = 68, eBSizeY = 44;
@@ -34,7 +34,7 @@ MainMenu::~MainMenu()
     delete createButton;
 }
 
-int MainMenu::drawAndCheckMenu(RenderWindow *window, float time, bool off)
+int MainMenu::drawAndCheckMenu(RenderWindow *window, long double time, bool off)
 {
     if (off)
     {

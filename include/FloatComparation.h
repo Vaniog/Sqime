@@ -4,6 +4,6 @@
 
 using namespace std;
 
-bool compare(float a, char operation, float b);
+bool compare(long double a, char operation, long double b);
 
-#endif // FLOATCOMPARATION_H_INCLUDED
+#endif // long doubleCOMPARATION_H_INCLUDED

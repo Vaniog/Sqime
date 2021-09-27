@@ -7,9 +7,9 @@ DynamicButtonCreatingUI::DynamicButtonCreatingUI(int startXIn, int startYIn, int
 
     Image uiImage;
     uiImage.loadFromFile("images//ButtonCreatingUi.png");
-    scale = (float)width / uiImage.getSize().x;
+    scale = (long double)width / uiImage.getSize().x;
 
-    float okButtonX = 102, okButtonY = 125, okButtonTexX = 16, okButtonTexY = 15;
+    long double okButtonX = 102, okButtonY = 125, okButtonTexX = 16, okButtonTexY = 15;
     okButton = new Button(startX + okButtonX * scale, startY + okButtonY * scale, 0, 0, okButtonTexX, okButtonTexY, scale * okButtonTexX, scale * okButtonTexY, "images//OKButtonForDB.png");
     uiTexture.loadFromImage(uiImage);
     uiSprite.setTexture(uiTexture);

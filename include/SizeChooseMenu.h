@@ -15,10 +15,10 @@ public:
 private:
     Texture sizeChooseTexture;
     Sprite sizeChooseSprite;
-    float startX, startY, endX, endY, spaceForBorder;
-    float width, height, scale;
+    long double startX, startY, endX, endY, spaceForBorder;
+    long double width, height, scale;
     int valueWidth = 1, valueHeight = 1;
-    float tileWidth;
+    long double tileWidth;
     Button *sizeChooseClose;
     RectangleShape *sizeChooseRect;
 

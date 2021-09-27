@@ -1,6 +1,6 @@
 #include <Platform.h>
 
-Platform::Platform(float startXIn, float startYIn, float endXIn, float endYIn, float widthIn, float heightIn, float speed, string texPlace, MyMap *MapIn, AllHitboxInf *AHIIn)
+Platform::Platform(long double startXIn, long double startYIn, long double endXIn, long double endYIn, long double widthIn, long double heightIn, long double speed, string texPlace, MyMap *MapIn, AllHitboxInf *AHIIn)
 {
     AHI = AHIIn;
     scale = MapIn->scale;
@@ -45,7 +45,7 @@ Platform::Platform(float startXIn, float startYIn, float endXIn, float endYIn, f
     platformSprite.setScale(MapIn->scale * (tilesize * scale * width) / (tilesize * scale * width), MapIn->scale * (tilesize * scale * height) / (tilesize * scale * height));
 }
 
-void Platform::drawObject(float &time)
+void Platform::drawObject(long double &time)
 {
     if (AHI->animationProcess != 1)
         movePlatform(time, AHI);
@@ -57,16 +57,16 @@ void Platform::displayObject(RenderWindow *window)
     window->draw(platformSprite);
 }
 
-pair <float, float> Platform::coordinates()
+pair <long double, long double> Platform::coordinates()
 {
-    pair <float, float> xy = {curX, curY};
+    pair <long double, long double> xy = {curX, curY};
     return xy;
 }
 
 
-pair <float, float> Platform::sizes()
+pair <long double, long double> Platform::sizes()
 {
-    pair <float, float> xy = {width, height};
+    pair <long double, long double> xy = {width, height};
     return xy;
 }
 
@@ -81,16 +81,16 @@ void Platform::setNumber(int n)
 }
 
 
-void Platform::movePlatform(float time, AllHitboxInf *AHI)
+void Platform::movePlatform(long double time, AllHitboxInf *AHI)
 {
     AHI->resetDepth();
-    float oldX = curX, oldY = curY;
+    long double oldX = curX, oldY = curY;
     int oldDir = dir;
 
     curX += (dir % 2) * (2 - dir) * platformSpeed * time;
     curY += ((dir + 1) % 2) * (dir - 1) * platformSpeed * time;
 
-    float weightToMove = AHI->tryToMoveAll(number, dir, platformSpeed * time, 0);
+    long double weightToMove = AHI->tryToMoveAll(number, dir, platformSpeed * time, 0);
     if (weightToMove != -1)
     {
         curX = oldX;
@@ -206,7 +206,7 @@ void Platform::movePlatform(float time, AllHitboxInf *AHI)
         dir = oldDir;
 }
 
-void Platform::sendMessage(float message)
+void Platform::sendMessage(long double message)
 // modes: 0 - both direction, 1 - plus direction, 2 - minus direction, 3 - stop moving
 {
     int mode = message;
@@ -238,12 +238,12 @@ void Platform::sendMessage(float message)
         break;
     }
 }
-int Platform::tryToMove(float distance, int direction, int mode)
+int Platform::tryToMove(long double distance, int direction, int mode)
 {
     return -1;
 }
 
-int Platform::tryToSquezze(float distance, int direction, int mode)
+int Platform::tryToSquezze(long double distance, int direction, int mode)
 {
     return -1;
 }

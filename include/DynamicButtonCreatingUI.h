@@ -9,12 +9,12 @@ using namespace sf;
 struct ButtonsInf
 {
 public:
-    ButtonsInf(int width, int height, float scaleIn)
+    ButtonsInf(int width, int height, long double scaleIn)
     {
         scale = scaleIn;
         sizes[0] = width;
         sizes[1] = height;
-        rect.setSize(Vector2f((float)width * scale, (float)height * scale));
+        rect.setSize(Vector2f((long double)width * scale, (long double)height * scale));
         rect.setFillColor(Color(255, 255, 255, 70));
     }
     int value[2] = {0, 0}; // first - real, second - what mouse touch
@@ -43,7 +43,7 @@ private:
     vector <vector <int>> coords;
     int sizes[2];
     int amount = 0;
-    float scale;
+    long double scale;
     RectangleShape rect;
 };
 
@@ -56,7 +56,7 @@ public:
     int draw(RenderWindow *window);
 private:
     int startX, startY;
-    float scale;
+    long double scale;
     Texture uiTexture;
     Sprite uiSprite;
 

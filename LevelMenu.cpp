@@ -54,7 +54,7 @@ int LevelMenu::drawAndCheckMenu(RenderWindow *window)
         }
         else
         {
-            levelText.setPosition((float)spaceForText + ((float)spaceForButtons / 40) + startX + i % buttonsInRow * fullSpace, (float)spaceForText + ((float)spaceForButtons / 40) + startY + fullSpace * (i / buttonsInRow) - spaceForButtons / 16);
+            levelText.setPosition((long double)spaceForText + ((long double)spaceForButtons / 40) + startX + i % buttonsInRow * fullSpace, (long double)spaceForText + ((long double)spaceForButtons / 40) + startY + fullSpace * (i / buttonsInRow) - spaceForButtons / 16);
             levelText.setScale(0.95, 0.95);
         }
         window->draw(levelText);

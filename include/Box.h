@@ -15,26 +15,26 @@ using namespace sf;
 class Box: public DynamicObject
 {
 public:
-    float curX , curY;
+    long double curX , curY;
     int number = 0;
     Box(string boxTexturePlace, int startX, int startY, int w, int h, MyMap *MapIn, AllHitboxInf *AHIIn);
-    void drawObject(float &time);
+    void drawObject(long double &time);
     void displayObject(RenderWindow *window);
-    int tryToMove(float distance, int direction, int mode);
+    int tryToMove(long double distance, int direction, int mode);
     int getNumber();
     void setNumber(int n);
-    pair <float, float> coordinates();
-    pair <float, float> sizes();
+    pair <long double, long double> coordinates();
+    pair <long double, long double> sizes();
 
 private:
-    float scale;
-    float weight;
-    float freeFallAcc, fallSpeed, maxFallSpeed;
-    float realY, lastCurY;
+    long double scale;
+    long double weight;
+    long double freeFallAcc, fallSpeed, maxFallSpeed;
+    long double realY, lastCurY;
 
-    float startX, startY;
-    float mapWidth, mapHeight;
-    float height, width;
+    long double startX, startY;
+    long double mapWidth, mapHeight;
+    long double height, width;
 
     AllHitboxInf *AHI;
     int windowWidth, windowHeight;
@@ -43,10 +43,10 @@ private:
     Sprite boxSprite;
     Texture boxTexture;
 
-    void Update(float &time);
+    void Update(long double &time);
 
-    int isTouching(float newX, float newY, int direction);
-    int tryToSquezze(float distance, int direction, int mode);
+    int isTouching(long double newX, long double newY, int direction);
+    int tryToSquezze(long double distance, int direction, int mode);
     char type();
 };
 #endif // BOX_H

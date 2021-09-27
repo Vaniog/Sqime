@@ -11,15 +11,15 @@ public:
     MainMenu();
     ~MainMenu();
 
-    int drawAndCheckMenu(RenderWindow *window, float time, bool off = 0);
+    int drawAndCheckMenu(RenderWindow *window, long double time, bool off = 0);
 private:
     int sizeX = 128 * 5, sizeY = 32 * 5;
     int startX = (VideoMode::getDesktopMode().width - sizeX) / 2;
     int startY = 200;
     int spaceY = 50;
-    float scale = 3; // all configurable here
+    long double scale = 3; // all configurable here
 
-    float movingSpeed = 0.02, backStartX; // for "parallax" background
+    long double movingSpeed = 0.02, backStartX = 0; // for "parallax" background
 
     Button *exitButton;
     Button *mapButton;

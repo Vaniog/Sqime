@@ -20,8 +20,8 @@ Player::Player(string playerTexturePlace, int sX, int sY, int w, int h, MyMap *M
     playerSprite.setTexture(playerTexture);
     playerSprite.setTextureRect(IntRect(0, 0, ptilesize, ptilesize));
     playerSprite.setScale(scale * width / startW * tilesize, scale * height / startH * tilesize);
-    width = w * 0.997;
-    height = h * 0.997;
+    width = w * 0.995;
+    height = h * 0.995;
     heightCoef = 1 / (height / ((int)height + 1));
     volume = width * height;
     weight = 100;
@@ -48,7 +48,7 @@ Player::Player(string playerTexturePlace, int sX, int sY, int w, int h, MyMap *M
             physics[i][k] = MapIn->getPhysics(i, k);
 }
 
-void Player::drawObject(float &time)
+void Player::drawObject(long double &time)
 {
     switch (AHI->animationProcess)
     {
@@ -72,7 +72,7 @@ void Player::displayObject(RenderWindow *window)
 
 
 
-void Player::Update(float &time) // physics moves
+void Player::Update(long double &time) // physics moves
 {
     AHI->resetDepth();
 
@@ -110,7 +110,7 @@ void Player::Update(float &time) // physics moves
     else
         playerSpeed = 0, lastDir = -1;
 
-    float weightToMove = -1;
+    long double weightToMove = -1;
     if (playerSpeed != 0)
     {
 
@@ -127,17 +127,17 @@ void Player::Update(float &time) // physics moves
     else
         playerSpeed = 0;
 
-    if (playerSpeed > 0 && (int)(curX + 1) - curX < 0.04)
+    if (playerSpeed > 0 && (int)(curX + 1) - curX < 0.01)
         if (tryToMove((int)(curX + 1) - curX + 0.00001, 1, 0) != -1)
-            tryToMove((int)(curX + 1) - curX + 0.00001, 1, 1), cout << curX << " " << curX + width << "\n";
+            tryToMove((int)(curX + 1) - curX + 0.00001, 1, 1);
 
-    if (playerSpeed < 0 && curX - (int)curX < 0.04)
+    if (playerSpeed < 0 && curX - (int)curX < 0.01)
         if (tryToMove(curX - (int)curX, 3, 0) != -1)
             tryToMove(curX - (int)curX, 3, 1);
 
     //try to go to real Y
-    float oldY = curY;
-    float wasMoved = 0;
+    long double oldY = curY;
+    long double wasMoved = 0;
     if (lastCurY == curY)
     {
         if (tryToMove(realY - curY, 2, 0))
@@ -154,16 +154,16 @@ void Player::Update(float &time) // physics moves
         fallSpeed -= sqrt(2 * freeFallAcc * (height * heightCoef + 0.3)), onGround = 0;
     if (onGround == 1)
     {
-        float weightToMove = tryToMove(0.0001, 2, 0);
+        long double weightToMove = tryToMove(0.0001, 2, 0);
         if (weightToMove != -1)
             onGround = 0;
     }
     else
     {
-        float changeY = fallSpeed * time + freeFallAcc * time * time / 2;
+        long double changeY = fallSpeed * time + freeFallAcc * time * time / 2;
         if (fallSpeed > maxFallSpeed)
             fallSpeed = maxFallSpeed;
-        float weightToMove = tryToMove(changeY, 2, 0);
+        long double weightToMove = tryToMove(changeY, 2, 0);
         if (weightToMove == -1)
         {
             if (fallSpeed >= 0)
@@ -188,39 +188,39 @@ void Player::Update(float &time) // physics moves
                 if (fallSpeed > 0)
                     onGround = 1, fallSpeed += freeFallAcc * weight / weightToMove / 2;
                 else
-                    fallSpeed += freeFallAcc * time * weightToMove / weight, fallSpeed = min((float)0, fallSpeed);
+                    fallSpeed += freeFallAcc * time * weightToMove / weight, fallSpeed = min((long double)0, fallSpeed);
             tryToMove(changeY * weight / weightToMove, 2, 1);
         }
     }
     realY = curY;
 
     //try to set down on int position
-    if (onGround == 0 && (int)(curY + height + 1) - (curY + height) < 0.05 && !wasMoved)
+    if (onGround == 0 && (int)(curY + height + 1) - (curY + height) < 0.05 && (int)(curY + height + 1) - (curY + height) > 0.01 && !wasMoved)
     {
-        float oldY = curY;
-        float changeY = (int)(curY + height + 1) - (curY + height);
+        long double oldY = curY;
+        long double changeY = (int)(curY + height + 1) - (curY + height);
         if (tryToMove(changeY, 2, 0))
             tryToMove(changeY, 2, 1);
         else
             curY = oldY;
     }
-    else if (onGround == 0 && curY + height - (int)(curY + height) < 0.05 && !wasMoved)
+    /*else if (onGround == 0 && curY + height - (int)(curY + height) < 0.05 && !wasMoved)
     {
-        float oldY = curY;
-        float changeY = curY + height - (int)(curY + height);
+        long double oldY = curY;
+        long double changeY = curY + height - (int)(curY + height);
         if (tryToMove(changeY, 0, 0))
             tryToMove(changeY, 0, 1);
         else
             curY = oldY;
-    }
+    }*/
     lastCurY = curY;
 }
 
-int Player::isTouching(float newX, float newY, int direction)
+int Player::isTouching(long double newX, long double newY, int direction)
 {
     int block = 0;
     bool wasStop = 0;
-    float i = -1, k = -1;
+    long double i = -1, k = -1;
     while(i < width)
     {
         i++;
@@ -266,13 +266,13 @@ int Player::isTouching(float newX, float newY, int direction)
 }
 
 
-int Player::tryToMove(float distance, int direction, int mode) // mode 0 for check possible 1 for moving
+int Player::tryToMove(long double distance, int direction, int mode) // mode 0 for check possible 1 for moving
 {
     if (distance < 0)
         direction = (direction + 2) % 4, distance = -distance;
 
-    float weightToMove = 0;
-    float oldX = curX, oldY = curY;
+    long double weightToMove = 0;
+    long double oldX = curX, oldY = curY;
 
     switch (direction)
     {
@@ -377,7 +377,7 @@ int Player::tryToMove(float distance, int direction, int mode) // mode 0 for che
         return weightToMove + weight;
 }
 
-int Player::tryToSquezze(float distance, int direction, int mode)
+int Player::tryToSquezze(long double distance, int direction, int mode)
 {
     switch(direction)
     {
@@ -385,10 +385,10 @@ int Player::tryToSquezze(float distance, int direction, int mode)
     {
         if (height <= 1 / heightCoef)
             return -1;
-        float changeW = volume / (height - distance) - width;
-        float oldX = curX;
-        float weightToMove1, weightToMove2;
-        float returnWeight = weight * width * sqrt(width);
+        long double changeW = volume / (height - distance) - width;
+        long double oldX = curX;
+        long double weightToMove1, weightToMove2;
+        long double returnWeight = weight * width * sqrt(width);
         if (curY - (int)(curY) < 0.000001)
             curY += 0.000001;
         width += changeW;
@@ -465,10 +465,10 @@ int Player::tryToSquezze(float distance, int direction, int mode)
     {
         if (height <= 1 / heightCoef)
             return -1;
-        float changeW = volume / (height - distance) - width;
-        float oldX = curX;
-        float weightToMove1, weightToMove2;
-        float returnWeight = weight * width * sqrt(width);
+        long double changeW = volume / (height - distance) - width;
+        long double oldX = curX;
+        long double weightToMove1, weightToMove2;
+        long double returnWeight = weight * width * sqrt(width);
         curY += distance;
         width += changeW;
         height -= distance;
@@ -550,13 +550,13 @@ int Player::tryToSquezze(float distance, int direction, int mode)
     {
         if (width <= 1 / heightCoef)
             return -1;
-        float changeH = volume / (width - distance) - height;
-        float oldY = curY;
-        float weightToMove1, weightToMove2;
-        float returnWeight = weight * height * sqrt(height);
+        long double changeH = volume / (width - distance) - height;
+        long double oldY = curY;
+        long double weightToMove1, weightToMove2;
+        long double returnWeight = weight * height * sqrt(height);
 
         height += changeH;
-        float endX = curX + width;
+        long double endX = curX + width;
         curX += distance;
         width -= distance;
         if (curX + width > endX)
@@ -642,10 +642,10 @@ int Player::tryToSquezze(float distance, int direction, int mode)
     {
         if (width <= 1 / heightCoef)
             return -1;
-        float changeH = volume / (width - distance) - height;
-        float oldY = curY;
-        float weightToMove1, weightToMove2;
-        float returnWeight = weight * height * sqrt(height);
+        long double changeH = volume / (width - distance) - height;
+        long double oldY = curY;
+        long double weightToMove1, weightToMove2;
+        long double returnWeight = weight * height * sqrt(height);
         height += changeH;
         width -= distance;
 
@@ -725,13 +725,13 @@ int Player::tryToSquezze(float distance, int direction, int mode)
 int Player::levelPassCheck() // check if player passed level
 {
     int i;
-    float aD = 0.1; // around distance, its what we add to hitbox around
-    float sD = 0.1; // side distance, its distance, on what we need neutral block under point (if we watch direction 2)
-    float sD2 = 0.01; // assumption in side
+    long double aD = 0.1; // around distance, its what we add to hitbox around
+    long double sD = 0.1; // side distance, its distance, on what we need neutral block under point (if we watch direction 2)
+    long double sD2 = 0.01; // assumption in side
 
-    float x[4] = {curX, curX + width, curX + width, curX};
-    float y[4] = {curY, curY, curY + height, curY + height};
-    float x2[16], y2[16];
+    long double x[4] = {curX, curX + width, curX + width, curX};
+    long double y[4] = {curY, curY, curY + height, curY + height};
+    long double x2[16], y2[16];
     {
     x2[0] = x[0] - sD, x2[1] = x[0] + sD2, x2[2] = x[1] - sD2, x2[3] = x[1] + sD;
     for (i = 0; i < 4; i++)
@@ -781,36 +781,36 @@ int Player::levelPassCheck() // check if player passed level
     return 0;
 }
 
-void Player::animationLevelPass(float time) // if you pass level, program call this function
+void Player::animationLevelPass(long double time) // if you pass level, program call this function
 {
     switch (anDir)
     {
     case 0:
     {
         curX = (int)(curX + 0.1);
-        float plungeSpeed = 0.0005 * height;
+        long double plungeSpeed = 0.0005 * height;
         if (curY < anEY)
         {
             AHI->animationProcess = 2;
         }
         curY -= plungeSpeed * time;
-        anCutTex -= plungeSpeed * time * (float)tilesize * 2 / height;
-        playerSprite.setTextureRect(IntRect(0, tilesize * 2 - (int)min(anCutTex, (float)tilesize * 2), tilesize * 2, (int)min(anCutTex, (float)tilesize * 2)));
-        playerSprite.setPosition(curX * scale * tilesize + startX, startY + curY * scale * tilesize + (tilesize * 2 - (int)min(anCutTex, (float)32)) * scale * height / 2);
+        anCutTex -= plungeSpeed * time * (long double)tilesize * 2 / height;
+        playerSprite.setTextureRect(IntRect(0, tilesize * 2 - (int)min(anCutTex, (long double)tilesize * 2), tilesize * 2, (int)min(anCutTex, (long double)tilesize * 2)));
+        playerSprite.setPosition(curX * scale * tilesize + startX, startY + curY * scale * tilesize + (tilesize * 2 - (int)min(anCutTex, (long double)32)) * scale * height / 2);
         break;
     }
 
     case 1:
     {
         curY = (int)(curY + 0.1) + (int)(height + 0.1) - height;
-        float plungeSpeed = 0.0005 * width;
+        long double plungeSpeed = 0.0005 * width;
         if (curX > anEX)
         {
             AHI->animationProcess = 2;
         }
         curX += plungeSpeed * time;
-        anCutTex -= plungeSpeed * time * (float)tilesize * 2 / width;
-        playerSprite.setTextureRect(IntRect(0, 0, min(anCutTex, (float)tilesize * 2), tilesize * 2));
+        anCutTex -= plungeSpeed * time * (long double)tilesize * 2 / width;
+        playerSprite.setTextureRect(IntRect(0, 0, min(anCutTex, (long double)tilesize * 2), tilesize * 2));
         playerSprite.setPosition(curX * scale * tilesize + startX, startY + curY * scale * tilesize);
         break;
     }
@@ -819,14 +819,14 @@ void Player::animationLevelPass(float time) // if you pass level, program call t
     case 2:
     {
         curX = (int)(curX + 0.1);
-        float plungeSpeed = 0.0005 * height;
+        long double plungeSpeed = 0.0005 * height;
         if (curY > anEY)
         {
             AHI->animationProcess = 2;
         }
         curY += plungeSpeed * time;
-        anCutTex -= plungeSpeed * time * (float)tilesize * 2 / height;
-        playerSprite.setTextureRect(IntRect(0, 0, tilesize * 2, min(anCutTex, (float)tilesize * 2)));
+        anCutTex -= plungeSpeed * time * (long double)tilesize * 2 / height;
+        playerSprite.setTextureRect(IntRect(0, 0, tilesize * 2, min(anCutTex, (long double)tilesize * 2)));
         playerSprite.setPosition(curX * scale * tilesize + startX, startY + curY * scale * tilesize);
         break;
     }
@@ -834,29 +834,29 @@ void Player::animationLevelPass(float time) // if you pass level, program call t
     case 3:
     {
         curY = (int)(curY + 0.1) + (int)(height + 0.1) - height;
-        float plungeSpeed = 0.0005 * width;
+        long double plungeSpeed = 0.0005 * width;
         if (curX < anEX)
         {
             AHI->animationProcess = 2;
         }
         curX -= plungeSpeed * time;
-        anCutTex -= plungeSpeed * time * (float)tilesize * 2 / width;
-        playerSprite.setTextureRect(IntRect(tilesize * 2 - (int)min(anCutTex, (float)tilesize * 2), 0, (int)min(anCutTex, (float)tilesize * 2), tilesize * 2));
-        playerSprite.setPosition(curX * scale * tilesize + startX + (tilesize * 2 - (int)min(anCutTex, (float)32)) * scale * width / 2, startY + curY * scale * tilesize);
+        anCutTex -= plungeSpeed * time * (long double)tilesize * 2 / width;
+        playerSprite.setTextureRect(IntRect(tilesize * 2 - (int)min(anCutTex, (long double)tilesize * 2), 0, (int)min(anCutTex, (long double)tilesize * 2), tilesize * 2));
+        playerSprite.setPosition(curX * scale * tilesize + startX + (tilesize * 2 - (int)min(anCutTex, (long double)32)) * scale * width / 2, startY + curY * scale * tilesize);
         break;
     }
     }
 }
 
-pair <float, float> Player::coordinates()
+pair <long double, long double> Player::coordinates()
 {
-    pair <float, float> xy = {curX, curY};
+    pair <long double, long double> xy = {curX, curY};
     return xy;
 }
 
-pair <float, float> Player::sizes()
+pair <long double, long double> Player::sizes()
 {
-    pair <float, float> xy = {width, height};
+    pair <long double, long double> xy = {width, height};
     return xy;
 }
 

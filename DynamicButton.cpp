@@ -15,34 +15,34 @@ DynamicButton::DynamicButton(int curXIn, int curYIn, int length, int direction, 
     startMapY = mapIn->startY;
     scale = mapIn->scale;
     tilesize = mapIn->tilesize;
-    float thickness = (float)6 / 16;
+    long double thickness = (long double)6 / 16;
     switch (direction)
     {
     case 0:
         height = thickness;
         width = length;
-        curY -= (float)1 / 16;
+        curY -= (long double)1 / 16;
         endX = curX;
         endY = curY - height - 0.01;
         break;
     case 1:
         height = length;
         width = thickness;
-        curX += 1 - thickness + (float)1 / 16;
+        curX += 1 - thickness + (long double)1 / 16;
         endX = curX + width + 0.01;
         endY = curY;
         break;
     case 2:
         height = thickness;
         width = length;
-        curY += 1 - thickness + (float)1 / 16;
+        curY += 1 - thickness + (long double)1 / 16;
         endX = curX;
         endY = curY + height + 0.01;
         break;
     case 3:
         height = length;
         width = thickness;
-        curX -= (float)1 / 16;
+        curX -= (long double)1 / 16;
         endX = curX - width - 0.01;
         endY = curY;
         break;
@@ -74,7 +74,7 @@ DynamicButton::~DynamicButton()
 {
 }
 
-int DynamicButton::tryToMove(float distance, int direction, int mode)
+int DynamicButton::tryToMove(long double distance, int direction, int mode)
 {
     int weight = 0;
     if (direction == dbDirection)
@@ -130,23 +130,23 @@ int DynamicButton::tryToMove(float distance, int direction, int mode)
     }
     return -1;
 }
-int DynamicButton::tryToSquezze(float distance, int direction, int mode)
+int DynamicButton::tryToSquezze(long double distance, int direction, int mode)
 {
     return -1;
 }
 
-void DynamicButton::drawObject(float &time)
+void DynamicButton::drawObject(long double &time)
 {
-    float distance;
-    float oldX = curX;
-    float oldY = curY;
+    long double distance;
+    long double oldX = curX;
+    long double oldY = curY;
     switch (dbDirection)
     {
     case 0:
         if (curY != startY)
         {
             distance = (startY - curY);
-            distance = min(distance, (float)0.02);
+            distance = min(distance, (long double)0.02);
             curY += distance;
             if (AHI->tryToMoveAll(number, dbDirection, -distance, 0) != 0)
                 curY = oldY;
@@ -158,7 +158,7 @@ void DynamicButton::drawObject(float &time)
         if (curX != startX)
         {
             distance = (curX - startX);
-            distance = min(distance, (float)0.02);
+            distance = min(distance, (long double)0.02);
             curX -= distance;
             if (AHI->tryToMoveAll(number, dbDirection, -distance, 0) != 0)
                 curX = oldX;
@@ -170,7 +170,7 @@ void DynamicButton::drawObject(float &time)
         if (curY != startY)
         {
             distance = (curY - startY);
-            distance = min(distance, (float)0.02);
+            distance = min(distance, (long double)0.02);
             curY -= distance;
             if (AHI->tryToMoveAll(number, dbDirection, -distance, 0) != 0)
                 curY = oldY;
@@ -182,7 +182,7 @@ void DynamicButton::drawObject(float &time)
         if (curX != startX)
         {
             distance = (startX - curX);
-            distance = min(distance, (float)0.02);
+            distance = min(distance, (long double)0.02);
             curX += distance;
             if (AHI->tryToMoveAll(number, dbDirection, -distance, 0) != 0)
                 curX = oldX;
@@ -203,14 +203,14 @@ char DynamicButton::type()
     return 'd';
 }
 
-pair <float, float> DynamicButton::coordinates()
+pair <long double, long double> DynamicButton::coordinates()
 {
-    pair <float, float> ret = {curX, curY};
+    pair <long double, long double> ret = {curX, curY};
     return ret;
 }
-pair <float, float> DynamicButton::sizes()
+pair <long double, long double> DynamicButton::sizes()
 {
-    pair <float, float> ret = {width, height};
+    pair <long double, long double> ret = {width, height};
     return ret;
 }
 

@@ -8,11 +8,11 @@ class AllHitboxInf
 public:
     AllHitboxInf(MyMap *mapIn);
     int addObject(DynamicObject *obj);
-    int tryToMoveAll(int number, int direction, float distance, int mode); // mode 0 for trying, 1 for moving
-    int drawObjects(RenderWindow *window, float time, AllHitboxInf *AHI);
+    int tryToMoveAll(int number, int direction, long double distance, int mode); // mode 0 for trying, 1 for moving
+    int drawObjects(RenderWindow *window, long double time, AllHitboxInf *AHI);
     void resetDepth();
 
-    void sendMessageToObject(int number, float message);
+    void sendMessageToObject(int number, long double message);
     int animationProcess = 0; // 0 - level passing, 1 - level passed animation 2 - level passed
     MyMap *mainMap;
 private:

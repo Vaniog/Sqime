@@ -59,8 +59,8 @@ pair <int, int> SizeChooseMenu::display(RenderWindow *window)
 
 int SizeChooseMenu::mouseCheck()
 {
-    float mouseX = Mouse::getPosition().x;
-    float mouseY = Mouse::getPosition().y;
+    long double mouseX = Mouse::getPosition().x;
+    long double mouseY = Mouse::getPosition().y;
     if (mouseX >= startX && mouseX <= endX - scale && mouseY >= startY && mouseY <= endY - scale)
     {
         valueWidth = (mouseX - startX) / tileWidth + 1;

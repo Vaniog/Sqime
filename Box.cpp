@@ -45,7 +45,7 @@ Box::Box(string boxTexturePlace, int sX, int sY, int w, int h, MyMap *MapIn, All
             physics[i][k] = MapIn->getPhysics(i, k);
 }
 
-void Box::drawObject(float &time)
+void Box::drawObject(long double &time)
 {
     switch (AHI->animationProcess)
     {
@@ -66,11 +66,11 @@ void Box::displayObject(RenderWindow *window)
 
 
 
-void Box::Update(float &time) // physics moves
+void Box::Update(long double &time) // physics moves
 {
     AHI->resetDepth();
 
-    float oldY;
+    long double oldY;
     if (lastCurY == curY)
     {
         if (tryToMove(realY - curY, 2, 0))
@@ -83,16 +83,16 @@ void Box::Update(float &time) // physics moves
 
     if (onGround == 1)
     {
-        float weightToMove = tryToMove(0.0001, 2, 0);
+        long double weightToMove = tryToMove(0.0001, 2, 0);
         if (weightToMove != -1)
             onGround = 0;
     }
     else
     {
-        float changeY = fallSpeed * time + freeFallAcc * time * time / 2;
+        long double changeY = fallSpeed * time + freeFallAcc * time * time / 2;
         if (fallSpeed > maxFallSpeed)
             fallSpeed = maxFallSpeed;
-        float weightToMove = tryToMove(changeY, 2, 0);
+        long double weightToMove = tryToMove(changeY, 2, 0);
         if (weightToMove == -1)
         {
             if (fallSpeed >= 0)
@@ -117,7 +117,7 @@ void Box::Update(float &time) // physics moves
                 if (fallSpeed > 0)
                     onGround = 1, fallSpeed += freeFallAcc * weight / weightToMove / 2;
                 else
-                    fallSpeed += freeFallAcc * time * weightToMove / weight, fallSpeed = min((float)0, fallSpeed);
+                    fallSpeed += freeFallAcc * time * weightToMove / weight, fallSpeed = min((long double)0, fallSpeed);
             tryToMove(changeY * weight / weightToMove, 2, 1);
         }
     }
@@ -126,8 +126,8 @@ void Box::Update(float &time) // physics moves
 
     if (abs((int)(curY + height + 1) - (curY + height)) < 0.01)
     {
-        float oldY = curY;
-        float changeY = (int)(curY + height + 1) - (curY + height);
+        long double oldY = curY;
+        long double changeY = (int)(curY + height + 1) - (curY + height);
         if (tryToMove(changeY, 2, 0))
             tryToMove(changeY, 2, 1);
         else
@@ -136,8 +136,8 @@ void Box::Update(float &time) // physics moves
     }
     else if (abs(curY + height - (int)(curY + height)) < 0.01)
     {
-        float oldY = curY;
-        float changeY = curY + height - (int)(curY + height);
+        long double oldY = curY;
+        long double changeY = curY + height - (int)(curY + height);
         if (tryToMove(changeY, 0, 0))
             tryToMove(changeY, 0, 1);
         else
@@ -147,11 +147,11 @@ void Box::Update(float &time) // physics moves
 }
 
 
-int Box::isTouching(float newX, float newY, int direction) // check which block box touch in this direction
+int Box::isTouching(long double newX, long double newY, int direction) // check which block box touch in this direction
 {
     int block = 0;
     bool wasStop = 0;
-    float i = -1, k = -1;
+    long double i = -1, k = -1;
     while(i < width)
     {
         i++;
@@ -193,13 +193,13 @@ int Box::isTouching(float newX, float newY, int direction) // check which block 
     return 0;
 }
 
-int Box::tryToMove(float distance, int direction, int mode) // mode 0 for check possible 1 for moving
+int Box::tryToMove(long double distance, int direction, int mode) // mode 0 for check possible 1 for moving
 {
     if (distance < 0)
         direction = (direction + 2) % 4, distance = -distance;
 
-    float weightToMove = 0;
-    float oldX = curX, oldY = curY;
+    long double weightToMove = 0;
+    long double oldX = curX, oldY = curY;
 
     switch (direction)
     {
@@ -301,21 +301,21 @@ int Box::tryToMove(float distance, int direction, int mode) // mode 0 for check 
     return weightToMove + weight;
 }
 
-int Box::tryToSquezze(float distance, int direction, int mode)
+int Box::tryToSquezze(long double distance, int direction, int mode)
 {
     return -1;
 }
 
 
-pair <float, float> Box::coordinates()
+pair <long double, long double> Box::coordinates()
 {
-    pair <float, float> xy = {curX, curY};
+    pair <long double, long double> xy = {curX, curY};
     return xy;
 }
 
-pair <float, float> Box::sizes()
+pair <long double, long double> Box::sizes()
 {
-    pair <float, float> xy = {width, height};
+    pair <long double, long double> xy = {width, height};
     return xy;
 }
 
