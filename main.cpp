@@ -252,26 +252,6 @@ int main()
             timePass += time * 1000 * 1000000;
             window.clear(Color(66, 92, 110));
             mainMapForCreating->DrawMap(&window, time);
-            if (Keyboard::isKeyPressed(Keyboard::U))
-            {
-
-                string way = "maps//";
-                string s;
-                cin >> s;
-                way += s;
-                way += ".txt";
-                mainMapForCreating->mapUpload(way);
-            }
-            if (Keyboard::isKeyPressed(Keyboard::D))
-            {
-
-                string way = "maps//";
-                string s;
-                cin >> s;
-                way += s;
-                way += ".txt";
-                mainMapForCreating->mapDownload(way);
-            }
 
             if (timePass > 3)
             {
