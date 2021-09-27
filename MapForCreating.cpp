@@ -189,7 +189,7 @@ void MapForCreating::DrawMap(RenderWindow *window, long double time)
     infText.setColor(Color::White);
     infText.setPosition(10 + windowWidth - spaceForObjButtons, 10);
     string s = to_string((int)width) + "    " + to_string((int)height) + "\n" + to_string((int)((Mouse::getPosition().x - startX) / tilesize / scale)) + "     " +  to_string((int)((Mouse::getPosition().y - startY) / tilesize / scale))
-    + "\n\nD - download \nU - upload\nT - try\nN - new\n";
+    + "\n\nT - try\nN - new\n";
     infText.setString(s);
     window->draw(infText);
 }
@@ -281,8 +281,6 @@ void MapForCreating::processCheck(RenderWindow *window)
 void MapForCreating::mapUpload (string mapFilePlace)
 {
     ofstream mapFile(mapFilePlace);
-    if(!mapFile.is_open())
-        cout << "FileError\n";
     mapFile << width << "\n";
     mapFile << height << "\n";
     int i, k;
