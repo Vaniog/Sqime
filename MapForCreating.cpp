@@ -79,8 +79,8 @@
 
     playerButton = new Button(windowWidth - spaceForObjButtons, 200, 0, 0, -1, -1, spaceForObjButtons - spaceAroundButtons * 2, spaceForObjButtons - spaceAroundButtons * 2, "images//PlayerButton.png");
     platformButton = new Button(windowWidth - spaceForObjButtons, 200 + spaceForObjButtons, 0, 0, -1, -1, spaceForObjButtons - spaceAroundButtons * 2, spaceForObjButtons - spaceAroundButtons * 2, "images//PlatformButton.png");
-    buttonButton = new Button(windowWidth - spaceForObjButtons, 200 + spaceForObjButtons * 2, 0, 0, -1, -1, spaceForObjButtons - spaceAroundButtons * 2, spaceForObjButtons - spaceAroundButtons * 2, "images//buttonButton.png");
-    boxButton = new Button(windowWidth - spaceForObjButtons, 200 + spaceForObjButtons * 3, 0, 0, -1, -1, spaceForObjButtons - spaceAroundButtons * 2, spaceForObjButtons - spaceAroundButtons * 2, "images//boxButton.png");
+    buttonButton = new Button(windowWidth - spaceForObjButtons, 200 + spaceForObjButtons * 2, 0, 0, -1, -1, spaceForObjButtons - spaceAroundButtons * 2, spaceForObjButtons - spaceAroundButtons * 2, "images//ButtonButton.png");
+    boxButton = new Button(windowWidth - spaceForObjButtons, 200 + spaceForObjButtons * 3, 0, 0, -1, -1, spaceForObjButtons - spaceAroundButtons * 2, spaceForObjButtons - spaceAroundButtons * 2, "images//BoxButton.png");
  //   ObjectInf *obj = new ObjectInf(2, 2, 0, 0, 0, 0, 0, 's');
   //  objects.push_back(obj);
 }

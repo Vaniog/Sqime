@@ -170,6 +170,8 @@ int main()
                 window.close();
         }
 
+        if (process >= 0)
+            window.clear();
         switch(process)
         {
         case 0:   //Main Menu
@@ -178,7 +180,7 @@ int main()
             switch(mainMainMenu->drawAndCheckMenu(&window, time)) // 1-play 2-levels 3-create 0-nothing
             {
             case 1:
-                process = -1, window.close();
+                window.close();
                 break;
             case 2:
                 process = -4;
@@ -206,11 +208,9 @@ int main()
                     delete mainMap;
                     break;
                 }
-                window.clear();
                 mainMap->DrawMap(&window, time);
                 break;
             }
-            window.clear();
             if(mainMap->DrawMap(&window, time) == 2) // 2 - level passed
             {
                 if (lastLevel != 0)
@@ -234,7 +234,6 @@ int main()
 
         case 2: //levels
         {
-            window.clear();
 
             if (mainButton.buttonDisplayAndCheck(&window,-1, -1) == 1)
             {
@@ -250,7 +249,7 @@ int main()
         case 3: //creating
         {
             timePass += time * 1000 * 1000000;
-            window.clear(Color(66, 92, 110));
+            //window.clear(Color(66, 92, 110));
             mainMapForCreating->DrawMap(&window, time);
 
             if (timePass > 3)
@@ -261,7 +260,6 @@ int main()
 
             if (mainButton.buttonDisplayAndCheck(&window,-1, -1) == 1)
                 process = 0, delete mainMapForCreating, clock.restart();
-            window.display();
 
             if (Keyboard::isKeyPressed(Keyboard::N))
             {
@@ -282,7 +280,6 @@ int main()
 
         case 4:
         {
-            window.clear();
             mainMainMenu->drawAndCheckMenu(&window, time, 1);
 
             if (mainLevelMapCurY > mainLevelMapMaxY)
@@ -309,7 +306,6 @@ int main()
 
         case 5: //level was passed
         {
-            window.clear();
             animationTimer += time / 500;
             if (animationTimer < 2)
             {
@@ -427,9 +423,7 @@ int main()
 
         case 20:
         {
-            window.clear();
             CL.draw(&window, time);
-            window.display();
             break;
         }
 

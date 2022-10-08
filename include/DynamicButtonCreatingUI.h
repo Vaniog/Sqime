@@ -18,11 +18,12 @@ public:
         rect.setFillColor(Color(255, 255, 255, 70));
     }
     int value[2] = {0, 0}; // first - real, second - what mouse touch
-    int addButton(int x, int y)
+    void addButton(int x, int y)
     {
-        vector <int> a = {x, y};
+        vector <int> a;
+        a.push_back(x), a.push_back(y);
         coords.push_back(a);
-        amount++;
+        amount += 1;
     }
     int checkButtonDrawRect(int mouseX, int mouseY, int isPressed, RenderWindow *window, int startX, int startY)
     {

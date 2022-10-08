@@ -6,7 +6,7 @@ DynamicButtonCreatingUI::DynamicButtonCreatingUI(int startXIn, int startYIn, int
     startY = startYIn;
 
     Image uiImage;
-    uiImage.loadFromFile("images//ButtonCreatingUi.png");
+    uiImage.loadFromFile("images//ButtonCreatingUI.png");
     scale = (long double)width / uiImage.getSize().x;
 
     long double okButtonX = 102, okButtonY = 125, okButtonTexX = 16, okButtonTexY = 15;

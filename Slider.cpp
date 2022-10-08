@@ -16,7 +16,7 @@ Slider::Slider(long double textX, long double textY, int textSize, int lineStart
     sliderSprite.setTexture(sliderTexture);
     sliderSprite.setScale(scale, scale);
 
-    font.loadFromFile("images//mainFont.ttf");
+    font.loadFromFile(".//images//mainFont.ttf");
     valueText = new Text("", font, textSize);
     valueText->setFillColor(Color(0, 0, 0));
     valueText->setPosition(textX, textY);

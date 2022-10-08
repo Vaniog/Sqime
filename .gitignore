@@ -3,4 +3,8 @@
 /Sqime.layout
 /bin
 /obj
-
+/.cmake
+/.idea
+/CMakeFiles
+/Testing
+/cmake-build-debug

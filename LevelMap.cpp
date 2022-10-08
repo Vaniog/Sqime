@@ -31,7 +31,7 @@ LevelMap::LevelMap(int width)
     mapTilesForLevelsFile.close();
 
     // loading levels unlocking by level
-    ifstream levelsUnlockingByLevelFile("settings//levelsUnlockingByLevel.txt   ");
+    ifstream levelsUnlockingByLevelFile("settings//levelsUnlockingByLevel.txt");
     for (int i = 0; i < levelsAmount; i++)
     {
         vector<int> levelsUnlocking;
@@ -100,7 +100,7 @@ LevelMap::LevelMap(int width)
 
     resetLabyrinth();
     // textures to sprite
-    mapPaperTexture.loadFromFile("images//mapPaper.png");
+    mapPaperTexture.loadFromFile("images//MapPaper.png");
     mapPaperSprite.setTexture(mapPaperTexture);
     mapLabyrinthSprite.setScale(scale, scale);
     mapPaperSprite.setScale(scale, scale);
@@ -170,11 +170,11 @@ int LevelMap::display (RenderWindow *window, long double time, long double newX,
     return levelChoosed;
 }
 
-int LevelMap::levelPassedAdd(int levelNumber)
+void LevelMap::levelPassedAdd(int levelNumber)
 {
     for (int i = 0; i < levelsPassed.size(); i++)
         if (levelNumber == levelsPassed[i])
-            return -0;
+            return;
     levelsPassed.push_back(levelNumber);
 
     for (int i = 0; i < levelsUnlockingByLevel[levelNumber - 1].size(); i++)

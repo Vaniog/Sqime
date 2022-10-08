@@ -17,7 +17,7 @@ public:
     LevelMap(int width);
 
     int display (RenderWindow *window, long double time, long double newX = -1, long double newY = -1);
-    int levelPassedAdd(int levelNumber);
+    void levelPassedAdd(int levelNumber);
     void startShowingNewLevel(int newLevelIn);
 
     ~LevelMap();

@@ -6,7 +6,7 @@
 #include <DynamicObject.h>
 #include <AllHitboxInf.h>
 #include <MyMap.h>
-#include <floatComparation.h>
+#include <FloatComparation.h>
 #define MaxMapW 50
 #define MaxMapH 50
 

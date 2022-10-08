@@ -1,5 +1,6 @@
 #include "DynamicObject.h"
 #include "Player.h"
+#include <cmath>
 
 
 Player::Player(string playerTexturePlace, int sX, int sY, int w, int h, MyMap *MapIn, AllHitboxInf *AHIIn)
