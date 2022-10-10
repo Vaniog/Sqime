@@ -1,4 +1,4 @@
-#include <Platform.h>
+#include "Platform.h"
 
 Platform::Platform(long double startXIn, long double startYIn, long double endXIn, long double endYIn, long double widthIn, long double heightIn, long double speed, string texPlace, MyMap *MapIn, AllHitboxInf *AHIIn)
 {
