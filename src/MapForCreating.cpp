@@ -186,7 +186,7 @@ void MapForCreating::DrawMap(RenderWindow *window, long double time)
     Font font;
     font.loadFromFile("images//mainFont.ttf");
     Text infText("", font, 25);
-    infText.setColor(Color::White);
+    infText.setFillColor(Color::White);
     infText.setPosition(10 + windowWidth - spaceForObjButtons, 10);
     string s = to_string((int)width) + "    " + to_string((int)height) + "\n" + to_string((int)((Mouse::getPosition().x - startX) / tilesize / scale)) + "     " +  to_string((int)((Mouse::getPosition().y - startY) / tilesize / scale))
     + "\n\nT - try\nN - new\n";

@@ -721,6 +721,7 @@ int Player::tryToSquezze(long double distance, int direction, int mode)
         return -1;
     }
 }
+return -1;
 }
 
 int Player::levelPassCheck() // check if player passed level

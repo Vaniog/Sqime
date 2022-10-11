@@ -25,7 +25,7 @@ public:
         coords.push_back(a);
         amount += 1;
     }
-    int checkButtonDrawRect(int mouseX, int mouseY, int isPressed, RenderWindow *window, int startX, int startY)
+    void checkButtonDrawRect(int mouseX, int mouseY, int isPressed, RenderWindow *window, int startX, int startY)
     {
         int i;
         value[1] = value[0];

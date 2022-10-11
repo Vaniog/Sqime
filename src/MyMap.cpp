@@ -127,7 +127,7 @@ void MyMap::mapDownload (string mapFilePlace)
             controlObj = getNumber(mapFile);
             controlMode = getNumber(mapFile);
             offMode = getNumber(mapFile), onMode = getNumber(mapFile);
-            DynamicObject *dynamicButton = new DynamicButton(sX, sY, length, dir, controlObj, controlMode, onMode, offMode, this, AHI, "images//dynamicButton.png");
+            DynamicObject *dynamicButton = new DynamicButton(sX, sY, length, dir, controlObj, controlMode, onMode, offMode, this, AHI, "images//DynamicButton.png");
             dynamicButton->setNumber(AHI->addObject(dynamicButton));
             break;
         }

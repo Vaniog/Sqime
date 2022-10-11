@@ -41,8 +41,8 @@ public:
             if (timePass > length)
                 return 0;
             return 1;
-
         }
+        return 0;
     }
     RenderWindow *window;
     long double length, timePass = 0;

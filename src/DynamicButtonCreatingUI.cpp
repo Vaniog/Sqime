@@ -54,6 +54,7 @@ int DynamicButtonCreatingUI::getValue(char valueName)
             return 1;
         }
     }
+    return -1;
 }
 
 DynamicButtonCreatingUI::~DynamicButtonCreatingUI()

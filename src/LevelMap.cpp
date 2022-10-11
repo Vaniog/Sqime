@@ -142,7 +142,7 @@ int LevelMap::display (RenderWindow *window, long double time, long double newX,
                     lastGamma = 0, lastTouched = i;
 
                 square.setFillColor(Color(74, 103, 119, lastGamma));
-                square.setPosition(curX + ((long double)startX / tilesize + levelsButtons[i].first) * tilesize * scale, curY + ((long double)startY / tilesize + levelsButtons[i].second) * tilesize * scale);
+                square.setPosition(curX + ((long double)startX / tilesize + levelsButtons[i].first) * (long double)tilesize * scale, curY + ((long double)startY / tilesize + levelsButtons[i].second) * (long double)tilesize * scale);
                 window->draw(square);
                 continue;
             }

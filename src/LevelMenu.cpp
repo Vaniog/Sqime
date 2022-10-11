@@ -34,7 +34,7 @@ int LevelMenu::drawAndCheckMenu(RenderWindow *window)
     font.loadFromFile("images//mainFont.ttf");
     Text levelText("", font, spaceForButtons - spaceForText * 2);
     levelText.setScale(1, 1);
-    levelText.setColor(Color(0, 0, 0, 255));
+    levelText.setFillColor(Color(0, 0, 0, 255));
 
     for (i = 0; i < levelsAmount; i++)
     {
