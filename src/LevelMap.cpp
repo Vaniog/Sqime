@@ -115,7 +115,7 @@ int LevelMap::display (RenderWindow *window, long double time, long double newX,
     mapPaperSprite.setPosition(curX, curY);
     window->draw(mapPaperSprite);
 
-    long double mouseX = (Mouse::getPosition().x - curX) / tilesize / scale - (long double)startX / tilesize, mouseY = (Mouse::getPosition().y - curY) / tilesize / scale - (long double)startY / tilesize;
+    long double mouseX = (Mouse::getPosition(*window).x - curX) / tilesize / scale - (long double)startX / tilesize, mouseY = (Mouse::getPosition(*window).y - curY) / tilesize / scale - (long double)startY / tilesize;
 
     RectangleShape square(Vector2f(tilesize * scale, tilesize * scale));
 

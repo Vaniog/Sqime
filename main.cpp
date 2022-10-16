@@ -95,8 +95,8 @@ public:
         window->draw(backSprite);
 
         int xSpace = 16, ySpace = 10;
-        long double mouseX = (long double)Mouse::getPosition().x / scale;
-        long double mouseY = (long double)Mouse::getPosition().y / scale;
+        long double mouseX = (long double)Mouse::getPosition(*window).x / scale;
+        long double mouseY = (long double)Mouse::getPosition(*window).y / scale;
         int levelPressed = 0;
 
         for (int i = 0; i < 4; i++)
@@ -134,8 +134,11 @@ int main()
     int process = -10;
     int windowWidth = VideoMode::getDesktopMode().width, windowHeight = VideoMode::getDesktopMode().height;
 
-    RenderWindow window(VideoMode(windowWidth, windowHeight), " " , Style::Fullscreen);
-
+    sf::RenderWindow *window;
+    if (!VideoMode::getFullscreenModes().empty())
+        window = new RenderWindow(VideoMode::getDesktopMode(), "" , Style::Fullscreen);
+    else
+        window = new RenderWindow(VideoMode::getDesktopMode(), "");
     MyMap *mainMap = NULL;
     MapForCreating *mainMapForCreating = NULL;
     LevelMenu *mainLevelMenu = NULL;
@@ -146,7 +149,7 @@ int main()
 
     CreatedLevels CL(0, 0, 500);
 
-    window.setFramerateLimit(200);
+    window->setFramerateLimit(200);
     Button mainButton(30, 30, 0, 0, 22, 9, 22 * 3, 9 * 3, "images//Butt.png");
     int lastLevel = 1;
     int levelChoose;
@@ -157,30 +160,30 @@ int main()
     int darknessProcessSet = 0, processPassed = 0;
     Darkness *darkness = NULL;
 
-    while (window.isOpen())
+    while (window->isOpen())
     {
         long double time = clock.getElapsedTime().asMicroseconds();
         clock.restart();
         time = time/1000;
         if (time > 50)
             time = 50;
-        while (window.pollEvent(event))
+        while (window->pollEvent(event))
         {
             if (event.type == Event::Closed || Keyboard::isKeyPressed(Keyboard::Q))
-                window.close();
+                window->close();
         }
 
         if (process >= 0)
-            window.clear();
+            window->clear();
         switch(process)
         {
         case 0:   //Main Menu
         {
-            window.clear();
-            switch(mainMainMenu->drawAndCheckMenu(&window, time)) // 1-play 2-levels 3-create 0-nothing
+            window->clear();
+            switch(mainMainMenu->drawAndCheckMenu(window, time)) // 1-play 2-levels 3-create 0-nothing
             {
             case 1:
-                window.close();
+                window->close();
                 break;
             case 2:
                 process = -4;
@@ -204,14 +207,14 @@ int main()
                     processPassed = 0;
                     darknessProcessSet = 1;
                     process = 0;
-                    darkness = new Darkness(&window, 2, -1);
+                    darkness = new Darkness(window, 2, -1);
                     delete mainMap;
                     break;
                 }
-                mainMap->DrawMap(&window, time);
+                mainMap->DrawMap(window, time);
                 break;
             }
-            if(mainMap->DrawMap(&window, time) == 2) // 2 - level passed
+            if(mainMap->DrawMap(window, time) == 2) // 2 - level passed
             {
                 if (lastLevel != 0)
                     process = 5;
@@ -219,9 +222,9 @@ int main()
                     process = 0;
             }
 
-            if (mainButton.buttonDisplayAndCheck(&window,-1, -1) == 1)
+            if (mainButton.buttonDisplayAndCheck(window,-1, -1) == 1)
             {
-                darkness = new Darkness(&window, 2, 1);
+                darkness = new Darkness(window, 2, 1);
                 darknessProcessSet = 1;
                 processPassed = 1;
                 clock.restart();
@@ -235,12 +238,12 @@ int main()
         case 2: //levels
         {
 
-            if (mainButton.buttonDisplayAndCheck(&window,-1, -1) == 1)
+            if (mainButton.buttonDisplayAndCheck(window,-1, -1) == 1)
             {
                 process = 0, delete mainLevelMenu, clock.restart();
                 continue;
             }
-            levelChoose = mainLevelMenu->drawAndCheckMenu(&window);
+            levelChoose = mainLevelMenu->drawAndCheckMenu(window);
             if (levelChoose != 0)
                 lastLevel = levelChoose, delete mainLevelMenu, process = -1;
             break;
@@ -249,8 +252,8 @@ int main()
         case 3: //creating
         {
             timePass += time * 1000 * 1000000;
-            //window.clear(Color(66, 92, 110));
-            mainMapForCreating->DrawMap(&window, time);
+            //window->clear(Color(66, 92, 110));
+            mainMapForCreating->DrawMap(window, time);
 
             if (timePass > 3)
             {
@@ -258,7 +261,7 @@ int main()
                 mainMapForCreating->mapUpload("maps//level00.txt");
             }
 
-            if (mainButton.buttonDisplayAndCheck(&window,-1, -1) == 1)
+            if (mainButton.buttonDisplayAndCheck(window,-1, -1) == 1)
                 process = 0, delete mainMapForCreating, clock.restart();
 
             if (Keyboard::isKeyPressed(Keyboard::N))
@@ -280,24 +283,24 @@ int main()
 
         case 4:
         {
-            mainMainMenu->drawAndCheckMenu(&window, time, 1);
+            mainMainMenu->drawAndCheckMenu(window, time, 1);
 
             if (mainLevelMapCurY > mainLevelMapMaxY)
             {
                 mainLevelMapCurY -= mainLevelMapSpeed * time;
                 if (mainLevelMapCurY < mainLevelMapMaxY)
                     mainLevelMapCurY = mainLevelMapMaxY;
-                mainLevelMap->display(&window, time, mainLevelMapCurX, mainLevelMapCurY);
+                mainLevelMap->display(window, time, mainLevelMapCurX, mainLevelMapCurY);
             }
             else
             {
-                int level = mainLevelMap->display(&window, time);
+                int level = mainLevelMap->display(window, time);
                 if (level != 0)
                     lastLevel = level, process = -1;
 
             }
 
-            if (mainButton.buttonDisplayAndCheck(&window, -1, -1) == 1)
+            if (mainButton.buttonDisplayAndCheck(window, -1, -1) == 1)
                 process = 0, clock.restart();
 
             break;
@@ -312,16 +315,16 @@ int main()
                 switch(animationProcess)
                 {
                 case 0:
-                    mainMap->DrawMap(&window, time);
-                    darkWindow(&window, animationTimer / 2 * 255);
+                    mainMap->DrawMap(window, time);
+                    darkWindow(window, animationTimer / 2 * 255);
                     break;
                 case 1:
-                    darkWindow(&window, 255);
+                    darkWindow(window, 255);
                     break;
                 case 2:
-                    mainMainMenu->drawAndCheckMenu(&window, time, 1);
-                    mainLevelMap->display(&window, time);
-                    darkWindow(&window, (2 - animationTimer) / 2 * 255);
+                    mainMainMenu->drawAndCheckMenu(window, time, 1);
+                    mainLevelMap->display(window, time);
+                    darkWindow(window, (2 - animationTimer) / 2 * 255);
                     break;
 
                 }
@@ -360,7 +363,7 @@ int main()
                 {
                     process = 1, processPassed = 0;
                     darknessProcessSet = 1;
-                    darkness = new Darkness(&window, 2, -1);
+                    darkness = new Darkness(window, 2, -1);
                 }
                 break;
             }
@@ -380,7 +383,7 @@ int main()
             clock.restart();
 
             processPassed = -1;
-            darkness = new Darkness(&window, 2, 1);
+            darkness = new Darkness(window, 2, 1);
             darknessProcessSet = 1;
             break;
         }
@@ -423,7 +426,7 @@ int main()
 
         case 20:
         {
-            CL.draw(&window, time);
+            CL.draw(window, time);
             break;
         }
 
@@ -435,7 +438,7 @@ int main()
             if(!(darkness->update(time / 500)))
                 darknessProcessSet = 0, delete darkness;
         }
-        window.display();
+        window->display();
     }
     return 0;
 }

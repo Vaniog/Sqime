@@ -69,8 +69,8 @@ DynamicButtonCreatingUI::~DynamicButtonCreatingUI()
 int DynamicButtonCreatingUI::draw(RenderWindow *window)
 {
     window->draw(uiSprite);
-    int mouseX = (Mouse::getPosition().x - startX) / scale;
-    int mouseY = (Mouse::getPosition().y - startY) / scale;
+    int mouseX = (Mouse::getPosition(*window).x - startX) / scale;
+    int mouseY = (Mouse::getPosition(*window).y - startY) / scale;
     int isPressed = Mouse::isButtonPressed(Mouse::Left);
 
     buttonMode->checkButtonDrawRect(mouseX, mouseY, isPressed, window, startX, startY);

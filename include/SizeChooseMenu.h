@@ -22,7 +22,7 @@ private:
     Button *sizeChooseClose;
     RectangleShape *sizeChooseRect;
 
-    int mouseCheck();
+    int mouseCheck(sf::RenderWindow *window);
 };
 
 #endif // SIZECHOOSEMENU_H

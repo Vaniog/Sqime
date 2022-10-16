@@ -75,7 +75,7 @@ private:
     void correctPositions();
     void tileUpdate(int x, int y); // count ID, and set right texture
     int countNeighbours(int x, int y); // count ID for block
-    void keyboardCommands();
+    void keyboardCommands(sf::RenderWindow *window);
     void addToObjSprites(int number);
     void displaySprites (RenderWindow *window), displayButtons(RenderWindow * window);
     void clearObjSprites();
@@ -83,7 +83,7 @@ private:
     void processCheck(RenderWindow *window);
     void buttonsModeSet(int mode); // turn on or off buttons
     long double getNumber(ifstream &mapFile);
-    pair <int, int> catchMouse(); // help to input size with help of mouse
+    pair <int, int> catchMouse(sf::RenderWindow *window); // help to input size with help of mouse
     //size choose UI
     pair <int, int> process = {0, 0}; // 0 0 for classic, 1 0 for sizes,  1 1 for coordinates (first number is a type)
     ObjectInf *inputObject;

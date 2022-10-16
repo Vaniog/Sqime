@@ -37,7 +37,7 @@ SizeChooseMenu::~SizeChooseMenu()
 pair <int, int> SizeChooseMenu::display(RenderWindow *window)
 {
     pair <int, int> sizes = {0, 0};
-    int mouseCheckReturn = mouseCheck();
+    int mouseCheckReturn = mouseCheck(window);
     sizeChooseRect->setSize(Vector2f(tileWidth * valueWidth - scale, tileWidth * valueHeight - scale));
     sizeChooseRect->setPosition(startX + scale, startY + scale);
     window->draw(sizeChooseSprite);
@@ -57,10 +57,10 @@ pair <int, int> SizeChooseMenu::display(RenderWindow *window)
 }
 
 
-int SizeChooseMenu::mouseCheck()
+int SizeChooseMenu::mouseCheck(sf::RenderWindow *window)
 {
-    long double mouseX = Mouse::getPosition().x;
-    long double mouseY = Mouse::getPosition().y;
+    long double mouseX = Mouse::getPosition(*window).x;
+    long double mouseY = Mouse::getPosition(*window).y;
     if (mouseX >= startX && mouseX <= endX - scale && mouseY >= startY && mouseY <= endY - scale)
     {
         valueWidth = (mouseX - startX) / tileWidth + 1;

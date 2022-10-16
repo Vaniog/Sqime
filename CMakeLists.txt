@@ -4,6 +4,8 @@ project(sqime)
 
 include_directories(include)
 
+set(SFML_DIR "SFML-2.5.1\\lib\\cmake\\SFML")
+
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 
 add_executable(main main.cpp

@@ -30,8 +30,8 @@ int Button::buttonDisplayAndCheck(RenderWindow *window, int xIn, int yIn)
     }
 
     bool isMouseOnButton = 0;
-    int mouseX = Mouse::getPosition().x;
-    int mouseY = Mouse::getPosition().y;
+    int mouseX = Mouse::getPosition(*window).x;
+    int mouseY = Mouse::getPosition(*window).y;
     if (mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height)
     {
         if (Mouse::isButtonPressed(Mouse::Left))

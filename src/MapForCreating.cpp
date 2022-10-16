@@ -104,7 +104,7 @@ void MapForCreating::DrawMap(RenderWindow *window, long double time)
     timeAfterPrevClick += time;
     (*window).draw(backSprite);
     if (process.first == 0)
-        keyboardCommands();
+        keyboardCommands(window);
 
     for (i = 0; i < width; i++)
     {
@@ -188,7 +188,7 @@ void MapForCreating::DrawMap(RenderWindow *window, long double time)
     Text infText("", font, 25);
     infText.setFillColor(Color::White);
     infText.setPosition(10 + windowWidth - spaceForObjButtons, 10);
-    string s = to_string((int)width) + "    " + to_string((int)height) + "\n" + to_string((int)((Mouse::getPosition().x - startX) / tilesize / scale)) + "     " +  to_string((int)((Mouse::getPosition().y - startY) / tilesize / scale))
+    string s = to_string((int)width) + "    " + to_string((int)height) + "\n" + to_string((int)((Mouse::getPosition(*window).x - startX) / tilesize / scale)) + "     " +  to_string((int)((Mouse::getPosition(*window).y - startY) / tilesize / scale))
     + "\n\nT - try\nN - new\n";
     infText.setString(s);
     window->draw(infText);
@@ -218,8 +218,8 @@ void MapForCreating::processCheck(RenderWindow *window)
         {
             if (Mouse::isButtonPressed(Mouse::Left))
             {
-                inputObject->startX = (int)((Mouse::getPosition().x - startX) / tilesize / scale);
-                inputObject->startY = (int)((Mouse::getPosition().y - startY) / tilesize / scale);
+                inputObject->startX = (int)((Mouse::getPosition(*window).x - startX) / tilesize / scale);
+                inputObject->startY = (int)((Mouse::getPosition(*window).y - startY) / tilesize / scale);
                 process.second++;
                 if (process.first == 1 || process.first == 3 || process.first == 4) //player or button or box
                 {
@@ -236,8 +236,8 @@ void MapForCreating::processCheck(RenderWindow *window)
         {
             if (Mouse::isButtonPressed(Mouse::Left))
             {
-                inputObject->endX = (int)((Mouse::getPosition().x - startX) / tilesize / scale);
-                inputObject->endY = (int)((Mouse::getPosition().y - startY) / tilesize / scale);
+                inputObject->endX = (int)((Mouse::getPosition(*window).x - startX) / tilesize / scale);
+                inputObject->endY = (int)((Mouse::getPosition(*window).y - startY) / tilesize / scale);
                 process.second++;
                 while(Mouse::isButtonPressed(Mouse::Left)){};
             }
@@ -630,7 +630,7 @@ void MapForCreating::correctPositions()
     feelObjSprites(objects.size());
 }
 
-void MapForCreating::keyboardCommands()
+void MapForCreating::keyboardCommands(sf::RenderWindow *window)
 {
     if (Keyboard::isKeyPressed(Keyboard::Up) && height < MaxMapH)
     {
@@ -664,8 +664,8 @@ void MapForCreating::keyboardCommands()
 
     if (Mouse::isButtonPressed(Mouse::Left))
     {
-        long double mouseX = Mouse::getPosition().x;
-        long double mouseY = Mouse::getPosition().y;
+        long double mouseX = Mouse::getPosition(*window).x;
+        long double mouseY = Mouse::getPosition(*window).y;
 
         if (mouseX >= startX && mouseY >= startY)
         {
@@ -678,8 +678,8 @@ void MapForCreating::keyboardCommands()
 
     if (Mouse::isButtonPressed(Mouse::Right))
     {
-        long double mouseX = Mouse::getPosition().x;
-        long double mouseY = Mouse::getPosition().y;
+        long double mouseX = Mouse::getPosition(*window).x;
+        long double mouseY = Mouse::getPosition(*window).y;
 
         if (mouseX >= startX && mouseY >= startY)
         {
@@ -820,13 +820,13 @@ long double MapForCreating::getNumber(ifstream &mapFile)
     return a;
 }
 
-pair <int, int> MapForCreating::catchMouse()
+pair <int, int> MapForCreating::catchMouse(sf::RenderWindow *window)
 {
     pair <int, int> positions;
 
     while(!Mouse::isButtonPressed(Mouse::Left)){}
-        positions.first = (Mouse::getPosition().x - startX) / tilesize / scale;
-        positions.second = (Mouse::getPosition().y - startY) / tilesize / scale;
+        positions.first = (Mouse::getPosition(*window).x - startX) / tilesize / scale;
+        positions.second = (Mouse::getPosition(*window).y - startY) / tilesize / scale;
     while(Mouse::isButtonPressed(Mouse::Left)){}
     return positions;
 }

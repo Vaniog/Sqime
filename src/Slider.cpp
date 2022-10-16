@@ -59,8 +59,8 @@ long double Slider::drawSliderGetValue(RenderWindow *window)
     {
         if (Mouse::isButtonPressed(Mouse::Left))
         {
-            int mouseX = Mouse::getPosition().x;
-            int mouseY = Mouse::getPosition().y;
+            int mouseX = Mouse::getPosition(*window).x;
+            int mouseY = Mouse::getPosition(*window).y;
             if ((mouseX <= lineEndX && mouseX >= lineStartX) && (remTouch == 1 || (mouseY <= lineStartY + sliderDiametr / 2 && mouseY >= lineStartY - sliderDiametr / 2)))
             {
                 sliderCurX = mouseX, remTouch = 1;
@@ -81,8 +81,8 @@ long double Slider::drawSliderGetValue(RenderWindow *window)
     {
         if (Mouse::isButtonPressed(Mouse::Left))
         {
-            int mouseX = Mouse::getPosition().x;
-            int mouseY = Mouse::getPosition().y;
+            int mouseX = Mouse::getPosition(*window).x;
+            int mouseY = Mouse::getPosition(*window).y;
             if ((mouseY <= lineEndY && mouseY >= lineStartY) && (remTouch == 1 || (mouseX <= lineStartX + sliderDiametr / 2 && mouseX >= lineStartX - sliderDiametr / 2)))
             {
                 sliderCurY = mouseY, remTouch = 1;
