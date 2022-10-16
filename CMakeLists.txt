@@ -1,14 +1,17 @@
 cmake_minimum_required(VERSION 3.0)
-
-project(sqime)
+set(CMAKE_CXX_STANDARD 14)
+project(Sqime)
 
 include_directories(include)
 
-set(SFML_DIR "SFML-2.5.1\\lib\\cmake\\SFML")
+if (WIN32)
+    set(SFML_DIR "C:\\SFML\\lib\\cmake\\SFML")
+    set(SFML_STATIC_LIBRARIES TRUE)
+endif (WIN32)
 
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 
-add_executable(main main.cpp
+add_executable(Sqime main.cpp
         include/AllIncludes.h
         include/DynamicObject.h src/DynamicObject.cpp
         include/AllHitboxInf.h src/AllHitboxInf.cpp
@@ -26,4 +29,4 @@ add_executable(main main.cpp
         include/Slider.h src/Slider.cpp
         include/LevelMap.h src/LevelMap.cpp)
 
-target_link_libraries(main sfml-network sfml-audio sfml-graphics sfml-window sfml-system)
+target_link_libraries(Sqime sfml-network sfml-audio sfml-graphics sfml-window sfml-system)
