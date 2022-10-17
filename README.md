@@ -1,6 +1,7 @@
 # Sqime
 
 ## This is a game
+---
 ![pic](images/ForREADME/img.png)
 I'm Vaniog, my discord: <b>Vaniog#1886</b>
 ---
