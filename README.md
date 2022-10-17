@@ -2,11 +2,12 @@
 
 ## This is a game ##
 ---
-![pic](images/ForREADME/img.png) I'm Vaniog, my discord: <b>Vaniog#1886</b>
+![pic](images/ForREADME/img.png) I'm Vaniog, my discord: **Vaniog#1886**
 
 ---
 ## Table of Contents:
 - [Description](#description)
+- [Quick setup](#quick-setup)
 - [Playing](#playing)
 - [Building](#building)
 ---
@@ -18,21 +19,25 @@ I cleaned as much as I can, I added README, CMakeLists,
 and I deleted trash from repository.
 If sometime I'll want to return to this game, I'll write
 it from scratch.
-
+---
+## Quick setup
+For quick setup just install project from the [latest release](https://github.com/Vaniog/Sqime/releases/tag/v1.0). \
+It has Windows, Linux, MacOS versions. \
+If you want to build project yourself, watch [building](#building)
 ---
 ## Playing
 ### In game:
-> moving - <b>w, a, s, d</b> \
-> restart level - <b>r</b>
+> moving - **w, a, s, d** \
+> restart level - **r**
 
 ### In creating mode
 Your created level will be saved at maps/level00.txt, share it!
 > #### <u>Main</u>
->- new field - <b>n</b> 
->- try level - <b>t</b> 
->- field size change - <b>arrows up and down</b> 
->- to choose tile to draw - <b>buttons on left sight</b> 
->- to change tile rotation - <b>double-click on tile button</b>
+>- new field - **n** 
+>- try level - **t** 
+>- field size change - **arrows up and down** 
+>- to choose tile to draw - **buttons on left sight** 
+>- to change tile rotation - **double-click on tile button**
 
 > #### How to make <u>slime</u>
 >- Push slime button 
@@ -58,12 +63,12 @@ Your created level will be saved at maps/level00.txt, share it!
  ---
 ## Building
 This project is running Simple Fast Multimedia Library
-(SFML) \
+(**SFML**) \
 SFML: [Github](https://github.com/SFML/SFML) [Website](https://www.sfml-dev.org/)
 
 - [Linux](#linux)
-- [Windows](#linux)
 - [MacOS](#macos)
+- [Windows](#windows)
 
 ### Linux
     #installing cmake
@@ -107,3 +112,12 @@ SFML: [Github](https://github.com/SFML/SFML) [Website](https://www.sfml-dev.org/
     #and launch
     cd ..
     build/Sqime
+
+### Windows
+To build with **CMake** you need to have **SFML** at **C:/**, (C:/SFML), or in **PATH**. 
+Select **"Sqime/"** as launch directory (launch **.exe** from **"/Sqime"**).
+
+I cant give just code for terminal to build is easily on **Windows**.
+Maybe your **IDE** running with **CMake** projects (**CLion, VSCode** with plugins).
+
+You still can download built project from the [latest release](https://github.com/Vaniog/Sqime/releases/tag/v1.0)
