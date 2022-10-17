@@ -6,9 +6,9 @@
 
 ---
 ## Table of Contents:
-- #### [Description](#description)
-- #### [Playing](#playing)
-- #### [Building](#building)
+- [Description](#description)
+- [Playing](#playing)
+- [Building](#building)
 ---
 ## Description
 This is my old project, so here it is,
