@@ -86,6 +86,9 @@ SFML: [Github](https://github.com/SFML/SFML) [Website](https://www.sfml-dev.org/
     build/Sqime
 
 ### MacOS
+    #if you haven't brew, install it
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    
     #inctalling cmake
     brew install cmake
 
