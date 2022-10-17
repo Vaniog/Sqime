@@ -11,26 +11,33 @@
 - [Playing](#playing)
 - [Building](#building)
 ---
+
 ## Description
+
 This is my old project, so here it is,
 bad code (watch good [issues](https://github.com/Vaniog/Sqime/issues) from [bogdasar](https://github.com/bogdasar1985)), bad file organization and much more.
 But the game is not so bad.
-I cleaned as much as I can, I added README, CMakeLists,
-and I deleted trash from repository.
-If sometime I'll want to return to this game, I'll write
-it from scratch.
+I cleaned as much as I can, I added README, CMakeLists, and I deleted trash from repository.
+If sometime I'll want to return to this game, I'll write it from scratch.
+
 ---
 ## Quick setup
+
 For quick setup just install project from the [latest release](https://github.com/Vaniog/Sqime/releases/tag/v1.0). \
 It has Windows, Linux, MacOS versions. \
 If you want to build project yourself, watch [building](#building)
+
 ---
+
 ## Playing
+
 ### In game:
+
 > moving - **w, a, s, d** \
 > restart level - **r**
 
 ### In creating mode
+
 Your created level will be saved at maps/level00.txt, share it!
 > #### <u>Main</u>
 >- new field - **n** 
@@ -61,7 +68,9 @@ Your created level will be saved at maps/level00.txt, share it!
 >- Choose mode of button (just experiment with it) 
 >- Choose size, and when choose coords
  ---
+ 
 ## Building
+
 This project is running Simple Fast Multimedia Library
 (**SFML**) \
 SFML: [Github](https://github.com/SFML/SFML) [Website](https://www.sfml-dev.org/)
