@@ -162,7 +162,7 @@ void DynamicButton::drawObject(long double &time)
             curX -= distance;
             if (AHI->tryToMoveAll(number, dbDirection, -distance, 0) != 0)
                 curX = oldX;
-            else if (curX = startX)
+            else if (curX == startX)
                 buttonBecome(0);
         }
         break;
