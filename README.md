@@ -61,8 +61,8 @@ This project is running Simple Fast Multimedia Library
 (SFML) \
 SFML: [Github](https://github.com/SFML/SFML) [Website](https://www.sfml-dev.org/)
 
-- [Linux](#Linux)
-- [Windows](#playing)
+- [Linux](#linux)
+- [Windows](#linux)
 - [MacOS](#macos)
 
 ### Linux
