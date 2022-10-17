@@ -12,7 +12,7 @@
 ---
 ## Description
 This is my old project, so here it is,
-bad code, bad file organization and much more.
+bad code (watch good [issues](https://github.com/Vaniog/Sqime/issues) from [bogdasar](https://github.com/bogdasar1985)), bad file organization and much more.
 But the game is not so bad.
 I cleaned as much as I can, I added README, CMakeLists,
 and I deleted trash from repository.
