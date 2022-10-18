@@ -2,7 +2,8 @@
 
 ## This is a game ##
 ---
-![pic](images/ForREADME/img.png) I'm Vaniog, my discord: **Vaniog#1886**
+![pic](images/ForREADME/img.png) I'm Vaniog, my discord: **Vaniog#1886** \
+This readme and release for my training
 
 ---
 ## Table of Contents:
